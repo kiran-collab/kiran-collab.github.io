@@ -13,8 +13,8 @@ name                     : &name "Kiran Davuluri"
 description              : &description "About Me"
 url                      : https://kirand.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
-repository               : "kirand.github.io"
-teaser                   :  # filename of teaser fallback teaser image placed in /images/, .e.g. "500x300.png"
+repository               : "kiran-collab/kirand.github.io"
+teaser                   : /images/kiran_bio_pic.PNG # filename of teaser fallback teaser image placed in /images/, .e.g. "500x300.png"
 breadcrumbs              : false # true, false (default)
 words_per_minute         : 160
 future                   : true
@@ -81,7 +81,7 @@ analytics:
 # Site Author
 author:
   name             : "Kiran Davuluri"
-  avatar           : "images/kiran_bio_pic.PNG"
+  avatar           : "/images/kiran_bio_pic.PNG"
   bio              : "Your biography for the left-hand sidebar"
   location         : "Location"
   employer         :
