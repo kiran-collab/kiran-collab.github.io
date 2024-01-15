@@ -79,7 +79,7 @@ analytics:
 # Site Author
 author:
   name             : "Kiran Davuluri"
-  avatar           : "images/bio-pic.jpg"
+  avatar           : "/images/bio-pic.jpg"
   bio              : "Student at University of Michigan"
   #location         : "Location"
   #employer         :
