@@ -9,3 +9,9 @@ Web Links for work portfolio:
 [Resume]()
 
 [CV](https://drive.google.com/file/d/1jpRhpbJInBu95KyjB3g_d-IJGopl4fHs/view?usp=drive_link)
+
+
+Current Projects
+===============
+
+Griffin: Collaborative Drone-Car for Real-time road event detection
