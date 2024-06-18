@@ -24,3 +24,7 @@ Current Projects
 ===============
 
 Griffin: Collaborative Drone-Car for Real-time road event detection
+
+BMEye: Public Health-Oriented Body Mass Index Monitoring Using Commodity WiFi
+
+SWiDir: Enhancing Smartphone-based Walking Direction Estimation with Passive WiFi Sensing
