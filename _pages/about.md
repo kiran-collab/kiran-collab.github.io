@@ -27,7 +27,7 @@ Selected Projects
   
   *SAIND: Scene Animation of 2D Videos in the wild
 
-**Distributed Computing in IoT:**
+**Distributed Computing for future mobility:**
   
   *Griffin: Collaborative Drone-Car for Real-time road event detection
 
