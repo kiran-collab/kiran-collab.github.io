@@ -23,10 +23,13 @@ Web Links for work portfolio:
 Selected Projects
 ===============
 
-SAIND: Scene Animation of 2D Videos in the wild
+**Generative AI:**
+  SAIND: Scene Animation of 2D Videos in the wild
 
-Griffin: Collaborative Drone-Car for Real-time road event detection
+**Distributed Computing in IoT:**
+  Griffin: Collaborative Drone-Car for Real-time road event detection
 
-BMEye: Public Health-Oriented Body Mass Index Monitoring Using Commodity WiFi
+**Wifi Sensing:**
+  BMEye: Public Health-Oriented Body Mass Index Monitoring Using Commodity WiFi
 
-SWiDir: Enhancing Smartphone-based Walking Direction Estimation with Passive WiFi Sensing
+  SWiDir: Enhancing Smartphone-based Walking Direction Estimation with Passive WiFi Sensing
