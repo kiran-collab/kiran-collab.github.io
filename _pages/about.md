@@ -25,14 +25,14 @@ Selected Projects
 
 **Generative AI:**
   
-  SAIND: Scene Animation of 2D Videos in the wild
+  *SAIND: Scene Animation of 2D Videos in the wild
 
 **Distributed Computing in IoT:**
   
-  Griffin: Collaborative Drone-Car for Real-time road event detection
+  *Griffin: Collaborative Drone-Car for Real-time road event detection
 
 **Wifi Sensing:**
   
-  BMEye: Public Health-Oriented Body Mass Index Monitoring Using Commodity WiFi
+  *BMEye: Public Health-Oriented Body Mass Index Monitoring Using Commodity WiFi
 
-  SWiDir: Enhancing Smartphone-based Walking Direction Estimation with Passive WiFi Sensing
+  *SWiDir: Enhancing Smartphone-based Walking Direction Estimation with Passive WiFi Sensing
