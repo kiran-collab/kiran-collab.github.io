@@ -11,7 +11,7 @@ redirect_from:
 About Me
 ======
 
-I am a master's student at University of Michigan in the Computer Science department. I am advised by Prof. Zheng Song at UMich-Dearborn. 
+I am a master's student at University of Michigan in the Computer Science department. I am advised by Prof. Zheng Song at University of Michigan Dearborn. 
 
 Web Links for work portfolio:
 
