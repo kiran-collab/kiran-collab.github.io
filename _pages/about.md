@@ -11,7 +11,8 @@ redirect_from:
 About Me
 ======
 
-I am a master's student at University of Michigan in the Computer Science department. I am advised by Prof. Zheng Song at University of Michigan Dearborn. Previously I was advised by Prof. Chetan Arora and Prof. Vinay Namboodri.
+I have been a  master's student at University of Michigan in the Computer Science department. Advised by Prof. Zheng Song at University of Michigan Dearborn, I focused on developing system based solutions for usecases utilizing Wifi Sensing and Distributed Computing based solutions for Future Mobility. Previously I was advised by Prof. Chetan Arora and Prof. Vinay Namboodri where I focused on Font Interpolation in multi linguistic setting.
+I spent fruitful time at IIIT Chennai, advised by Prof. V Masilamani, in which our team designed and developed desktop and web tools for preventing obscene image related cyber crimes. 
 
 Web Links for work portfolio:
 
