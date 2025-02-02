@@ -11,8 +11,8 @@ redirect_from:
 About Me
 ======
 
-I have been a  master's student at University of Michigan in the Computer Science department. Advised by Prof. Zheng Song at University of Michigan Dearborn, I focused on developing system based solutions for usecases utilizing Wifi Sensing and Distributed Computing based solutions for Future Mobility. Previously I was advised by Prof. Chetan Arora and Prof. Vinay Namboodri where I focused on Font Interpolation in multi linguistic setting.
-I spent fruitful time at IIIT Chennai, advised by Prof. V Masilamani, in which our team designed and developed desktop and web tools for preventing obscene image related cyber crimes. 
+I have been a  master's student at University of Michigan in the Computer Science department. Advised by [Prof. Zheng Song]() at University of Michigan Dearborn, I focused on developing system based solutions for usecases utilizing Wifi Sensing and Distributed Computing based solutions for Future Mobility. Previously I was advised by [Prof. Chetan Arora](https://www.cse.iitd.ac.in/~chetan/) and [Prof. Vinay Namboodri](https://vinaypn.github.io) where I focused on Font Interpolation in multi linguistic setting.
+I spent fruitful time at IIIT Chennai as Project JRF, advised by [Prof. V Masilamani](https://www.iiitdm.ac.in/people/faculty/masila@iiitdm.ac.in), in which our team designed and developed desktop and web tools for preventing obscene image related cyber crimes. 
 
 Web Links for work portfolio:
 
