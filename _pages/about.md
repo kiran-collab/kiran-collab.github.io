@@ -27,6 +27,7 @@ Selected Technical Projects
 **Generative AI:**
   
   *SAIND: Scene Animation of 2D Videos in the wild
+  *Font Style generation for Scene Text Recognition
 
 **Distributed Computing for future mobility:**
   
