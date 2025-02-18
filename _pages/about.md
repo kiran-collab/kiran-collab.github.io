@@ -18,7 +18,7 @@ Web Links for work portfolio:
 
 [Resume]()
 
-[CV](https://drive.google.com/file/d/1jpRhpbJInBu95KyjB3g_d-IJGopl4fHs/view?usp=drive_link)
+[CV](https://drive.google.com/file/d/1CfEzSRm9qq0q56GY-pWFhLHzBt1oCyKK/view?usp=share_link)
 
 
 Selected Projects
