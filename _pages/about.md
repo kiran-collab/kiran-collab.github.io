@@ -16,7 +16,7 @@ I spent fruitful time at IIIT Chennai as Project JRF, advised by [Prof. V Masila
 
 Web Links for work portfolio:
 
-[Resume]()
+[Resume](https://drive.google.com/file/d/1S4DCs-e5daRELRfqEjJPbFkjNlEhRwex/view?usp=share_link)
 
 [CV](https://drive.google.com/file/d/1CfEzSRm9qq0q56GY-pWFhLHzBt1oCyKK/view?usp=share_link)
 
