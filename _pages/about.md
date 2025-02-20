@@ -36,7 +36,7 @@ News
   <img src="_pages/link_icon.png" alt="Reference 1" style="width: 20px; height: 20px;">
 </a>
 
-(May 2024) Held _Graduate Teaching Assistant_ position for CIS 310: Computer Org. and Architecture course.
+(May 2024 - Aug 2024) Held _Graduate Teaching Assistant_ position for CIS 310: Computer Org. and Architecture course.
 
 (Apr 2024) Reviwer for _ICCCN 24_
 
