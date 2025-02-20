@@ -29,7 +29,7 @@ Selected Technical Projects
   *SAIND: Scene Animation using (RGB) Images aNd Depth maps
 
   <div align="center">
-  <img src="saind.png" >
+  <img src="_pages/saind.png" >
   </div>
   
   *Font Style generation for Scene Text Recognition
