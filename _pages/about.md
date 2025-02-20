@@ -31,12 +31,14 @@ News
 
 (Oct 2024) Paper sumbitted to _Transactions in Intelligent Vehicles_
 
-(Sept 2024) Paper accepted to _Sensors 24_!
+(Sep 2024) Paper accepted to _Sensors 24_!
 
 (Aug 2024) Successfully defended my thesis! My work focused on developing middleware framework for real-time event detection using UAV and GV.
 <a href="https://deepblue.lib.umich.edu/handle/2027.42/195589" target="_blank">
   <img src="_pages/link_icon.png" alt="Reference 1" style="width: 20px; height: 20px;">
 </a>
+
+(Apr 2024) Reviwer for _ICCCN 24_
 
 Selected Technical Projects
 ===============
