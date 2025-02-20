@@ -32,6 +32,22 @@ Selected Technical Projects
   <img src="_pages/saind.png" width="30%" height="50%">
   </div>
 
+
+  <div style="display: flex; align-items: center;">
+  <img src="_pages/saind.png" style="width: 30%; height: auto; margin-right: 20px;">
+  
+  <div>
+    <span style="color: red;">SAIND: Scene Animation using (RGB) Images aNd Depth maps</span>
+    
+    <div style="margin-top: 10px;">
+      <a href="https://example.com/doc1" target="_blank" style="margin-right: 15px;">Reference 1</a>
+      <a href="https://example.com/doc2" target="_blank" style="margin-right: 15px;">Reference 2</a>
+      <a href="https://example.com/doc3" target="_blank">Reference 3</a>
+    </div>
+  </div>
+</div>
+
+
   <br><br>
   
   <span style="color:red">&nbsp;&nbsp;Font Style generation for Scene Text Recognition</span>
