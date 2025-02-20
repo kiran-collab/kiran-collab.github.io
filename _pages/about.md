@@ -25,8 +25,10 @@ Selected Technical Projects
 ===============
 
 **Generative AI:**
+
+  <span style="color:red">*SAIND: Scene Animation using (RGB) Images aNd Depth maps</span>
+
   
-  *SAIND: Scene Animation using (RGB) Images aNd Depth maps
 
   <div align="left">
   <img src="saind.png" width="30%" height="50%">
