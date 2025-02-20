@@ -25,7 +25,7 @@ News
 
 
 
-(Jan 2025) Reviewer for JCOMMS 
+(Jan 2025) Reviewer for _JCOMMS_ 
 
 (Nov 2024) Paper accepted to _MobiCom 2024_!
 
@@ -33,7 +33,7 @@ News
 
 (Sept 2024) Paper accepted to _Sensors 24_!
 
-(Aug 2024) Successfully defended my thesis!
+(Aug 2024) Successfully defended my thesis! My work focused on developing middleware framework for real-time event detection using UAV and GV [Resume](https://deepblue.lib.umich.edu/handle/2027.42/195589)
 
 Selected Technical Projects
 ===============
