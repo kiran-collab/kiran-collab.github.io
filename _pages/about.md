@@ -42,7 +42,7 @@ Selected Technical Projects
   
   *Griffin: Collaborative Drone-Car for Real-time road event detection
 
-  <div align="center">
+  <div align="left">
   <img src="griffin.png" width="50%" height="80%">
   </div>
 
@@ -50,12 +50,12 @@ Selected Technical Projects
   
   *BMEye: Public Health-Oriented Body Mass Index Monitoring Using Commodity WiFi
 
-  <div align="center">
+  <div align="left">
   <img src="bmeye.png" width="50%" height="80%">
   </div>
 
   *SWiDir: Enhancing Smartphone-based Walking Direction Estimation with Passive WiFi Sensing
 
-  <div align="center">
+  <div align="left">
   <img src="swidir.png" width="50%" height="80%">
   </div>
