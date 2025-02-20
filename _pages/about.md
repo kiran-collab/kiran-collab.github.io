@@ -56,6 +56,8 @@ Selected Technical Projects
   </div>
 </div>
 
+  <br><br>
+  
 **Distributed Computing Systems for future mobility:**
   
   <div style="display: flex; align-items: center;">
@@ -72,6 +74,7 @@ Selected Technical Projects
   </div>
 </div>
 
+  <br><br>
   
 **Wifi Sensing:**
 
