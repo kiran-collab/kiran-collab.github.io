@@ -33,43 +33,75 @@ Selected Technical Projects
     <span style="color: red;">SAIND: Scene Animation using (RGB) Images aNd Depth maps</span>
     
     <div style="margin-top: 10px;">
-      <a href="https://example.com/doc1" target="_blank" style="margin-right: 15px;">Reference 1</a>
-      <a href="https://example.com/doc2" target="_blank" style="margin-right: 15px;">Reference 2</a>
-      <a href="https://example.com/doc3" target="_blank">Reference 3</a>
+      <a href="https://example.com/doc1" target="_blank" style="margin-right: 15px;">report</a>
+      <a href="https://example.com/doc2" target="_blank" style="margin-right: 15px;">ppt</a>
+      <a href="https://example.com/doc3" target="_blank">github</a>
     </div>
   </div>
 </div>
 
-
-
   <br><br>
   
-  <span style="color:red">&nbsp;&nbsp;Font Style generation for Scene Text Recognition</span>
-
-  <div align="left">
-  <img src="_pages/fontStyleTransfer.png" width="30%" height="50%">
+  <div style="display: flex; align-items: center;">
+  <img src="_pages/fontStyleTransfer.png" style="width: 30%; height: auto; margin-right: 20px;">
+  
+  <div>
+    <span style="color: red;">Font Style generation for Scene Text Recognition</span>
+    
+    <div style="margin-top: 10px;">
+      <a href="https://example.com/doc1" target="_blank" style="margin-right: 15px;">report</a>
+      <a href="https://example.com/doc2" target="_blank" style="margin-right: 15px;">ppt</a>
+      <a href="https://example.com/doc3" target="_blank">github</a>
+    </div>
   </div>
+</div>
 
 **Distributed Computing Systems for future mobility:**
   
-  <span style="color:violet">&nbsp;&nbsp;Griffin: Collaborative Drone-Car for Real-time road event detection</span>
-
-  <div align="left">
-  <img src="_pages/griffin.png" width="30%" height="50%">
-  </div>
-
-**Wifi Sensing:**
+  <div style="display: flex; align-items: center;">
+  <img src="_pages/griffin.png" style="width: 30%; height: auto; margin-right: 20px;">
   
-  <span style="color:meganta">&nbsp;&nbsp;BMEye: Public Health-Oriented Body Mass Index Monitoring Using Commodity WiFi</span>
-
-  <div align="left">
-  <img src="_pages/bmeye.png" width="30%" height="50%">
+  <div>
+    <span style="color: red;">Griffin: Collaborative Drone-Car for Real-time road event detection</span>
+    
+    <div style="margin-top: 10px;">
+      <a href="https://example.com/doc1" target="_blank" style="margin-right: 15px;">paper</a>
+      <a href="https://example.com/doc2" target="_blank" style="margin-right: 15px;">poster</a>
+      <a href="https://example.com/doc3" target="_blank">github</a>
+    </div>
   </div>
+</div>
+
+  
+**Wifi Sensing:**
+
+  <div style="display: flex; align-items: center;">
+  <img src="_pages/bmeye.png" style="width: 30%; height: auto; margin-right: 20px;">
+  
+  <div>
+    <span style="color: red;">BMEye: Public Health-Oriented Body Mass Index Monitoring Using Commodity WiFi</span>
+    
+    <div style="margin-top: 10px;">
+      <a href="https://example.com/doc1" target="_blank" style="margin-right: 15px;">paper</a>
+      <a href="https://example.com/doc2" target="_blank" style="margin-right: 15px;">ppt</a>
+      <a href="https://example.com/doc3" target="_blank">github</a>
+      <a href="https://example.com/doc4" target="_blank">video</a>
+    </div>
+  </div>
+</div>
 
   <br><br>
 
-  <span style="color:megenta">&nbsp;&nbsp;SWiDir: Enhancing Smartphone-based Walking Direction Estimation with Passive WiFi Sensing</span>
-
-  <div align="left">
-  <img src="_pages/swidir.png" width="30%" height="50%">
+  <div style="display: flex; align-items: center;">
+  <img src="_pages/swidir.png" style="width: 30%; height: auto; margin-right: 20px;">
+  
+  <div>
+    <span style="color: red;">SWiDir: Enhancing Smartphone-based Walking Direction Estimation with Passive WiFi Sensing</span>
+    
+    <div style="margin-top: 10px;">
+      <a href="https://example.com/doc1" target="_blank" style="margin-right: 15px;">paper</a>
+      <a href="https://example.com/doc2" target="_blank" style="margin-right: 15px;">ppt</a>
+      <a href="https://example.com/doc3" target="_blank">github</a>
+    </div>
   </div>
+</div>
