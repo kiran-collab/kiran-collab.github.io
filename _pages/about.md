@@ -80,7 +80,7 @@ Selected Technical Projects
 **Distributed Computing Systems for future mobility:**
   
   <div style="display: flex; align-items: center;">
-  <img src="_pages/griffin.png" style="width: 30%; height: auto; margin-right: 20px;">
+  <img src="_pages/griffin.png" style="width: 60%; height: auto; margin-right: 30px;">
   
   <div>
     <span style="color: red;">Griffin: Collaborative Drone-Car for Real-time road event detection</span>
