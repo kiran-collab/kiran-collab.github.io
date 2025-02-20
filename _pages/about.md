@@ -28,8 +28,6 @@ Selected Technical Projects
 
   <span style="color:red">&nbsp;&nbsp;SAIND: Scene Animation using (RGB) Images aNd Depth maps</span>
 
-  
-
   <div align="left">
   <img src="_pages/saind.png" width="30%" height="50%">
   </div>
