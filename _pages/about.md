@@ -23,8 +23,6 @@ Web Links for work portfolio:
 News
 =====
 
-
-
 (Jan 2025) Reviewer for _JCOMMS_ 
 
 (Nov 2024) Paper accepted to _MobiCom 2024_!
@@ -37,6 +35,8 @@ News
 <a href="https://deepblue.lib.umich.edu/handle/2027.42/195589" target="_blank">
   <img src="_pages/link_icon.png" alt="Reference 1" style="width: 20px; height: 20px;">
 </a>
+
+(May 2024) Held _Graduate Teaching Assistant_ position for CIS 310: Computer Org. and Architecture course.
 
 (Apr 2024) Reviwer for _ICCCN 24_
 
