@@ -33,6 +33,8 @@ Selected Technical Projects
   <div align="left">
   <img src="_pages/saind.png" width="30%" height="50%">
   </div>
+
+  <br><br>
   
   *Font Style generation for Scene Text Recognition
 
