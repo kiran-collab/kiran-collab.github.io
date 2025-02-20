@@ -33,9 +33,9 @@ News
 
 (Sept 2024) Paper accepted to _Sensors 24_!
 
-(Aug 2024) Successfully defended my thesis! My work focused on developing middleware framework for real-time event detection using UAV and GV. [Thesis](https://deepblue.lib.umich.edu/handle/2027.42/195589) 
+(Aug 2024) Successfully defended my thesis! My work focused on developing middleware framework for real-time event detection using UAV and GV.
 <a href="https://deepblue.lib.umich.edu/handle/2027.42/195589" target="_blank">
-  <img src="_pages/linkicon.png" alt="Reference 1" style="width: 24px; height: 24px;">
+  <img src="_pages/link_icon.png" alt="Reference 1" style="width: 24px; height: 24px;">
 </a>
 
 Selected Technical Projects
