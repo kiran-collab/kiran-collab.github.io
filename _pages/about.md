@@ -27,11 +27,13 @@ News
 
 (Jan 2025) Reviewer for JCOMMS 
 
-(Nov 2024) Paper accepted to MobiCom 2024
+(Nov 2024) Paper accepted to _MobiCom 2024_!
 
 (Oct 2024) Paper sumbitted to _Transactions in Intelligent Vehicles_
 
-(Sept 2024) Paper accepted to _Sensors 24_
+(Sept 2024) Paper accepted to _Sensors 24_!
+
+(Aug 2024) Successfully defended my thesis!
 
 Selected Technical Projects
 ===============
