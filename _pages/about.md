@@ -88,7 +88,7 @@ Selected Technical Projects
       <a href="https://example.com/doc1" target="_blank" style="margin-right: 15px;">paper</a>
       <a href="https://example.com/doc2" target="_blank" style="margin-right: 15px;">ppt</a>
       <a href="https://example.com/doc3" target="_blank">github</a>
-      <a href="https://example.com/doc4" target="_blank">video</a>
+      <a href="https://drive.google.com/file/d/1O4tS-Qrpfxc6nQA-L1zBzoVZg0EM_-a9/view?usp=share_link" target="_blank">usecase video</a>
     </div>
   </div>
 </div>
