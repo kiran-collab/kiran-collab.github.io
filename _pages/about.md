@@ -37,7 +37,7 @@ Selected Technical Projects
   *Font Style generation for Scene Text Recognition
 
   <div align="left">
-  <img src="fontStyleTransfer.png" width="30%" height="50%">
+  <img src="_pages/fontStyleTransfer.png" width="30%" height="50%">
   </div>
 
 **Distributed Computing Systems for future mobility:**
@@ -45,7 +45,7 @@ Selected Technical Projects
   *Griffin: Collaborative Drone-Car for Real-time road event detection
 
   <div align="left">
-  <img src="griffin.png" width="30%" height="50%">
+  <img src="_pages/griffin.png" width="30%" height="50%">
   </div>
 
 **Wifi Sensing:**
@@ -53,11 +53,11 @@ Selected Technical Projects
   *BMEye: Public Health-Oriented Body Mass Index Monitoring Using Commodity WiFi
 
   <div align="left">
-  <img src="bmeye.png" width="30%" height="50%">
+  <img src="_pages/bmeye.png" width="30%" height="50%">
   </div>
 
   *SWiDir: Enhancing Smartphone-based Walking Direction Estimation with Passive WiFi Sensing
 
   <div align="left">
-  <img src="swidir.png" width="30%" height="50%">
+  <img src="_pages/swidir.png" width="30%" height="50%">
   </div>
