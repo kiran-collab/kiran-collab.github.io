@@ -29,13 +29,13 @@ Selected Technical Projects
   *SAIND: Scene Animation using (RGB) Images aNd Depth maps
 
   <div align="center">
-  <img src="saind.png" style="display: block; float: left; width: 50; height: auto;">
+  <img src="saind.png" style="display: block; float: left; width: "50%"; height: auto;">
   </div>
   
   *Font Style generation for Scene Text Recognition
 
   <div align="center">
-  <img src="saind.png" style="display: block; float: left; width: 50; height: auto;">
+  <img src="saind.png" style="display: block; float: left; width: "50%"; height: auto;">
   </div>
 
 **Distributed Computing Systems for future mobility:**
@@ -43,7 +43,7 @@ Selected Technical Projects
   *Griffin: Collaborative Drone-Car for Real-time road event detection
 
    <div align="center">
-  <img src="saind.png" style="display: block; float: left; width: 50; height: auto;">
+  <img src="saind.png" style="display: block; float: left; width: "50%"; height: auto;">
   </div>
 
 **Wifi Sensing:**
@@ -51,11 +51,11 @@ Selected Technical Projects
   *BMEye: Public Health-Oriented Body Mass Index Monitoring Using Commodity WiFi
 
   <div align="center">
-  <img src="saind.png" style="display: block; float: left; width: 50; height: auto;">
+  <img src="saind.png" style="display: block; float: left; width: "50%"; height: auto;">
   </div>
 
   *SWiDir: Enhancing Smartphone-based Walking Direction Estimation with Passive WiFi Sensing
 
   <div align="center">
-  <img src="saind.png" style="display: block; float: left; width: 50; height: auto;">
+  <img src="saind.png" style="display: block; float: left; width: "50%"; height: auto;">
   </div>
