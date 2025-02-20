@@ -20,6 +20,18 @@ Web Links for work portfolio:
 
 [CV](https://drive.google.com/file/d/1CfEzSRm9qq0q56GY-pWFhLHzBt1oCyKK/view?usp=share_link)
 
+News
+=====
+
+
+
+(Jan 2025) Reviewer for JCOMMS 
+
+(Nov 2024) Paper accepted to MobiCom 2024
+
+(Oct 2024) Paper sumbitted to _Transactions in Intelligent Vehicles_
+
+(Sept 2024) Paper accepted to _Sensors 24_
 
 Selected Technical Projects
 ===============
@@ -108,3 +120,8 @@ Selected Technical Projects
     </div>
   </div>
 </div>
+
+Contact 
+========
+
+Email: kirandav AT umich dot edu
