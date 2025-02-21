@@ -15,7 +15,7 @@ author_profile: true
 
 (Aug 2024) Successfully defended my thesis! My work focused on developing middleware framework for real-time event detection using UAV a.
 <a href="https://deepblue.lib.umich.edu/handle/2027.42/195589" target="_blank">
-  <img src="assets/images/link_icon.png" alt="Reference 1" style="width: 20px; height: 20px;">
+  <img src="/./assets/images/link_icon.png" alt="Reference 1" style="width: 20px; height: 20px;">
 </a>
 
 (May 2024 - Aug 2024) Held _Graduate Teaching Assistant_ position for CIS 310: Computer Org. and Architecture course.
