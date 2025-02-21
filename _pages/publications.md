@@ -1,16 +1,26 @@
 ---
-layout: archive
 title: "Publications"
 permalink: /publications/
+layout: single
 author_profile: true
 ---
 
-{% if author.googlescholar %}
-  You can also find my articles on <u><a href="https://scholar.google.com/citations?hl=en&user=zRhJxzoAAAAJ&view_op=list_works&authuser=1&gmla=AGd7smHXaRbUTQ0_V9Uz9PEImu08OGKFXBJ6OaQd8CjxkCIWGacoOao0CD6522VJ7JtfFNruuKT9gnkjcn-GgEApsW_awfRwkOzSZw">my Google Scholar profile</a>.</u>
-{% endif %}
+News
+=====
 
-{% include base_path %}
+(Jan 2025) Reviewer for _JCOMMS_ 
 
-{% for post in site.publications reversed %}
-  {% include archive-single.html %}
-{% endfor %}
+(Nov 2024) Our work "Proximal Federated Learning for Body Mass Index Monitoring using Commodity WiFi" accepted to _MobiCom 2024_!
+
+(Oct 2024) Our paper "Real-time Drone-Car Collaboration for Future Mobility: Vision and Challenge" sumbitted to _Transactions in Intelligent Vehicles_
+
+(Sep 2024) Our paper "SWiLoc: Fusing Smartphone Sensors and WiFi CSI for Accurate Indoor Localization" accepted to _Sensors 24_!
+
+(Aug 2024) Successfully defended my thesis! My work focused on developing middleware framework for real-time event detection using UAV and GV.
+<a href="https://deepblue.lib.umich.edu/handle/2027.42/195589" target="_blank">
+  <img src="_pages/link_icon.png" alt="Reference 1" style="width: 20px; height: 20px;">
+</a>
+
+(May 2024 - Aug 2024) Held _Graduate Teaching Assistant_ position for CIS 310: Computer Org. and Architecture course.
+
+(Apr 2024) Reviwer for _ICCCN 24_
