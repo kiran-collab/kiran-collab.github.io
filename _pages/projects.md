@@ -1,11 +1,11 @@
 ---
-title: "Projects"
+title: ""
 permalink: /projects/
 layout: single
 author_profile: true
 ---
 
-**Generative AI:**
+**Vision Generative AI:**
 
 <div style="display: flex; align-items: center;">
   <img src="/./assets/images/saind.png" style="width: 30%; height: auto; margin-right: 20px;">
