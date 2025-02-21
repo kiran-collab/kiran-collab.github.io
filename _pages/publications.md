@@ -1,12 +1,9 @@
 ---
-title: "Publications"
+title: "News"
 permalink: /publications/
 layout: single
 author_profile: true
 ---
-
-News
-=====
 
 (Jan 2025) Reviewer for _JCOMMS_ 
 
