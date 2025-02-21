@@ -1,15 +1,19 @@
----
-title: "Paper Title Number 1"
-collection: publications
-permalink: /publication/2009-10-01-paper-title-number-1
-excerpt: 'This paper is about the number 1. The number 2 is left for future work.'
-date: 2009-10-01
-venue: 'Journal 1'
-paperurl: 'http://academicpages.github.io/files/paper1.pdf'
-citation: 'Your Name, You. (2009). &quot;Paper Title Number 1.&quot; <i>Journal 1</i>. 1(1).'
----
-This paper is about the number 1. The number 2 is left for future work.
+News
+=====
 
-[Download paper here](http://academicpages.github.io/files/paper1.pdf)
+(Jan 2025) Reviewer for _JCOMMS_ 
 
-Recommended citation: Your Name, You. (2009). "Paper Title Number 1." <i>Journal 1</i>. 1(1).
+(Nov 2024) Our work "Proximal Federated Learning for Body Mass Index Monitoring using Commodity WiFi" accepted to _MobiCom 2024_!
+
+(Oct 2024) Our paper "Real-time Drone-Car Collaboration for Future Mobility: Vision and Challenge" sumbitted to _Transactions in Intelligent Vehicles_
+
+(Sep 2024) Our paper "SWiLoc: Fusing Smartphone Sensors and WiFi CSI for Accurate Indoor Localization" accepted to _Sensors 24_!
+
+(Aug 2024) Successfully defended my thesis! My work focused on developing middleware framework for real-time event detection using UAV and GV.
+<a href="https://deepblue.lib.umich.edu/handle/2027.42/195589" target="_blank">
+  <img src="_pages/link_icon.png" alt="Reference 1" style="width: 20px; height: 20px;">
+</a>
+
+(May 2024 - Aug 2024) Held _Graduate Teaching Assistant_ position for CIS 310: Computer Org. and Architecture course.
+
+(Apr 2024) Reviwer for _ICCCN 24_
