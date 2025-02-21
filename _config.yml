@@ -7,7 +7,7 @@
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Homee"
+title                    : "Home"
 title_separator          : "-"
 name                     : &name "Kiran Davuluri"
 description              : &description "About Me"
