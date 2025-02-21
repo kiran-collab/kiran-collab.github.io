@@ -14,9 +14,8 @@ author_profile: true
     <span style="color: red;">SAIND: Scene Animation using (RGB) Images aNd Depth maps</span>
     
     <div style="margin-top: 10px;">
-      <a href="https://example.com/doc1" src="/./assets/images/pdfdoc_icon.png" target="_blank" style="margin-right: 15px;">report</a>
-      <a href="https://example.com/doc2" target="_blank" style="margin-right: 15px;">ppt</a>
-      <a href="https://example.com/doc3" target="_blank">github</a>
+      <a href="https://example.com/doc1" target="_blank" style="margin-right: 15px;"><img src="/./assets/images/pdfdoc_icon.png" alt="PDF Document" style="width: 20px; height: 20px;"></a>
+      <a href="https://example.com/doc3" target="_blank"><img src="/./assets/images/github_icon.png" alt="PDF Document" style="width: 20px; height: 20px;"></a>
     </div>
   </div>
 </div>
