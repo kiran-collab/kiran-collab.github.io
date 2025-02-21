@@ -8,7 +8,7 @@ author_profile: true
 **Generative AI:**
 
 <div style="display: flex; align-items: center;">
-  <img src="_pages/saind.png" style="width: 30%; height: auto; margin-right: 20px;">
+  <img src="/./assets/images/saind.png" style="width: 30%; height: auto; margin-right: 20px;">
   
   <div>
     <span style="color: red;">SAIND: Scene Animation using (RGB) Images aNd Depth maps</span>
@@ -24,7 +24,7 @@ author_profile: true
   <br><br>
   
   <div style="display: flex; align-items: center;">
-  <img src="_pages/fontStyleTransfer.png" style="width: 30%; height: auto; margin-right: 20px;">
+  <img src="/./assets/images/fontStyleTransfer.png" style="width: 30%; height: auto; margin-right: 20px;">
   
   <div>
     <span style="color: red;">Font Style generation for Scene Text Recognition</span>
@@ -42,7 +42,7 @@ author_profile: true
 **Distributed Computing Systems for future mobility:**
   
   <div style="display: flex; align-items: center;">
-  <img src="_pages/griffin.png" style="width: 60%; height: auto; margin-right: 30px;">
+  <img src="/./assets/images/griffin.png" style="width: 60%; height: auto; margin-right: 30px;">
   
   <div>
     <span style="color: red;">Griffin: Collaborative Drone-Car for Real-time road event detection</span>
@@ -60,7 +60,7 @@ author_profile: true
 **Wifi Sensing:**
 
   <div style="display: flex; align-items: center;">
-  <img src="_pages/bmeye.png" style="width: 30%; height: auto; margin-right: 20px;">
+  <img src="/./assets/images/bmeye.png" style="width: 30%; height: auto; margin-right: 20px;">
   
   <div>
     <span style="color: red;">BMEye: Public Health-Oriented Body Mass Index Monitoring Using Commodity WiFi</span>
@@ -77,7 +77,7 @@ author_profile: true
   <br><br>
 
   <div style="display: flex; align-items: center;">
-  <img src="_pages/swidir.png" style="width: 30%; height: auto; margin-right: 20px;">
+  <img src="/./assets/images/swidir.png" style="width: 30%; height: auto; margin-right: 20px;">
   
   <div>
     <span style="color: red;">SWiDir: Enhancing Smartphone-based Walking Direction Estimation with Passive WiFi Sensing</span>
