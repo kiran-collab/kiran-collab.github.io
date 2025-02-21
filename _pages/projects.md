@@ -65,7 +65,7 @@ author_profile: true
     <div style="margin-top: 10px;">
       <a href="https://example.com/doc1" target="_blank" style="margin-right: 15px;"><img src="/./assets/images/pdfdoc_icon.png" alt="PDF Document" style="width: 20px; height: 20px;"></a>
       <a href="https://github.com/kiran-collab/CSIKit-BMEye" target="_blank"><img src="/./assets/images/github_icon.png" alt="PDF Document" style="width: 20px; height: 20px;"></a>
-      <a href="https://drive.google.com/file/d/1O4tS-Qrpfxc6nQA-L1zBzoVZg0EM_-a9/view?usp=share_link" target="_blank"><img src="/./assets/images/video_icon.png" alt="PDF Document" style="width: 20px; height: 20px;"></a>
+      <a href="https://drive.google.com/file/d/1O4tS-Qrpfxc6nQA-L1zBzoVZg0EM_-a9/view?usp=share_link" target="_blank"><img src="/./assets/images/video_icon.jpg" alt="PDF Document" style="width: 20px; height: 20px;"></a>
     </div>
   </div>
 </div>
