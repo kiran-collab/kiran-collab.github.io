@@ -24,6 +24,7 @@ Web Links for work portfolio:
 Research Interests
 =================
 
+My current research directions include Computer Vision with Distributive Computing, Video Analytics at the Edge, Computer Vision and its generative mechanisms.
 
 
 
