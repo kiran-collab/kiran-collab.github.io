@@ -46,7 +46,7 @@ author_profile: true
     
     <div style="margin-top: 10px;">
       <a href="https://drive.google.com/file/d/1AiJLYfZRTlw3ID_MDAoul3_plD1E9NM3/view?usp=share_link" target="_blank" style="margin-right: 15px;"><img src="/./assets/images/pdfdoc_icon.png" alt="PDF Document" style="width: 20px; height: 20px;"></a>
-      <a href="https://example.com/doc2" target="_blank" style="margin-right: 15px;"><img src="/./assets/images/poster_icon.png" alt="PDF Document" style="width: 20px; height: 20px;"></a>
+      <a href="https://drive.google.com/file/d/1HZzd6dDWaV-agRxN0BtVJxJWthMUIzy5/view?usp=share_link" target="_blank" style="margin-right: 15px;"><img src="/./assets/images/poster_icon.png" alt="PDF Document" style="width: 20px; height: 20px;"></a>
       <a href="https://github.com/kiran-collab/Griffin" target="_blank"><img src="/./assets/images/github_icon.png" alt="PDF Document" style="width: 20px; height: 20px;"></a>
     </div>
   </div>
