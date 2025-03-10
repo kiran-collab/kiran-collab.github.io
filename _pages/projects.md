@@ -8,7 +8,7 @@ author_profile: true
 **Vision Generative AI:**
 
 <div style="display: flex; align-items: center;">
-  <img src="/./assets/images/saind.png" style="width: 30%; height: auto; margin-right: 20px;">
+  <img src="/./assets/images/saind.png" style="width: 30%; height: auto; margin-right: 20px; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3)">
   
   <div>
     <span style="color: red;">SAIND: Scene Animation using (RGB) Images aNd Depth maps</span>
