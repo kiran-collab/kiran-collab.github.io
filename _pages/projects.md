@@ -5,7 +5,7 @@ layout: single
 author_profile: true
 ---
 
-**Vision Generative AI:**
+**Vision Language Models:**
 
 <div style="display: flex; align-items: center;">
   <img src="/./assets/images/saind.png" style="width: 30%; height: auto; margin-right: 20px; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3)">
