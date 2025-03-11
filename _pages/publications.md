@@ -13,7 +13,7 @@ author_profile: true
 
 (Sep 2024) Our paper "SWiLoc: Fusing Smartphone Sensors and WiFi CSI for Accurate Indoor Localization" accepted to _Sensors 24_!
 
-(Aug 2024) Successfully defended my thesis! My work focused on developing middleware framework for real-time event detection using UAV a.
+(Aug 2024) Successfully defended my thesis! My work focused on developing middleware framework for real-time event detection using UAV and GV.
 <a href="https://deepblue.lib.umich.edu/handle/2027.42/195589" target="_blank">
   <img src="/./assets/images/link_icon.png" alt="Reference 1" style="width: 20px; height: 20px;">
 </a>
