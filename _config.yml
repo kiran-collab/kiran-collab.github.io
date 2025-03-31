@@ -81,7 +81,7 @@ analytics:
 author:
   name             : "Kiran Davuluri"
   avatar           : "kiran_bio_pic_2.jpg"
-  bio              : "Masters @ U of M"
+  bio              : "Masters @ University of Michigan"
   #location         : "Location"
   #employer         :
   #pubmed           : "https://www.ncbi.nlm.nih.gov/pubmed/?term=john+snow"
@@ -222,6 +222,16 @@ defaults:
   - scope:
       path: "/publications/"
       type: publications
+    values:
+      layout: single
+      author_profile: true
+      share: true
+      comments: true
+
+  # _products
+  - scope:
+      path: "/products"
+      type: products
     values:
       layout: single
       author_profile: true
