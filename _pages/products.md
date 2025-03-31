@@ -1,5 +1,5 @@
 ---
-title: "Selected Technical Projects"
+title: "Products"
 permalink: /products/
 layout: single
 author_profile: true
