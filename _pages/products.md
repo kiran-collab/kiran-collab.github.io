@@ -1,6 +1,6 @@
 ---
 title: "Selected Technical Projects"
-permalink: /projects/
+permalink: /products/
 layout: single
 author_profile: true
 ---
