@@ -4,6 +4,9 @@ permalink: /publications/
 layout: single
 author_profile: true
 ---
+(Jun 2025) Reviewer for _SoftCom '25_
+
+(Apr 2025) Joining Minerva AI as _Data Scientist Intern_
 
 (Jan 2025) Reviewer for _JCOMMS_ 
 
