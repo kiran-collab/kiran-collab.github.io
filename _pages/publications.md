@@ -4,6 +4,12 @@ permalink: /publications/
 layout: single
 author_profile: true
 ---
+(Dec 2025) Joining InfiswiftAI
+
+(Oct 2025) Reviewer at _JCOMMS_
+
+(Sep 2025) Reviewer for _IOTJ_
+
 (Jun 2025) Reviewer for _SoftCom '25_
 
 (Apr 2025) Joining Minerva AI as _Data Scientist Intern_
