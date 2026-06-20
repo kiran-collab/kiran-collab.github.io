@@ -5,7 +5,8 @@ layout: single
 author_profile: true
 ---
 (Apr 2026) Our paper "Real-time Drone-Car Collaboration for Future Mobility: Vision and Challenge" accepted to _ACM Sigapp 2026_
-(Dec 2025) Joining InfiswiftAI
+
+(Dec 2025) Joining InfiswiftAI as an AI and Computer Vision Engineer
 
 (Oct 2025) Reviewer at _JCOMMS_
 
@@ -13,7 +14,7 @@ author_profile: true
 
 (Jun 2025) Reviewer for _SoftCom '25_
 
-(Apr 2025) Joining Minerva AI as _Data Scientist Intern_
+(Apr 2025) Joining Minerva AI as _Data Scientist_
 
 (Jan 2025) Reviewer for _JCOMMS_ 
 
