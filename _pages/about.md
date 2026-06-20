@@ -13,7 +13,7 @@ About Me
 
 I earned my master's in Computer Science from the University of Michigan, where I was advised by [Prof. Zheng Song](https://umdearborn.edu/people-um-dearborn/zheng-song) and [Prof. JJ Corso](https://web.eecs.umich.edu/~jjcorso/), focusing on WiFi sensing and distributed computing for future mobility. 
 
-Previously, I worked on multilingual font interpolation with [Prof. Chetan Arora](https://www.cse.iitd.ac.in/~chetan/) at IIT Delhi and [Prof. Vinay Namboodiri](https://vinaypn.github.io) at University of Bath,  
+Previously, I worked on multilingual font interpolation with [Prof. Chetan Arora](https://www.cse.iitd.ac.in/~chetan/) at IIT Delhi and [Prof. Vinay Namboodiri](https://vinaypn.github.io) at University of Bath.
 
 As a Project JRF at IIT Madras with [Prof. Anil Prabhakar](https://sites.google.com/ee.iitm.ac.in/anilprabhakar/home) & IIIT Chennai with [Prof. V. Masilamani](https://www.iiitdm.ac.in/people/faculty/masila@iiitdm.ac.in), I developed AI backed desktop and web tools for detecting multimodal deepfake content to combat cybercrime.
 
