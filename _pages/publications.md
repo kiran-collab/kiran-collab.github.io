@@ -4,7 +4,7 @@ permalink: /publications/
 layout: single
 author_profile: true
 ---
-(Apr 2026) Our paper "Real-time Drone-Car Collaboration for Future Mobility: Vision and Challenge" accepted to _ACM Sigapp 2026_
+(Apr 2026) Our paper "Real-time Drone-Car Collaboration for Future Mobility: Vision and Challenge" accepted to _ACM Sigapp '26_
 
 (Dec 2025) Joining InfiswiftAI as an AI and Computer Vision Engineer
 
