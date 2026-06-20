@@ -17,7 +17,7 @@ Previously, I worked on multilingual font interpolation with [Prof. Chetan Arora
 
 As a Project Junior Research Fellow at IIT Madras with [Prof. Anil Prabhakar](https://sites.google.com/ee.iitm.ac.in/anilprabhakar/home) & IIIT Chennai with [Prof. V. Masilamani](https://www.iiitdm.ac.in/people/faculty/masila@iiitdm.ac.in), I developed AI backed desktop and web tools for detecting multimodal deepfake content to combat cybercrime.
 
-Currently, I am working with [Rahul Garg](https://www.linkedin.com/in/irahulgarg/) on optimizing wakeword detection algorithms for largescale robotic tasks and [Narayanan Nagarajan](https://www.linkedin.com/in/narayanan-nagarajan/) on developing agentic workflows for automatic RFI resolutions in a 2D to 3D construction CAD image -> video visualizer.
+Currently at Infiswift, I am working with [Rahul Garg](https://www.linkedin.com/in/irahulgarg/) on optimizing wakeword detection algorithms for largescale robotic tasks and [Narayanan Nagarajan](https://www.linkedin.com/in/narayanan-nagarajan/) on developing agentic workflows for automatic RFI resolutions in a 2D to 3D construction CAD image -> video visualizer.
 
 Web Links for work portfolio:
 
