@@ -4,6 +4,7 @@ permalink: /publications/
 layout: single
 author_profile: true
 ---
+(Apr 2026) Our paper "Real-time Drone-Car Collaboration for Future Mobility: Vision and Challenge" accepted to _ACM Sigapp 2026_
 (Dec 2025) Joining InfiswiftAI
 
 (Oct 2025) Reviewer at _JCOMMS_
@@ -16,11 +17,11 @@ author_profile: true
 
 (Jan 2025) Reviewer for _JCOMMS_ 
 
-(Nov 2024) Our work "Proximal Federated Learning for Body Mass Index Monitoring using Commodity WiFi" accepted to _MobiCom 2024_!
+(Nov 2024) Our work "Proximal Federated Learning for Body Mass Index Monitoring using Commodity WiFi" accepted to _MobiCom 2024_
 
 (Oct 2024) Our paper "Real-time Drone-Car Collaboration for Future Mobility: Vision and Challenge" sumbitted to _Transactions in Intelligent Vehicles_
 
-(Sep 2024) Our paper "SWiLoc: Fusing Smartphone Sensors and WiFi CSI for Accurate Indoor Localization" accepted to _Sensors 24_!
+(Sep 2024) Our paper "SWiLoc: Fusing Smartphone Sensors and WiFi CSI for Accurate Indoor Localization" accepted to _Sensors 24_
 
 (Aug 2024) Successfully defended my thesis! My work focused on developing middleware framework for real-time event detection using UAV and GV.
 <a href="https://deepblue.lib.umich.edu/handle/2027.42/195589" target="_blank">
