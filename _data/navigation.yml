@@ -6,6 +6,8 @@ main:
     url: /projects/
   - title: "Products"
     url: /products/
+  - title: "Tutorials"
+    url: /tutorials/
 
   #- title: "Talks"
   #  url: /talks/    
