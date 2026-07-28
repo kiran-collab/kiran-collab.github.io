@@ -8,6 +8,8 @@ main:
     url: /products/
   - title: "Tutorials"
     url: /tutorials/
+  - title: "Collaborators"
+    url: /collaborators/
 
   #- title: "Talks"
   #  url: /talks/    
