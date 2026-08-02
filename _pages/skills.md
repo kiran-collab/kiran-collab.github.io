@@ -1404,3 +1404,5 @@ author_profile: true
 </svg></div>
 <div class="tk-txt"><p><strong>moto.</strong> moto mocks AWS service APIs in-process so tests exercise S3, SQS, DynamoDB, and similar without network calls or real credentials. That keeps the suite fast, deterministic, and free of cloud spend.</p></div>
 </div>
+
+{% include speak-buttons.html %}

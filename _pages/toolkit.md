@@ -1210,3 +1210,5 @@ A working glossary of the areas, systems, and tools I build with — spanning mo
 </svg></div>
 <div class="tk-txt"><p><strong>Seaborn.</strong> Seaborn builds on Matplotlib with a statistical grammar and sensible defaults for distributions, relationships, and categorical comparisons. It produces informative exploratory plots in a fraction of the code.</p></div>
 </div>
+
+{% include speak-buttons.html %}
