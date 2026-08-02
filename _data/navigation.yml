@@ -6,6 +6,10 @@ main:
     url: /projects/
   - title: "Products"
     url: /products/
+  - title: "Articles"
+    url: /articles/
+  - title: "Trends"
+    url: /trends/
   - title: "Skills"
     url: /skills/
   - title: "Toolkit"
