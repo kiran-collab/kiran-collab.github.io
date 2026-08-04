@@ -18,7 +18,9 @@ author_profile: true
 .pl .band { fill: #f1eef7; stroke: #6b4a8b; stroke-width: 1.1; }
 .pl .bandt { font: 600 7px -apple-system, sans-serif; fill: #543a6e; text-anchor: middle; }
 .pl .band.eng  { fill: #eaf2e6; stroke: #4a6741; }
+.pl .band.lead { fill: #e8f1f6; stroke: #1f6f8b; }
 .pl .bandt.eng { fill: #33502c; }
+.pl .bandt.lead { fill: #17566c; }
 
 /* ---------- role cards ---------- */
 .role {
@@ -63,13 +65,14 @@ table.cmp td:first-child { font-weight: 600; white-space: nowrap; }
 .sec { margin-top: 2.4em; padding-top: .5em; border-top: 2px solid #eee; scroll-margin-top: 24px; }
 </style>
 
-<p>Nine roles that sit close enough together to be confused constantly — in job ads, in interviews, and by candidates deciding which one they actually want. For each: what you own, the skills that matter, the soft skills nobody lists but everybody screens for, the tools, and a small project worth building.</p>
+<p>Ten roles that sit close enough together to be confused constantly — in job ads, in interviews, and by candidates deciding which one they actually want. For each: what you own, the skills that matter, the soft skills nobody lists but everybody screens for, the tools, and a small project worth building.</p>
 
 <p>The strip on every card shows the same pipeline with that role's territory lit up — <strong style="color:#1f6f8b">solid</strong> for what you own, <span style="color:#5c8b9d">pale</span> for what you touch. Overlaps between roles are real, not sloppy labelling.</p>
 
 <p class="jump">
 <a href="#glance">At a glance</a>
 <a href="#ai-engineer">AI Engineer</a>
+<a href="#lead-ai-engineer">Lead AI Engineer</a>
 <a href="#ml-engineer">ML Engineer</a>
 <a href="#research-engineer">Research Engineer</a>
 <a href="#research-scientist">Research Scientist</a>
@@ -88,6 +91,7 @@ table.cmp td:first-child { font-weight: 600; white-space: nowrap; }
 <thead><tr><th>Role</th><th>Core question</th><th>Primary output</th><th>Interview weighted toward</th><th>Most confused with</th></tr></thead>
 <tbody>
 <tr><td>AI Engineer</td><td>Can I build a reliable feature on a model I didn't train?</td><td>A shipped LLM/VLM feature + its eval harness</td><td>Applied coding, LLM system design, evals</td><td>ML Engineer</td></tr>
+<tr><td>Lead AI Engineer</td><td>Is the team building the right thing, in the right order?</td><td>Technical direction others can execute against</td><td>Ambiguous system design, leadership scenarios</td><td>Eng Manager / Staff Engineer</td></tr>
 <tr><td>ML Engineer</td><td>Can I train, serve, and keep this model healthy?</td><td>A model in production with monitoring</td><td>ML system design, fundamentals, coding</td><td>AI Engineer / Data Scientist</td></tr>
 <tr><td>Research Engineer</td><td>Can I make this experiment run correctly, at scale, fast?</td><td>Training infrastructure and experiment velocity</td><td>Systems + ML coding, distributed training</td><td>ML Engineer</td></tr>
 <tr><td>Research Scientist</td><td>What don't we know, and can I move it?</td><td>A method and a result others can build on</td><td>Research talk, your own papers, fundamentals</td><td>Research Engineer</td></tr>
@@ -151,6 +155,75 @@ table.cmp td:first-child { font-weight: 600; white-space: nowrap; }
 <h4>Small project worth building</h4>
 <div class="proj">
 <p><strong>A documentation assistant with an evaluation harness.</strong> Index a public documentation set, serve answers with hybrid retrieval and a reranker, and cite sources. <span class="edge">The differentiator is not the chatbot — everyone has one.</span> It is the 50-question golden set with expected answers, the faithfulness and retrieval-precision scores, and a CI job that fails the build when a prompt change regresses quality. Publish the eval numbers before and after one deliberate improvement.</p>
+</div>
+
+</div>
+
+<h2 class="sec" id="lead-ai-engineer">Lead AI Engineer</h2>
+
+<div class="role">
+
+<svg class="pl" viewBox="0 0 300 64" aria-label="Pipeline with serve and product owned, explore train store touched, under a technical direction band">
+<rect class="band lead" x="3" y="4" width="292" height="16" rx="3"/><text class="bandt lead" x="149" y="15">technical direction · mentoring · cross-team alignment</text>
+<rect class="off" x="3" y="26" width="40" height="20" rx="3"/><text class="lf" x="23" y="39">source</text>
+<rect class="off" x="45" y="26" width="40" height="20" rx="3"/><text class="lf" x="65" y="39">ingest</text>
+<rect class="touch" x="87" y="26" width="40" height="20" rx="3"/><text class="lt" x="107" y="39">store</text>
+<rect class="touch" x="129" y="26" width="40" height="20" rx="3"/><text class="lt" x="149" y="39">explore</text>
+<rect class="touch" x="171" y="26" width="40" height="20" rx="3"/><text class="lt" x="191" y="39">train</text>
+<rect class="own" x="213" y="26" width="40" height="20" rx="3"/><text class="lo" x="233" y="39">serve</text>
+<rect class="own" x="255" y="26" width="40" height="20" rx="3"/><text class="lo" x="275" y="39">product</text>
+<text class="cap" x="149" y="58">same territory as AI Engineer, plus the decisions about it</text>
+</svg>
+
+<h3>Lead AI Engineer</h3>
+<p class="qn">"Is the team building the right thing, in the right order, well enough to keep?"</p>
+
+<h4>What actually changes from AI Engineer</h4>
+<p>This is a seniority tier rather than a different discipline, so the useful question is not what the skills are — you already have them — but what the job becomes. Four things change, and they are the whole difficulty:</p>
+<ul>
+<li><strong>You are measured on the team's output, not your own.</strong> A quarter where you wrote almost no code and three engineers shipped well is a good quarter. This takes most people a year to genuinely believe.</li>
+<li><strong>The hardest problems stop being technical.</strong> They become "these two teams disagree and both are partly right", and no amount of engineering skill resolves them.</li>
+<li><strong>You decide without enough information, publicly.</strong> Waiting for certainty is itself a decision, and usually the expensive one.</li>
+<li><strong>Your leverage moves to review and design.</strong> A good design review changes the direction of six weeks of work; a good pull-request comment changes how someone builds for years.</li>
+</ul>
+
+<h4>What you own</h4>
+<ul>
+<li>Technical direction for the AI surface — including which problems should <em>not</em> get a model, which is the more valuable half of that judgment.</li>
+<li>The expensive-to-reverse decisions: provider and model strategy, evaluation infrastructure, build versus buy, and where lock-in is acceptable.</li>
+<li>The quality bar and its enforcement — what the eval gates are, and holding the line when a deadline argues otherwise.</li>
+<li>Engineers growing: scoping work so it stretches people, reviewing in a way that teaches, and giving the hard feedback early.</li>
+<li>Translation upward — converting leadership's expectations into something achievable, and the reverse, without either side feeling managed.</li>
+</ul>
+
+<h4>Technical skills</h4>
+<p>Everything in the AI Engineer card remains assumed. What gets added:</p>
+<ul>
+<li>System design across a portfolio rather than a feature — shared eval infrastructure, shared retrieval, and cost modelled at the level of the whole product.</li>
+<li>Enough breadth into data, infrastructure, and security to spot the risk that sits between teams and has no owner.</li>
+<li>Reading the research and vendor landscape well enough to know what is about to get cheap, so you don't build what you could buy in six months.</li>
+<li>Writing that carries a decision: design documents and decision records that let someone act without you in the room.</li>
+</ul>
+
+<h4>Soft skills that actually get screened</h4>
+<ul>
+<li><strong>Restraint.</strong> Not fixing it yourself when fixing it yourself would be faster. This is the single hardest transition, and interviewers probe it deliberately.</li>
+<li><strong>Saying no upward with a smaller yes attached.</strong> "Not that, but here is what we can have by then" keeps credibility that a flat refusal spends.</li>
+<li><strong>Feedback that changes behaviour without costing trust</strong> — specific, early, and about the work rather than the person.</li>
+<li><strong>Making your reasoning legible.</strong> A decision nobody can reconstruct gets relitigated every quarter.</li>
+<li><strong>Absorbing uncertainty on behalf of the team</strong> so they can keep building while you carry the ambiguity.</li>
+</ul>
+
+<h4>Tools</h4>
+<p class="chips"><span>Everything in the AI Engineer card</span><span>Design docs / ADRs</span><span>Eval platforms</span><span>Cost dashboards</span><span>Roadmapping</span><span>Incident review</span></p>
+
+<h4>What to show instead of a project</h4>
+<div class="proj">
+<p><strong>Evidence of judgment, not another repository.</strong> By this level a portfolio project proves little — everyone assumes you can build. <span class="edge">Bring a decision record instead:</span> one architecture or build-versus-buy call you made, the options you rejected and why, what you were uncertain about, and what actually happened afterwards — including if it went badly. Pair it with evidence someone else built on your work: a tool your team adopted, an engineer who grew under your review, a direction change you argued for and won.</p>
+</div>
+
+<div class="note">
+<p><strong>Check whether it is actually a management job.</strong> "Lead" usually means a technical track where you still build — but if the description mentions headcount, performance reviews, hiring plans, or budget ownership, it is an engineering manager role wearing an engineering title. That is a genuinely different career, not a harder version of this one. Ask directly in the interview: <em>"how much of this role is expected to be hands-on in six months?"</em> — and treat a vague answer as an answer.</p>
 </div>
 
 </div>
@@ -644,7 +717,7 @@ table.cmp td:first-child { font-weight: 600; white-space: nowrap; }
 <p>The practical consequence for a job search: if what you enjoy is watching something you built get used next quarter, research will feel slow and disconnected. If what you enjoy is the open question itself and you can wait years to see it land, product roles will feel like they never let you go deep enough. Both are honourable answers, and picking the wrong one is the most common reason people are unhappy a year into an otherwise good job.</p>
 
 <div class="note">
-<p><strong>Where the overlaps genuinely are.</strong> AI Engineer and ML Engineer overlap on serving. Data Scientist and Data Analyst overlap on analysis — the honest distinction is inference versus reporting, not seniority. Data Engineer and Analytics Engineer overlap almost entirely at some companies. Research Engineer and Research Scientist overlap on the experiment itself — the split is who chooses the question versus who makes it runnable, and at smaller labs one person does both. If a job description spans two of these, it usually means the team is small and you'll do both, which is excellent for learning and worth asking about directly.</p>
+<p><strong>Where the overlaps genuinely are.</strong> AI Engineer and ML Engineer overlap on serving. Data Scientist and Data Analyst overlap on analysis — the honest distinction is inference versus reporting, not seniority. Data Engineer and Analytics Engineer overlap almost entirely at some companies. A Lead AI Engineer would own the technical direction across the AI parts of this project without owning a stage of it. Research Engineer and Research Scientist overlap on the experiment itself — the split is who chooses the question versus who makes it runnable, and at smaller labs one person does both. If a job description spans two of these, it usually means the team is small and you'll do both, which is excellent for learning and worth asking about directly.</p>
 </div>
 
 <h2 class="sec" id="choosing">Choosing between them</h2>
@@ -658,15 +731,16 @@ table.cmp td:first-child { font-weight: 600; white-space: nowrap; }
 <li>Getting a model to behave in a product → AI Engineer.</li>
 <li>Sitting with a customer while their system misbehaves → Forward Deployed Engineer.</li>
 <li>Finding out that two teams have been assuming different launch dates → TPM.</li>
+<li>Wanting the call to be yours, and being at peace with writing less code → Lead AI Engineer.</li>
 <li>Making a 400-GPU run finish before the weekend → Research Engineer.</li>
 <li>Being genuinely unsure whether the idea will work at all → Research Scientist.</li>
 </ul>
 
-<h4>Things that hold across all nine</h4>
+<h4>Things that hold across all ten</h4>
 <ul>
 <li><strong>Ship something end to end and write about it.</strong> One finished, documented, honestly-evaluated project beats five tutorial repositories — in every one of these roles.</li>
 <li><strong>Numbers on your resume, not adjectives.</strong> "Cut p99 latency from 2.4s to 700ms" carries; "optimised system performance" does not.</li>
 <li><strong>Have the failure story ready.</strong> Every interview loop asks. The strong answer names your own mistake, the diagnosis, and what you changed afterwards.</li>
-<li><strong>SQL is the common denominator.</strong> Six of the nine use it regularly (the research roles least of all); being genuinely good at it is unusually high leverage per hour invested.</li>
+<li><strong>SQL is the common denominator.</strong> Six of the ten use it regularly (the research roles least of all); being genuinely good at it is unusually high leverage per hour invested.</li>
 <li><strong>Read the responsibilities, then ask what the last person did all week.</strong> It is the single most informative question available to you in an interview, and few candidates ask it.</li>
 </ul>
