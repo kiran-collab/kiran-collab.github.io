@@ -8,6 +8,8 @@ main:
     url: /products/
   - title: "Articles"
     url: /articles/
+  - title: "Job Resources"
+    url: /job-resources/
   - title: "Trends"
     url: /trends/
   - title: "Skills"
