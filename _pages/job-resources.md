@@ -17,6 +17,8 @@ author_profile: true
 .pl .cap { font: 500 6.5px -apple-system, sans-serif; fill: #8a9199; text-anchor: middle; }
 .pl .band { fill: #f1eef7; stroke: #6b4a8b; stroke-width: 1.1; }
 .pl .bandt { font: 600 7px -apple-system, sans-serif; fill: #543a6e; text-anchor: middle; }
+.pl .band.eng  { fill: #eaf2e6; stroke: #4a6741; }
+.pl .bandt.eng { fill: #33502c; }
 
 /* ---------- role cards ---------- */
 .role {
@@ -61,7 +63,7 @@ table.cmp td:first-child { font-weight: 600; white-space: nowrap; }
 .sec { margin-top: 2.4em; padding-top: .5em; border-top: 2px solid #eee; scroll-margin-top: 24px; }
 </style>
 
-<p>Seven roles that sit close enough together to be confused constantly — in job ads, in interviews, and by candidates deciding which one they actually want. For each: what you own, the skills that matter, the soft skills nobody lists but everybody screens for, the tools, and a small project worth building.</p>
+<p>Nine roles that sit close enough together to be confused constantly — in job ads, in interviews, and by candidates deciding which one they actually want. For each: what you own, the skills that matter, the soft skills nobody lists but everybody screens for, the tools, and a small project worth building.</p>
 
 <p>The strip on every card shows the same pipeline with that role's territory lit up — <strong style="color:#1f6f8b">solid</strong> for what you own, <span style="color:#5c8b9d">pale</span> for what you touch. Overlaps between roles are real, not sloppy labelling.</p>
 
@@ -69,6 +71,8 @@ table.cmp td:first-child { font-weight: 600; white-space: nowrap; }
 <a href="#glance">At a glance</a>
 <a href="#ai-engineer">AI Engineer</a>
 <a href="#ml-engineer">ML Engineer</a>
+<a href="#research-engineer">Research Engineer</a>
+<a href="#research-scientist">Research Scientist</a>
 <a href="#data-scientist">Data Scientist</a>
 <a href="#data-analyst">Data Analyst</a>
 <a href="#data-engineer">Data Engineer</a>
@@ -85,6 +89,8 @@ table.cmp td:first-child { font-weight: 600; white-space: nowrap; }
 <tbody>
 <tr><td>AI Engineer</td><td>Can I build a reliable feature on a model I didn't train?</td><td>A shipped LLM/VLM feature + its eval harness</td><td>Applied coding, LLM system design, evals</td><td>ML Engineer</td></tr>
 <tr><td>ML Engineer</td><td>Can I train, serve, and keep this model healthy?</td><td>A model in production with monitoring</td><td>ML system design, fundamentals, coding</td><td>AI Engineer / Data Scientist</td></tr>
+<tr><td>Research Engineer</td><td>Can I make this experiment run correctly, at scale, fast?</td><td>Training infrastructure and experiment velocity</td><td>Systems + ML coding, distributed training</td><td>ML Engineer</td></tr>
+<tr><td>Research Scientist</td><td>What don't we know, and can I move it?</td><td>A method and a result others can build on</td><td>Research talk, your own papers, fundamentals</td><td>Research Engineer</td></tr>
 <tr><td>Data Scientist</td><td>What is true here, and what should we do?</td><td>A decision, with quantified uncertainty</td><td>Stats, SQL, product case</td><td>Data Analyst / ML Engineer</td></tr>
 <tr><td>Data Analyst</td><td>What happened, and what should people see?</td><td>Trusted metrics and dashboards</td><td>SQL (heaviest), business case</td><td>Data Scientist</td></tr>
 <tr><td>Data Engineer</td><td>Is the data correct, fresh, and available?</td><td>Reliable pipelines and models of the data</td><td>SQL, modelling, pipeline design</td><td>Backend / Analytics Engineer</td></tr>
@@ -197,6 +203,117 @@ table.cmp td:first-child { font-weight: 600; white-space: nowrap; }
 <h4>Small project worth building</h4>
 <div class="proj">
 <p><strong>A closed training-to-retraining loop.</strong> Fine-tune a small model, serve it behind an autoscaling endpoint, and log every prediction. <span class="edge">The differentiator is the loop closing itself:</span> a drift detector on the input distribution, an alert, and an automated retraining job that promotes a new version only if it beats the incumbent on a held-out set. Report p99 latency and cost per 1K requests before and after one optimisation.</p>
+</div>
+
+</div>
+
+<h2 class="sec" id="research-engineer">Research Engineer</h2>
+
+<div class="role">
+
+<svg class="pl" viewBox="0 0 300 64" aria-label="Pipeline with train owned, store serve touched, under an experiment-infrastructure band">
+<rect class="band eng" x="3" y="4" width="292" height="16" rx="3"/><text class="bandt eng" x="149" y="15">experiment infrastructure · scale · reproducibility</text>
+<rect class="off" x="3" y="26" width="40" height="20" rx="3"/><text class="lf" x="23" y="39">source</text>
+<rect class="off" x="45" y="26" width="40" height="20" rx="3"/><text class="lf" x="65" y="39">ingest</text>
+<rect class="touch" x="87" y="26" width="40" height="20" rx="3"/><text class="lt" x="107" y="39">store</text>
+<rect class="touch" x="129" y="26" width="40" height="20" rx="3"/><text class="lt" x="149" y="39">explore</text>
+<rect class="own" x="171" y="26" width="40" height="20" rx="3"/><text class="lo" x="191" y="39">train</text>
+<rect class="touch" x="213" y="26" width="40" height="20" rx="3"/><text class="lt" x="233" y="39">serve</text>
+<rect class="off" x="255" y="26" width="40" height="20" rx="3"/><text class="lf" x="275" y="39">product</text>
+<text class="cap" x="149" y="58">owns how fast the lab can try the next idea</text>
+</svg>
+
+<h3>Research Engineer</h3>
+<p class="qn">"Can I make this experiment run — correctly, at scale, and fast enough to iterate?"</p>
+
+<h4>What you own</h4>
+<ul>
+<li>The training stack: distributed runs, data loading at scale, checkpointing, and recovery when a node dies at hour thirty.</li>
+<li>Experiment velocity — the turnaround time between a researcher's idea and a result, which is the lab's real throughput metric.</li>
+<li>Reproducibility: same config, same seed, same result, months later and on different hardware.</li>
+<li>Performance: throughput per GPU, memory efficiency, and finding the bottleneck that makes a run 40% slower than it should be.</li>
+</ul>
+
+<h4>Technical skills</h4>
+<ul>
+<li>Distributed training in depth — data, tensor, pipeline, and fully-sharded parallelism, and knowing which failure each one causes.</li>
+<li>Profiling and performance reasoning: reading a trace, spotting a stalled data loader, distinguishing memory-bound from compute-bound.</li>
+<li>Numerical debugging — loss spikes, NaNs, divergence at scale, and precision issues that only appear past a certain size.</li>
+<li>Genuinely strong software engineering. Research code rots fast; the RE is the reason it doesn't.</li>
+<li>Cluster reality: schedulers, GPU topology, interconnect, and the cost of a run before it starts.</li>
+</ul>
+
+<h4>Soft skills that actually get screened</h4>
+<ul>
+<li><strong>A service mindset.</strong> Your users are researchers, and your output is their productivity. Satisfaction has to come from someone else's result.</li>
+<li><strong>Pushing back on an expensive run</strong> that has no hypothesis behind it — diplomatically, since the person proposing it is usually senior to you.</li>
+<li><strong>Tolerating specification that arrives half-formed.</strong> "Try it with a different loss" is a complete request in this world, and you make it concrete.</li>
+</ul>
+
+<h4>Tools</h4>
+<p class="chips"><span>PyTorch</span><span>JAX</span><span>FSDP / DeepSpeed</span><span>SLURM</span><span>Kubernetes</span><span>NCCL</span><span>Nsight / torch profiler</span><span>Weights &amp; Biases</span><span>CUDA (reading it)</span><span>Docker</span></p>
+
+<h4>Small project worth building</h4>
+<div class="proj">
+<p><strong>Make one training script fast and reproducible.</strong> Take a single-GPU training script and scale it to multi-GPU with correct gradient synchronisation, deterministic seeding, and resumable checkpoints. <span class="edge">The differentiator is the profile:</span> publish tokens/second per GPU before and after, name the bottleneck you found, and show the fix. A number with a trace behind it is worth more than any amount of framework familiarity.</p>
+</div>
+
+</div>
+
+<h2 class="sec" id="research-scientist">Research Scientist</h2>
+
+<div class="role">
+
+<svg class="pl" viewBox="0 0 300 64" aria-label="Pipeline with explore and train owned, under a hypothesis and publication band">
+<rect class="band" x="3" y="4" width="292" height="16" rx="3"/><text class="bandt" x="149" y="15">problem selection · method · evidence · publication</text>
+<rect class="off" x="3" y="26" width="40" height="20" rx="3"/><text class="lf" x="23" y="39">source</text>
+<rect class="off" x="45" y="26" width="40" height="20" rx="3"/><text class="lf" x="65" y="39">ingest</text>
+<rect class="off" x="87" y="26" width="40" height="20" rx="3"/><text class="lf" x="107" y="39">store</text>
+<rect class="own" x="129" y="26" width="40" height="20" rx="3"/><text class="lo" x="149" y="39">explore</text>
+<rect class="own" x="171" y="26" width="40" height="20" rx="3"/><text class="lo" x="191" y="39">train</text>
+<rect class="off" x="213" y="26" width="40" height="20" rx="3"/><text class="lf" x="233" y="39">serve</text>
+<rect class="off" x="255" y="26" width="40" height="20" rx="3"/><text class="lf" x="275" y="39">product</text>
+<text class="cap" x="149" y="58">upstream of the product — the method others will ship later</text>
+</svg>
+
+<h3>Research Scientist</h3>
+<p class="qn">"What don't we know yet, and can I produce evidence that moves it?"</p>
+
+<h4>What you own</h4>
+<ul>
+<li>Problem selection — deciding what is worth working on, which is the highest-variance decision in the role.</li>
+<li>The method: a novel approach, or a novel understanding of why an existing one behaves as it does.</li>
+<li>Experimental design that can actually support the claim — baselines, ablations, and the comparison a skeptic would demand.</li>
+<li>The claim itself, and its limits. Overclaiming is the cardinal sin here in a way it isn't elsewhere.</li>
+</ul>
+
+<h4>Technical skills</h4>
+<ul>
+<li>Mathematical depth — linear algebra, probability, and optimisation held well enough to reason with, not just recite.</li>
+<li>Fluent literature reading: finding the three papers that matter, reproducing a result, and spotting the assumption doing the real work.</li>
+<li>Rigorous evaluation — ablations that isolate one variable, baselines tuned as carefully as your method, seeds and variance reported.</li>
+<li>Enough engineering to run your own experiments without waiting, even where a Research Engineer owns the platform.</li>
+<li>Writing. A result nobody can follow does not exist, and papers are the medium of the job.</li>
+</ul>
+
+<h4>Soft skills that actually get screened</h4>
+<ul>
+<li><strong>Tolerance for long stretches of failure.</strong> Most ideas do not work. The role selects for people who stay productive through months without a positive result.</li>
+<li><strong>Taste in problems</strong> — the least teachable and most valued trait. Interviews probe it directly with "what would you work on next, and why that?"</li>
+<li><strong>Taking hard critique without defending.</strong> Peer review, reading groups, and your own team exist to attack the claim; the useful reflex is curiosity, not protection.</li>
+<li><strong>Honesty about negative results,</strong> including when the honest report undercuts your own narrative.</li>
+</ul>
+
+<h4>Tools</h4>
+<p class="chips"><span>PyTorch / JAX</span><span>Weights &amp; Biases</span><span>SLURM</span><span>NumPy / SciPy</span><span>LaTeX / Overleaf</span><span>arXiv</span><span>HuggingFace</span><span>matplotlib</span></p>
+
+<h4>Small project worth building</h4>
+<div class="proj">
+<p><strong>Reproduce a paper, then go one step past it.</strong> Pick a recent paper with released code, reproduce the headline result, and report honestly where your numbers differ and why. <span class="edge">The differentiator is the step past:</span> one ablation the authors didn't run, with a hypothesis stated up front. Without a publication record this is the most credible evidence available that you can do the work — and reproduction gaps are a real, publishable contribution in their own right.</p>
+</div>
+
+<div class="note">
+<p><strong>On the PhD question.</strong> Research Scientist postings usually expect a PhD or an equivalent publication record, because the role is judged on original contribution. Research Engineer generally does not — it is judged on systems ability, and it is often the higher-leverage way into a lab for a strong engineer. If you want to work on frontier models without a doctorate, RE is usually the open door, and the two roles sit side by side on the same problems.</p>
 </div>
 
 </div>
@@ -522,8 +639,12 @@ table.cmp td:first-child { font-weight: 600; white-space: nowrap; }
 <li><strong>TPM</strong> sequences all of it, spots that the model can't ship until the backfill completes, and runs the launch review.</li>
 </ul>
 
+<p><strong>Notice who isn't on this project: the two research roles.</strong> That absence is the most useful thing this scenario shows about them. The Research Scientist and Research Engineer produced the routing architecture and the training recipe that the ML Engineer is fine-tuning — one to three years earlier, on a different clock, measured by a different output. Research is upstream of the product, not a stage within it.</p>
+
+<p>The practical consequence for a job search: if what you enjoy is watching something you built get used next quarter, research will feel slow and disconnected. If what you enjoy is the open question itself and you can wait years to see it land, product roles will feel like they never let you go deep enough. Both are honourable answers, and picking the wrong one is the most common reason people are unhappy a year into an otherwise good job.</p>
+
 <div class="note">
-<p><strong>Where the overlaps genuinely are.</strong> AI Engineer and ML Engineer overlap on serving. Data Scientist and Data Analyst overlap on analysis — the honest distinction is inference versus reporting, not seniority. Data Engineer and Analytics Engineer overlap almost entirely at some companies. If a job description spans two of these, it usually means the team is small and you'll do both, which is excellent for learning and worth asking about directly.</p>
+<p><strong>Where the overlaps genuinely are.</strong> AI Engineer and ML Engineer overlap on serving. Data Scientist and Data Analyst overlap on analysis — the honest distinction is inference versus reporting, not seniority. Data Engineer and Analytics Engineer overlap almost entirely at some companies. Research Engineer and Research Scientist overlap on the experiment itself — the split is who chooses the question versus who makes it runnable, and at smaller labs one person does both. If a job description spans two of these, it usually means the team is small and you'll do both, which is excellent for learning and worth asking about directly.</p>
 </div>
 
 <h2 class="sec" id="choosing">Choosing between them</h2>
@@ -537,13 +658,15 @@ table.cmp td:first-child { font-weight: 600; white-space: nowrap; }
 <li>Getting a model to behave in a product → AI Engineer.</li>
 <li>Sitting with a customer while their system misbehaves → Forward Deployed Engineer.</li>
 <li>Finding out that two teams have been assuming different launch dates → TPM.</li>
+<li>Making a 400-GPU run finish before the weekend → Research Engineer.</li>
+<li>Being genuinely unsure whether the idea will work at all → Research Scientist.</li>
 </ul>
 
-<h4>Things that hold across all seven</h4>
+<h4>Things that hold across all nine</h4>
 <ul>
 <li><strong>Ship something end to end and write about it.</strong> One finished, documented, honestly-evaluated project beats five tutorial repositories — in every one of these roles.</li>
 <li><strong>Numbers on your resume, not adjectives.</strong> "Cut p99 latency from 2.4s to 700ms" carries; "optimised system performance" does not.</li>
 <li><strong>Have the failure story ready.</strong> Every interview loop asks. The strong answer names your own mistake, the diagnosis, and what you changed afterwards.</li>
-<li><strong>SQL is the common denominator.</strong> Six of the seven use it regularly; being genuinely good at it is unusually high leverage per hour invested.</li>
+<li><strong>SQL is the common denominator.</strong> Six of the nine use it regularly (the research roles least of all); being genuinely good at it is unusually high leverage per hour invested.</li>
 <li><strong>Read the responsibilities, then ask what the last person did all week.</strong> It is the single most informative question available to you in an interview, and few candidates ask it.</li>
 </ul>
