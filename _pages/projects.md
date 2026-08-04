@@ -1,9 +1,18 @@
 ---
-title: "Selected Technical Projects"
+title: "Selected Technical Research Projects"
 permalink: /projects/
 layout: single
 author_profile: true
 ---
+
+<style>
+.pd-more {
+  display: inline-block; margin-top: 8px; font-size: .84rem; font-weight: 600;
+  padding: .28em .8em; border: 1px solid #cfdfe6; border-radius: 13px;
+  background: #f0f7f9; color: #1f6f8b; text-decoration: none;
+}
+.pd-more:hover { background: #e2eff3; border-color: #1f6f8b; text-decoration: none; }
+</style>
 
 **Vision Language Models:**
 
@@ -16,6 +25,8 @@ author_profile: true
     <div style="margin-top: 10px;">
       <a href="https://drive.google.com/file/d/1C4xcUEtoDAojNvhtNKno31vqIitxZUj6/view?usp=share_link" target="_blank" style="margin-right: 15px;"><img src="/./assets/images/pdfdoc_icon.png" alt="PDF Document" style="width: 20px; height: 20px;"></a>
       <a href="https://github.com/kiran-collab/SAIND" target="_blank"><img src="/./assets/images/github_icon.png" alt="PDF Document" style="width: 20px; height: 20px;"></a>
+    
+      <a class="pd-more" href="/projects/saind/">Detailed summary →</a>
     </div>
   </div>
 </div>
@@ -30,6 +41,8 @@ author_profile: true
     
     <div style="margin-top: 10px;">
       <a href="https://github.com/kiran-collab/Font-Style-Transfer" target="_blank"><img src="/./assets/images/github_icon.png" alt="PDF Document" style="width: 20px; height: 20px;"></a>
+    
+      <a class="pd-more" href="/projects/font-style-interpolation/">Detailed summary →</a>
     </div>
   </div>
 </div>
@@ -48,6 +61,8 @@ author_profile: true
       <a href="https://drive.google.com/file/d/1AiJLYfZRTlw3ID_MDAoul3_plD1E9NM3/view?usp=share_link" target="_blank" style="margin-right: 15px;"><img src="/./assets/images/pdfdoc_icon.png" alt="PDF Document" style="width: 20px; height: 20px;"></a>
       <a href="https://drive.google.com/file/d/1HZzd6dDWaV-agRxN0BtVJxJWthMUIzy5/view?usp=share_link" target="_blank" style="margin-right: 15px;"><img src="/./assets/images/poster_icon.png" alt="PDF Document" style="width: 20px; height: 20px;"></a>
       <a href="https://github.com/kiran-collab/Griffin" target="_blank"><img src="/./assets/images/github_icon.png" alt="PDF Document" style="width: 20px; height: 20px;"></a>
+    
+      <a class="pd-more" href="/projects/griffin/">Detailed summary →</a>
     </div>
   </div>
 </div>
@@ -66,6 +81,8 @@ author_profile: true
       <a href="https://drive.google.com/file/d/1JWK-cM5xT7O-lAuwfAiJcKRPLSYMdu9g/view?usp=share_link" target="_blank" style="margin-right: 15px;"><img src="/./assets/images/pdfdoc_icon.png" alt="PDF Document" style="width: 20px; height: 20px;"></a>
       <a href="https://github.com/kiran-collab/CSIKit-BMEye" target="_blank"><img src="/./assets/images/github_icon.png" alt="PDF Document" style="width: 20px; height: 20px;"></a>
       <a href="https://drive.google.com/file/d/1O4tS-Qrpfxc6nQA-L1zBzoVZg0EM_-a9/view?usp=share_link" target="_blank"><img src="/./assets/images/video_icon.jpg" alt="PDF Document" style="width: 20px; height: 20px;"></a>
+    
+      <a class="pd-more" href="/projects/bmeye/">Detailed summary →</a>
     </div>
   </div>
 </div>
@@ -81,6 +98,8 @@ author_profile: true
     <div style="margin-top: 10px;">
       <a href="https://drive.google.com/file/d/1DKiSTapNdCezKOrGg1TwPvvLU7-wScef/view?usp=share_link" target="_blank" style="margin-right: 15px;"><img src="/./assets/images/pdfdoc_icon.png" alt="PDF Document" style="width: 20px; height: 20px;"></a>
       <a href="https://github.com/kiran-collab/SWidir" target="_blank"><img src="/./assets/images/github_icon.png" alt="PDF Document" style="width: 20px; height: 20px;"></a>
+    
+      <a class="pd-more" href="/projects/swidir/">Detailed summary →</a>
     </div>
   </div>
 </div>

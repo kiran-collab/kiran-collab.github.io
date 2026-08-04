@@ -1,0 +1,63 @@
+<style>
+.pd-deck { font-size: 1.05rem; color: #4a5158; border-left: 3px solid #c8d4da; padding-left: 1em; margin: 0 0 1.2em; }
+.pd-links { margin: 0 0 2em; }
+.pd-links a {
+  display: inline-block; font-size: .85rem; padding: .3em .85em; margin: 0 .4em .4em 0;
+  border: 1px solid #dde3e7; border-radius: 14px; text-decoration: none; color: #41606e; background: #f6f9fa;
+}
+.pd-links a:hover { background: #eaf1f4; border-color: #c3d2d9; text-decoration: none; }
+.pd-links a.back { background: #fff; color: #7a8189; }
+
+.pd h2 {
+  margin-top: 2.1em; padding-top: .4em; border-top: 2px solid #eee;
+  font-size: 1.28rem; color: #23303a; scroll-margin-top: 24px;
+}
+.pd h3 { font-size: 1.02rem; margin: 1.4em 0 .4em; color: #35424c; }
+.pd p, .pd li { line-height: 1.65; }
+
+table.pd-spec { width: 100%; border-collapse: collapse; font-size: .9rem; margin: 1.2em 0; display: block; overflow-x: auto; }
+table.pd-spec th, table.pd-spec td { border: 1px solid #e3e3e3; padding: .5em .7em; text-align: left; vertical-align: top; }
+table.pd-spec th { background: #f4f7f8; font-weight: 600; white-space: nowrap; }
+table.pd-spec td:first-child { font-weight: 600; white-space: nowrap; background: #fafbfb; }
+
+table.pd-res { width: 100%; border-collapse: collapse; font-size: .9rem; margin: 1.2em 0; display: block; overflow-x: auto; }
+table.pd-res th, table.pd-res td { border: 1px solid #e3e3e3; padding: .5em .7em; text-align: left; }
+table.pd-res th { background: #f4f7f8; font-weight: 600; }
+table.pd-res tr.win td { background: #f2f8ef; font-weight: 600; }
+table.pd-res td.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+.pd-note {
+  border: 1px solid #e0e6ea; border-left: 3px solid #8a6d1f; background: #fbf9f2;
+  padding: .85em 1.1em; border-radius: 0 4px 4px 0; margin: 1.5em 0; font-size: .92rem; color: #55504a;
+}
+.pd-gap {
+  border: 1px dashed #d8c9c6; background: #fdf7f6; color: #7a5b56;
+  padding: .8em 1.05em; border-radius: 4px; margin: 1.4em 0; font-size: .9rem;
+}
+.pd-foot { margin-top: 2.6em; padding-top: 1em; border-top: 1px solid #eee; font-size: .87rem; color: #7a8189; }
+
+/* diagram vocabulary, shared with the rest of the site */
+.dgm { width: 100%; height: auto; display: block; overflow: visible; }
+.dgm .b  { fill: #e8f1f6; stroke: #1f6f8b; stroke-width: 1.4; }
+.dgm .b2 { fill: #fbeae7; stroke: #b83227; stroke-width: 1.4; }
+.dgm .b3 { fill: #eaf2e6; stroke: #4a6741; stroke-width: 1.4; }
+.dgm .b4 { fill: #f1eef7; stroke: #6b4a8b; stroke-width: 1.4; }
+.dgm .bg { fill: #f4f5f6; stroke: #b0b6bd; stroke-width: 1.2; }
+.dgm .gh { fill: none; stroke: #cfd4d9; stroke-width: 1.1; stroke-dasharray: 3 3; }
+.dgm .l  { fill: none; stroke: #6b7480; stroke-width: 1.4; }
+.dgm .a  { fill: none; stroke: #6b7480; stroke-width: 1.4; marker-end: url(#pdar); }
+.dgm .a2 { fill: none; stroke: #b83227; stroke-width: 1.4; marker-end: url(#pdar2); }
+.dgm .a3 { fill: none; stroke: #4a6741; stroke-width: 1.4; marker-end: url(#pdar3); }
+.dgm .dl { fill: none; stroke: #9aa2ac; stroke-width: 1.3; stroke-dasharray: 4 3; }
+.dgm .fa { fill: #1f6f8b; } .dgm .fr { fill: #b83227; } .dgm .fg { fill: #4a6741; }
+.dgm .t  { font: 600 9px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #2f3640; text-anchor: middle; }
+.dgm .ts { font: 500 7.5px -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #5a626c; text-anchor: middle; }
+figure.fig { margin: 1.6em auto; max-width: 500px; }
+figure.fig figcaption { font-size: .8rem; color: #7a8189; text-align: center; margin-top: .5em; line-height: 1.45; }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<marker id="pdar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6b7480"/></marker>
+<marker id="pdar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#b83227"/></marker>
+<marker id="pdar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#4a6741"/></marker>
+</defs></svg>
