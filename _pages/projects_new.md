@@ -1,5 +1,5 @@
 ---
-title: "Selected Technical Projects"
+title: "Selected Technical Research Projects"
 permalink: /projects/
 layout: single
 author_profile: true
@@ -25,6 +25,12 @@ author_profile: true
     font-size: 13px;
     line-height: 1.5;
   }
+.pd-more {
+  display: inline-block; margin-top: 10px; font-size: .84rem; font-weight: 600;
+  padding: .3em .85em; border: 1px solid #cfdfe6; border-radius: 13px;
+  background: #f0f7f9; color: #1f6f8b; text-decoration: none;
+}
+.pd-more:hover { background: #e2eff3; border-color: #1f6f8b; text-decoration: none; }
 </style>
 
 <script>
@@ -53,6 +59,7 @@ author_profile: true
     <div class="dropdown-content" id="saind-summary">
       SAIND generates dynamic 3D scene animations using RGB images and depth maps. It blends geometric priors and scene semantics to infer realistic object motions for AR/VR storytelling and visualization.
     </div>
+    <a class="pd-more" href="/projects/saind/">Detailed summary →</a>
   </div>
 </div>
 
@@ -71,6 +78,7 @@ author_profile: true
     <div class="dropdown-content" id="fontstyle-summary">
       This project enhances scene text recognition by generating synthetic fonts that mimic various styles. It aids OCR models by increasing training diversity through font-aware text transformations.
     </div>
+    <a class="pd-more" href="/projects/font-style-interpolation/">Detailed summary →</a>
   </div>
 </div>
 
@@ -93,6 +101,7 @@ author_profile: true
     <div class="dropdown-content" id="griffin-summary">
       Griffin introduces a collaborative drone-car platform that captures real-time road events for improved traffic analytics. It uses middleware systems to coordinate mobility, data fusion, and alert broadcasting.
     </div>
+    <a class="pd-more" href="/projects/griffin/">Detailed summary →</a>
   </div>
 </div>
 
@@ -115,6 +124,7 @@ author_profile: true
     <div class="dropdown-content" id="bmeye-summary">
       BMEye leverages WiFi channel state information to estimate a user’s body shape and BMI. It offers a non-invasive, device-free public health tool for real-time population health monitoring.
     </div>
+    <a class="pd-more" href="/projects/bmeye/">Detailed summary →</a>
   </div>
 </div>
 
@@ -134,5 +144,6 @@ author_profile: true
     <div class="dropdown-content" id="swidir-summary">
       SWiDir augments smartphone sensors with passive WiFi data to improve user walking direction estimation. It enhances pedestrian navigation accuracy, especially in GPS-denied or cluttered indoor environments.
     </div>
+    <a class="pd-more" href="/projects/swidir/">Detailed summary →</a>
   </div>
 </div>

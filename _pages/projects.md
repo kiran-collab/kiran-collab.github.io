@@ -1,6 +1,7 @@
 ---
 title: "Selected Technical Research Projects"
 permalink: /projects/
+published: false   # superseded by projects_new.md, which owns /projects/
 layout: single
 author_profile: true
 ---
