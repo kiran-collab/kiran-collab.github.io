@@ -37,8 +37,8 @@ author_profile: true
 
 <a class="stack-card k-aws" href="/stacks/aws/">
 <span class="sc-name">AWS Stack →</span>
-<span class="sc-desc">The twenty-odd services you actually reach for out of hundreds — compute, storage, data and analytics, messaging, and the identity and operations layer underneath all of it.</span>
-<span class="sc-count">26 concepts</span>
+<span class="sc-desc">The twenty-odd services you actually reach for out of hundreds — containers and compute, storage, data and analytics, messaging, and the identity and operations layer underneath all of it.</span>
+<span class="sc-count">28 concepts</span>
 </a>
 
 </div>
