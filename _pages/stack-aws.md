@@ -47,7 +47,25 @@ author_profile: true
 </div>
 </details>
 
-<p class="cx-group">Compute</p>
+<p class="cx-group">Containers and compute</p>
+
+<details class="cx" id="containerization">
+<summary>Containerization</summary>
+<div class="cx-body">
+<p>A container packages an application together with its dependencies, libraries, and runtime into an image that behaves the same wherever it runs. Unlike a virtual machine it <span class="k">shares the host kernel</span> rather than booting its own, which is why it starts in seconds and measures in megabytes rather than gigabytes.</p>
+<p>On AWS this is the common currency of deployment: ECS, Fargate, EKS, Batch, SageMaker, and even Lambda all accept container images, so the same artefact moves between them. For ML work specifically it is the only reliable answer to CUDA, driver, and dependency drift — <span class="k">"works on my laptop" stops being a category of bug</span> once the laptop and the GPU cluster run the same image.</p>
+<p>The caveat worth holding: kernel sharing means isolation is weaker than a VM's. For multi-tenant or untrusted code, a container boundary alone is not a security boundary.</p>
+</div>
+</details>
+
+<details class="cx" id="docker-ecr">
+<summary>Docker &amp; ECR</summary>
+<div class="cx-body">
+<p>Docker is the tooling that builds and runs containers. A <code>Dockerfile</code> declares the build step by step, each instruction producing a cached layer, and the resulting image is what you ship. <span class="k">ECR</span> is AWS's private registry — where those images live, with IAM controlling who can pull them, vulnerability scanning on push, and lifecycle policies to expire old ones.</p>
+<p>Three habits separate a workable image from a painful one. Use <span class="k">multi-stage builds</span> so compilers and build dependencies stay out of the final image — the difference is routinely gigabytes. Order instructions so the slowest-changing layers come first, since a change invalidates every layer after it and turns a ten-second rebuild into ten minutes. And <span class="k">pin base images by digest or explicit version</span>, because <code>:latest</code> means your build is not reproducible and today's working image may not be tomorrow's.</p>
+<p>On the AWS side, set an ECR lifecycle policy early. Untagged images accumulate silently from every CI run, and nobody notices until the storage line on the bill does something surprising.</p>
+</div>
+</details>
 
 <details class="cx" id="ec2">
 <summary>EC2</summary>
