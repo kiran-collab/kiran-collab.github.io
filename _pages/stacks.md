@@ -35,6 +35,12 @@ author_profile: true
 <span class="sc-count">20 concepts</span>
 </a>
 
+<a class="stack-card k-aws" href="/stacks/aws/">
+<span class="sc-name">AWS Stack →</span>
+<span class="sc-desc">The twenty-odd services you actually reach for out of hundreds — compute, storage, data and analytics, messaging, and the identity and operations layer underneath all of it.</span>
+<span class="sc-count">26 concepts</span>
+</a>
+
 </div>
 
 <p class="stack-hint">Related: the <a href="/toolkit/">Toolkit</a> covers the same territory as a flat glossary, and <a href="/skills/">Skills</a> lists the specific tools I work with.</p>
