@@ -10,6 +10,8 @@ main:
     url: /articles/
   - title: "Job Resources"
     url: /job-resources/
+  - title: "Interviews"
+    url: /interview-rounds/
   - title: "Trends"
     url: /trends/
   - title: "Skills"
