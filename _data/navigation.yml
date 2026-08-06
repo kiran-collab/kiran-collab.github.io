@@ -18,6 +18,8 @@ main:
     url: /skills/
   - title: "Stacks"
     url: /stacks/
+  - title: "Vision"
+    url: /vision/
   - title: "Toolkit"
     url: /toolkit/
   - title: "Tutorials"

@@ -43,4 +43,4 @@ author_profile: true
 
 </div>
 
-<p class="stack-hint">Related: the <a href="/toolkit/">Toolkit</a> covers the same territory as a flat glossary, and <a href="/skills/">Skills</a> lists the specific tools I work with.</p>
+<p class="stack-hint">Related: <a href="/vision/">Vision &amp; Multimodal AI</a> covers the vision subdomains in the same format, the <a href="/toolkit/">Toolkit</a> covers the same territory as a flat glossary, and <a href="/skills/">Skills</a> lists the specific tools I work with.</p>
