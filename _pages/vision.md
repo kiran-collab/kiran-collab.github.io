@@ -25,7 +25,7 @@ author_profile: true
 
 <p class="stack-lead">The vision space, laid out end to end across five subdomains — from pixel arithmetic through recognition, generation, and models that reason across modalities. Each subdomain runs from foundations to advanced, so you can enter wherever you already are.</p>
 
-<p class="stack-hint">Click a subdomain to open it, then any concept inside. Tiers are cumulative: advanced material generally assumes the foundations above it.</p>
+<p class="stack-hint">Click a subdomain to open it, then any concept inside. PyTorch code for everything is collected at the end. Tiers are cumulative: advanced material generally assumes the foundations above it.</p>
 
 <p class="jump" style="margin-bottom:2em">
 <a class="stack-back" href="#image-processing">1 · Image Processing</a>
@@ -33,6 +33,7 @@ author_profile: true
 <a class="stack-back" href="#diffusion">3 · Diffusion Models</a>
 <a class="stack-back" href="#vlm">4 · Vision-Language Models</a>
 <a class="stack-back" href="#multimodal">5 · Multimodal Language Modelling</a>
+<a class="stack-back" href="#code-snippets">Code snippets</a>
 </p>
 
 <details class="vs-dom" id="image-processing">
@@ -131,36 +132,6 @@ author_profile: true
 <p>Recovering how a scene would look under neutral illumination. Grey-world assumes the average scene is achromatic; more careful methods estimate the illuminant explicitly.</p>
 <p>It matters for datasets because illumination is a confound: a classifier can learn indoor tungsten lighting instead of the object, and then fail outdoors.</p>
 <p class="uses">Uses: <code>cv2.xphoto.createSimpleWB</code> · <code>colour-science</code></p></div></details>
-<details class="cx code" id="image-processing-code"><summary>Code snippets</summary><div class="cx-body"><div class="snip"><p class="cap">Load, inspect, convert colour space</p><pre><code>import cv2, numpy as np
-img = cv2.imread("in.jpg")                 # BGR, uint8, HxWx3
-print(img.shape, img.dtype, img.min(), img.max())
-hsv  = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-lab  = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
-gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)</code></pre></div><div class="snip"><p class="cap">Histogram equalization (CLAHE)</p><pre><code>clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
-lab[:, :, 0] = clahe.apply(lab[:, :, 0])   # equalise luminance only
-out = cv2.cvtColor(lab, cv2.COLOR_LAB2BGR)</code></pre></div><div class="snip"><p class="cap">Gamma correction via lookup table</p><pre><code>gamma = 2.2
-lut = np.array([((i / 255.0) ** (1 / gamma)) * 255 for i in range(256)], np.uint8)
-linear = cv2.LUT(img, lut)</code></pre></div><div class="snip"><p class="cap">Convolution with a custom kernel</p><pre><code>sharpen = np.array([[ 0, -1,  0],
-                    [-1,  5, -1],
-                    [ 0, -1,  0]], np.float32)
-out = cv2.filter2D(img, ddepth=-1, kernel=sharpen)</code></pre></div><div class="snip"><p class="cap">Smoothing: Gaussian, median, bilateral</p><pre><code>g = cv2.GaussianBlur(img, (5, 5), sigmaX=1.5)
-m = cv2.medianBlur(img, 5)                       # salt-and-pepper
-b = cv2.bilateralFilter(img, 9, 75, 75)          # edge-preserving</code></pre></div><div class="snip"><p class="cap">Canny edges</p><pre><code>edges = cv2.Canny(gray, threshold1=100, threshold2=200, L2gradient=True)</code></pre></div><div class="snip"><p class="cap">Otsu and adaptive thresholding</p><pre><code>_, otsu = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-adap = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-                             cv2.THRESH_BINARY, blockSize=31, C=5)</code></pre></div><div class="snip"><p class="cap">Morphological cleanup</p><pre><code>k = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
-opened = cv2.morphologyEx(otsu, cv2.MORPH_OPEN,  k)   # drop specks
-closed = cv2.morphologyEx(opened, cv2.MORPH_CLOSE, k) # fill holes</code></pre></div><div class="snip"><p class="cap">Gaussian pyramid</p><pre><code>level = img.copy()
-pyr = [level]
-for _ in range(3):
-    level = cv2.pyrDown(level)
-    pyr.append(level)</code></pre></div><div class="snip"><p class="cap">Fourier magnitude spectrum</p><pre><code>f = np.fft.fftshift(np.fft.fft2(gray))
-mag = 20 * np.log(np.abs(f) + 1)</code></pre></div><div class="snip"><p class="cap">Homography warp (rectify a plane)</p><pre><code>H, mask = cv2.findHomography(src_pts, dst_pts, cv2.RANSAC, 5.0)
-rect = cv2.warpPerspective(img, H, (W, H_out), flags=cv2.INTER_LINEAR)</code></pre></div><div class="snip"><p class="cap">SIFT/ORB features and matching</p><pre><code>sift = cv2.SIFT_create()
-kp1, d1 = sift.detectAndCompute(gray1, None)
-kp2, d2 = sift.detectAndCompute(gray2, None)
-matches = cv2.BFMatcher().knnMatch(d1, d2, k=2)
-good = [a for a, b in matches if a.distance &lt; 0.75 * b.distance]   # Lowe ratio</code></pre></div><div class="snip"><p class="cap">Non-local means denoising</p><pre><code>den = cv2.fastNlMeansDenoisingColored(img, None, h=10, hColor=10,
-                                     templateWindowSize=7, searchWindowSize=21)</code></pre></div></div></details>
 </div>
 </details>
 
@@ -265,41 +236,6 @@ good = [a for a, b in matches if a.distance &lt; 0.75 * b.distance]   # Lowe rat
 <p>Adding time. Approaches range from frame-wise CNNs with temporal pooling, through 3D convolutions and two-stream networks using optical flow, to video transformers with spatiotemporal attention.</p>
 <p>The binding constraint is cost: attention over every frame patch is quadratic in sequence length, so nearly every practical system is a compromise on sampling rate and resolution.</p>
 <p class="uses">Uses: <code>decord</code> · <code>torchvision.io.read_video</code> · <code>transformers VideoMAE</code></p></div></details>
-<details class="cx code" id="computer-vision-code"><summary>Code snippets</summary><div class="cx-body"><div class="snip"><p class="cap">Backbone + transfer learning</p><pre><code>import timm, torch.nn as nn
-model = timm.create_model("resnet50", pretrained=True, num_classes=10)
-for p in model.parameters(): p.requires_grad = False
-for p in model.get_classifier().parameters(): p.requires_grad = True</code></pre></div><div class="snip"><p class="cap">Augmentation pipeline</p><pre><code>import albumentations as A
-tf = A.Compose([
-    A.RandomResizedCrop(224, 224, scale=(0.6, 1.0)),
-    A.HorizontalFlip(p=0.5),
-    A.ColorJitter(0.2, 0.2, 0.2, 0.1, p=0.5),
-    A.Normalize(), 
-], bbox_params=A.BboxParams(format="yolo", label_fields=["cls"]))</code></pre></div><div class="snip"><p class="cap">IoU and NMS</p><pre><code>from torchvision.ops import box_iou, nms
-iou  = box_iou(boxes_a, boxes_b)                 # pairwise
-keep = nms(boxes, scores, iou_threshold=0.5)     # indices to keep</code></pre></div><div class="snip"><p class="cap">Detection with YOLO</p><pre><code>from ultralytics import YOLO
-model = YOLO("yolo11n.pt")
-res = model("street.jpg", conf=0.25, iou=0.5)
-for b in res[0].boxes:
-    print(b.cls.item(), b.conf.item(), b.xyxy.tolist())</code></pre></div><div class="snip"><p class="cap">Segmentation head (U-Net)</p><pre><code>import segmentation_models_pytorch as smp
-net = smp.Unet(encoder_name="resnet34", encoder_weights="imagenet",
-               in_channels=3, classes=1)
-loss = smp.losses.DiceLoss(mode="binary")</code></pre></div><div class="snip"><p class="cap">Vision transformer features</p><pre><code>from transformers import AutoImageProcessor, AutoModel
-proc = AutoImageProcessor.from_pretrained("facebook/dinov2-base")
-enc  = AutoModel.from_pretrained("facebook/dinov2-base")
-feats = enc(**proc(images=pil_img, return_tensors="pt")).last_hidden_state</code></pre></div><div class="snip"><p class="cap">Multi-object tracking</p><pre><code>for r in YOLO("yolo11n.pt").track("clip.mp4", persist=True, tracker="bytetrack.yaml"):
-    for b in r.boxes:
-        print(int(b.id.item()), b.xyxy.tolist())   # stable id across frames</code></pre></div><div class="snip"><p class="cap">Camera calibration</p><pre><code>ret, K, dist, rvecs, tvecs = cv2.calibrateCamera(
-    objpoints, imgpoints, gray.shape[::-1], None, None)
-undist = cv2.undistort(img, K, dist)</code></pre></div><div class="snip"><p class="cap">Monocular depth</p><pre><code>from transformers import pipeline
-depth = pipeline("depth-estimation", model="Intel/dpt-large")
-d = depth(pil_img)["depth"]        # relative depth, not metric</code></pre></div><div class="snip"><p class="cap">Segment Anything (promptable)</p><pre><code>from segment_anything import sam_model_registry, SamPredictor
-sam = sam_model_registry["vit_h"](checkpoint="sam_vit_h.pth")
-pred = SamPredictor(sam); pred.set_image(rgb)
-masks, scores, _ = pred.predict(point_coords=np.array([[x, y]]),
-                                point_labels=np.array([1]))</code></pre></div><div class="snip"><p class="cap">Video frame sampling</p><pre><code>import decord
-vr = decord.VideoReader("clip.mp4")
-idx = np.linspace(0, len(vr) - 1, num=16).astype(int)   # uniform 16 frames
-frames = vr.get_batch(idx).asnumpy()</code></pre></div></div></details>
 </div>
 </details>
 
@@ -404,42 +340,6 @@ frames = vr.get_batch(idx).asnumpy()</code></pre></div></div></details>
 <p>FID compares feature distributions of real and generated sets; CLIP score measures prompt alignment; human preference remains the reference standard.</p>
 <p>All the automatic metrics are weak. FID is sensitive to sample count and preprocessing and rewards distribution matching rather than quality, and a model can score well while producing images nobody likes — which is why leaderboards in this area are dominated by human-preference arenas.</p>
 <p class="uses">Uses: <code>torchmetrics FID</code> · <code>clip_score</code></p></div></details>
-<details class="cx code" id="diffusion-code"><summary>Code snippets</summary><div class="cx-body"><div class="snip"><p class="cap">Text-to-image baseline</p><pre><code>from diffusers import StableDiffusionXLPipeline
-import torch
-pipe = StableDiffusionXLPipeline.from_pretrained(
-    "stabilityai/stable-diffusion-xl-base-1.0", torch_dtype=torch.float16).to("cuda")
-img = pipe("a lighthouse in fog, 35mm", num_inference_steps=30,
-           guidance_scale=7.0).images[0]</code></pre></div><div class="snip"><p class="cap">The forward process, explicitly</p><pre><code>from diffusers import DDPMScheduler
-sch = DDPMScheduler(num_train_timesteps=1000, beta_schedule="squaredcos_cap_v2")
-t = torch.randint(0, 1000, (x0.shape[0],))
-noise = torch.randn_like(x0)
-xt = sch.add_noise(x0, noise, t)          # closed form, no simulation</code></pre></div><div class="snip"><p class="cap">Training objective (predict the noise)</p><pre><code>pred = unet(xt, t, encoder_hidden_states=text_emb).sample
-loss = torch.nn.functional.mse_loss(pred, noise)   # that is the whole loss</code></pre></div><div class="snip"><p class="cap">Swapping the sampler</p><pre><code>from diffusers import DPMSolverMultistepScheduler, DDIMScheduler
-pipe.scheduler = DPMSolverMultistepScheduler.from_config(pipe.scheduler.config)
-# fewer steps for the same quality; DDIM for deterministic latents</code></pre></div><div class="snip"><p class="cap">Guidance scale sweep</p><pre><code>for g in (1.0, 3.0, 7.0, 12.0):
-    pipe(prompt, guidance_scale=g, generator=torch.manual_seed(0)).images[0].save(f"g{g}.png")</code></pre></div><div class="snip"><p class="cap">Latent space directly</p><pre><code>lat = pipe.vae.encode(img_t).latent_dist.sample() * pipe.vae.config.scaling_factor
-dec = pipe.vae.decode(lat / pipe.vae.config.scaling_factor).sample   # 8x smaller side</code></pre></div><div class="snip"><p class="cap">ControlNet (structural conditioning)</p><pre><code>from diffusers import StableDiffusionControlNetPipeline, ControlNetModel
-from controlnet_aux import CannyDetector
-cn = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-canny", torch_dtype=torch.float16)
-p  = StableDiffusionControlNetPipeline.from_pretrained(
-        "runwayml/stable-diffusion-v1-5", controlnet=cn, torch_dtype=torch.float16).to("cuda")
-img = p(prompt, image=CannyDetector()(src), controlnet_conditioning_scale=0.8).images[0]</code></pre></div><div class="snip"><p class="cap">LoRA: load, weight, unload</p><pre><code>pipe.load_lora_weights("path/or/hub-id", adapter_name="style")
-pipe.set_adapters(["style"], adapter_weights=[0.7])
-pipe.unload_lora_weights()</code></pre></div><div class="snip"><p class="cap">img2img and inpainting</p><pre><code>from diffusers import AutoPipelineForImage2Image, AutoPipelineForInpainting
-i2i = AutoPipelineForImage2Image.from_pipe(pipe)
-out  = i2i(prompt, image=init, strength=0.55).images[0]   # strength = where you start
-inp  = AutoPipelineForInpainting.from_pipe(pipe)(prompt, image=init, mask_image=mask).images[0]</code></pre></div><div class="snip"><p class="cap">Few-step generation (LCM)</p><pre><code>from diffusers import LCMScheduler
-pipe.scheduler = LCMScheduler.from_config(pipe.scheduler.config)
-pipe.load_lora_weights("latent-consistency/lcm-lora-sdxl")
-img = pipe(prompt, num_inference_steps=4, guidance_scale=1.0).images[0]</code></pre></div><div class="snip"><p class="cap">Video diffusion</p><pre><code>from diffusers import StableVideoDiffusionPipeline
-from diffusers.utils import export_to_video
-svd = StableVideoDiffusionPipeline.from_pretrained(
-    "stabilityai/stable-video-diffusion-img2vid-xt", torch_dtype=torch.float16).to("cuda")
-export_to_video(svd(init_image, decode_chunk_size=8).frames[0], "out.mp4", fps=7)</code></pre></div><div class="snip"><p class="cap">FID and CLIP score</p><pre><code>from torchmetrics.image.fid import FrechetInceptionDistance
-from torchmetrics.multimodal import CLIPScore
-fid = FrechetInceptionDistance(feature=2048)
-fid.update(real_uint8, real=True); fid.update(fake_uint8, real=False)
-print(fid.compute(), CLIPScore()(fake_uint8, prompts))</code></pre></div></div></details>
 </div>
 </details>
 
@@ -529,38 +429,6 @@ print(fid.compute(), CLIPScore()(fake_uint8, prompts))</code></pre></div></div><
 <p>Benchmarks such as MMMU, MMBench, and MathVista probe reasoning rather than recognition, usually as multiple choice for automatic scoring.</p>
 <p>Two caveats. Multiple choice is gameable — some models score above chance from text alone, without the image. And contamination is pervasive, since benchmark images and questions are on the public web and end up in pretraining data.</p>
 <p class="uses">Uses: <code>lmms-eval</code> · <code>MMMU</code></p></div></details>
-<details class="cx code" id="vlm-code"><summary>Code snippets</summary><div class="cx-body"><div class="snip"><p class="cap">CLIP zero-shot classification</p><pre><code>import open_clip, torch
-model, _, preprocess = open_clip.create_model_and_transforms("ViT-B-32", pretrained="laion2b_s34b_b79k")
-tok = open_clip.get_tokenizer("ViT-B-32")
-labels = ["a photo of a cat", "a photo of a dog"]
-with torch.no_grad():
-    i = model.encode_image(preprocess(pil).unsqueeze(0))
-    t = model.encode_text(tok(labels))
-    i, t = i / i.norm(dim=-1, keepdim=True), t / t.norm(dim=-1, keepdim=True)
-    probs = (100.0 * i @ t.T).softmax(dim=-1)</code></pre></div><div class="snip"><p class="cap">Captioning / VQA with BLIP-2</p><pre><code>from transformers import Blip2Processor, Blip2ForConditionalGeneration
-proc = Blip2Processor.from_pretrained("Salesforce/blip2-opt-2.7b")
-m = Blip2ForConditionalGeneration.from_pretrained("Salesforce/blip2-opt-2.7b", torch_dtype=torch.float16).to("cuda")
-inp = proc(pil, text="Question: what is on the table? Answer:", return_tensors="pt").to("cuda", torch.float16)
-print(proc.decode(m.generate(**inp, max_new_tokens=40)[0], skip_special_tokens=True))</code></pre></div><div class="snip"><p class="cap">Conversational VLM (LLaVA)</p><pre><code>from transformers import LlavaNextProcessor, LlavaNextForConditionalGeneration
-proc = LlavaNextProcessor.from_pretrained("llava-hf/llava-v1.6-mistral-7b-hf")
-m = LlavaNextForConditionalGeneration.from_pretrained(
-    "llava-hf/llava-v1.6-mistral-7b-hf", torch_dtype=torch.float16, device_map="auto")
-prompt = "[INST] &lt;image&gt;\nDescribe the chart and give the trend. [/INST]"
-out = m.generate(**proc(prompt, pil, return_tensors="pt").to("cuda"), max_new_tokens=200)</code></pre></div><div class="snip"><p class="cap">Open-vocabulary grounding</p><pre><code>from transformers import OwlViTProcessor, OwlViTForObjectDetection
-proc = OwlViTProcessor.from_pretrained("google/owlvit-base-patch32")
-m = OwlViTForObjectDetection.from_pretrained("google/owlvit-base-patch32")
-queries = [["the mug behind the laptop", "a pair of glasses"]]
-res = proc.post_process_object_detection(
-    m(**proc(text=queries, images=pil, return_tensors="pt")), threshold=0.1)</code></pre></div><div class="snip"><p class="cap">OCR</p><pre><code>import pytesseract
-text = pytesseract.image_to_string(pil, config="--psm 6")
-boxes = pytesseract.image_to_data(pil, output_type=pytesseract.Output.DICT)</code></pre></div><div class="snip"><p class="cap">Counting visual tokens (cost check)</p><pre><code>inp = proc(images=pil, return_tensors="pt")
-print(inp["pixel_values"].shape)          # patches -> tokens; scales with resolution
-# a single high-res image can consume thousands of context tokens</code></pre></div><div class="snip"><p class="cap">Hallucination probe (POPE-style)</p><pre><code>for obj in ["clock", "bicycle", "zebra"]:      # objects NOT in the image
-    q = f"Is there a {obj} in the image? Answer yes or no."
-    print(obj, ask_vlm(pil, q))                 # a good model answers 'no' every time</code></pre></div><div class="snip"><p class="cap">Video VLM frame sampling</p><pre><code>import decord
-vr = decord.VideoReader("clip.mp4")
-idx = np.linspace(0, len(vr) - 1, 8).astype(int)   # events between frames are invisible
-frames = [Image.fromarray(f) for f in vr.get_batch(idx).asnumpy()]</code></pre></div></div></details>
 </div>
 </details>
 
@@ -640,32 +508,211 @@ frames = [Image.fromarray(f) for f in vr.get_batch(idx).asnumpy()]</code></pre><
 <p>Safety work developed for text does not transfer cleanly. Instructions can be embedded in an image, harmful content can be split across modalities, and refusal behaviour trained on text often fails when the same request arrives visually.</p>
 <p>The general lesson is that <span class="k">every added modality is an added attack surface</span>, and guardrails have to be evaluated per modality and per combination rather than assumed to generalise.</p>
 </div></details>
-<details class="cx code" id="multimodal-code"><summary>Code snippets</summary><div class="cx-body"><div class="snip"><p class="cap">Tokenising audio alongside text</p><pre><code>import torchaudio
-from transformers import AutoProcessor, AutoModel
-wav, sr = torchaudio.load("clip.wav")
-wav = torchaudio.functional.resample(wav, sr, 16000)
-proc = AutoProcessor.from_pretrained("openai/whisper-small")
-feats = proc(wav.squeeze().numpy(), sampling_rate=16000, return_tensors="pt")</code></pre></div><div class="snip"><p class="cap">Cross-attention between modalities</p><pre><code>import torch.nn as nn
-xattn = nn.MultiheadAttention(embed_dim=1024, num_heads=16, batch_first=True)
-fused, weights = xattn(query=text_tokens, key=image_tokens, value=image_tokens)</code></pre></div><div class="snip"><p class="cap">Interleaved image-text sequence</p><pre><code>messages = [
-    {"role": "user", "content": [
-        {"type": "text",  "text": "Compare these two charts."},
-        {"type": "image", "image": img_a},
-        {"type": "image", "image": img_b},
-    ]},
-]
-inputs = processor.apply_chat_template(messages, return_tensors="pt")</code></pre></div><div class="snip"><p class="cap">Modality ablation — the collapse test</p><pre><code>full  = evaluate(model, dataset)                    # image + question
-blind = evaluate(model, dataset.without("image"))   # question only
-print(full, blind, full - blind)
-# if the gap is small, the model is not actually using the image</code></pre></div><div class="snip"><p class="cap">Any-to-any: discrete modality tokens</p><pre><code>img_tokens = vq_tokenizer.encode(image)      # image -> integer codes
-seq = text_ids + [BOI] + img_tokens + [EOI]  # one sequence, one vocabulary
-out = model.generate(seq)                    # next-token prediction across modalities</code></pre></div><div class="snip"><p class="cap">Long-context video budget</p><pre><code>frames_per_min, tokens_per_frame = 2, 256
-minutes = 60
-print(frames_per_min * minutes * tokens_per_frame)   # ~30k tokens/hour at this rate</code></pre></div><div class="snip"><p class="cap">Vision-language-action step</p><pre><code>obs = {"image": cam.read(), "instruction": "put the red block in the bowl"}
-action = policy(obs)                 # 7-DoF delta, closed loop
-robot.step(action)                   # errors change the world and compound</code></pre></div></div></details>
 </div>
 </details>
+
+
+<h2 class="vs-sec" id="code-snippets">Code Snippets</h2>
+<p class="vs-lead">Working PyTorch for the concepts above, grouped by subdomain. Written in torch rather than library one-liners wherever the mechanics are the point — the closed-form forward diffusion, the contrastive loss, morphology as pooling — because those are the parts worth being able to write from memory.</p>
+<details class="cx code" id="code-ip"><summary>1 · Image Processing — in PyTorch</summary><div class="cx-body"><div class="snip"><p class="cap">Load an image as a tensor</p><pre><code>import torch, torchvision
+from torchvision.io import read_image
+import torchvision.transforms.v2.functional as TF
+
+img = read_image("in.jpg")                 # uint8, [C,H,W], 0-255
+x   = img.float().div(255).unsqueeze(0)    # float32, [1,C,H,W], 0-1
+x   = x.to("cuda")                         # everything below runs batched on GPU
+print(x.shape, x.dtype, x.min().item(), x.max().item())</code></pre></div><div class="snip"><p class="cap">Colour conversion (matrix form)</p><pre><code># RGB -&gt; grayscale using luminance weights, as a 1x1 convolution
+w = torch.tensor([0.299, 0.587, 0.114], device=x.device).view(1, 3, 1, 1)
+gray = (x * w).sum(1, keepdim=True)        # [1,1,H,W]</code></pre></div><div class="snip"><p class="cap">Convolution with your own kernel</p><pre><code>import torch.nn.functional as F
+sharpen = torch.tensor([[0., -1., 0.],
+                        [-1., 5., -1.],
+                        [0., -1., 0.]], device=x.device)
+k = sharpen.view(1, 1, 3, 3).repeat(x.shape[1], 1, 1, 1)
+out = F.conv2d(x, k, padding=1, groups=x.shape[1])   # per-channel (depthwise)</code></pre></div><div class="snip"><p class="cap">Separable Gaussian blur</p><pre><code>def gaussian_kernel1d(sigma, ks):
+    t = torch.arange(ks) - ks // 2
+    g = torch.exp(-(t ** 2) / (2 * sigma ** 2))
+    return (g / g.sum()).float()
+
+g = gaussian_kernel1d(1.5, 9).to(x.device)
+C = x.shape[1]
+x = F.conv2d(x, g.view(1, 1, 1, -1).repeat(C, 1, 1, 1), padding=(0, 4), groups=C)
+x = F.conv2d(x, g.view(1, 1, -1, 1).repeat(C, 1, 1, 1), padding=(4, 0), groups=C)
+# two 1-D passes instead of one 2-D: O(k) per pixel rather than O(k^2)</code></pre></div><div class="snip"><p class="cap">Sobel edges</p><pre><code>sx = torch.tensor([[-1., 0., 1.], [-2., 0., 2.], [-1., 0., 1.]], device=x.device)
+sy = sx.T.contiguous()
+gx = F.conv2d(gray, sx.view(1, 1, 3, 3), padding=1)
+gy = F.conv2d(gray, sy.view(1, 1, 3, 3), padding=1)
+mag = torch.sqrt(gx ** 2 + gy ** 2)
+ang = torch.atan2(gy, gx)</code></pre></div><div class="snip"><p class="cap">Histogram and equalization</p><pre><code>hist = torch.histc(gray * 255, bins=256, min=0, max=255)
+cdf  = hist.cumsum(0)
+cdf  = (cdf - cdf.min()) / (cdf.max() - cdf.min())      # normalise to 0-1
+eq   = cdf[(gray * 255).long().clamp(0, 255)]           # LUT via indexing</code></pre></div><div class="snip"><p class="cap">Morphology as pooling</p><pre><code># dilation is a max filter; erosion is a min filter (= -max of the negative)
+def dilate(m, k=3): return F.max_pool2d(m, k, stride=1, padding=k // 2)
+def erode(m, k=3):  return -F.max_pool2d(-m, k, stride=1, padding=k // 2)
+
+mask   = (gray &gt; 0.5).float()
+opened = dilate(erode(mask))     # remove specks
+closed = erode(dilate(opened))   # fill holes</code></pre></div><div class="snip"><p class="cap">Image pyramid</p><pre><code>pyr, level = [x], x
+for _ in range(3):
+    level = F.avg_pool2d(level, 2)                       # blur + subsample
+    pyr.append(level)
+up = F.interpolate(pyr[-1], scale_factor=2, mode="bilinear", align_corners=False)</code></pre></div><div class="snip"><p class="cap">FFT and frequency filtering</p><pre><code>f = torch.fft.fftshift(torch.fft.fft2(gray))
+H, W = gray.shape[-2:]
+yy, xx = torch.meshgrid(torch.arange(H), torch.arange(W), indexing="ij")
+r = ((yy - H // 2) ** 2 + (xx - W // 2) ** 2).sqrt().to(f.device)
+low = torch.fft.ifft2(torch.fft.ifftshift(f * (r &lt; 30))).abs()   # low-pass</code></pre></div><div class="snip"><p class="cap">Geometric warp with grid_sample</p><pre><code>theta = torch.tensor([[[1., 0., 0.2],          # affine: translate + scale
+                        [0., 1., 0.0]]], device=x.device)
+grid = F.affine_grid(theta, x.shape, align_corners=False)
+warped = F.grid_sample(x, grid, mode="bilinear", align_corners=False)
+# grid_sample is differentiable, so warps can sit inside a training graph</code></pre></div><div class="snip"><p class="cap">Batched preprocessing on GPU</p><pre><code>from torchvision.transforms import v2
+tf = v2.Compose([v2.ToDtype(torch.float32, scale=True),
+                 v2.Resize((256, 256), antialias=True),
+                 v2.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])])
+batch = tf(torch.stack([read_image(p) for p in paths]).cuda())   # whole batch at once</code></pre></div></div></details>
+<details class="cx code" id="code-cv"><summary>2 · Computer Vision — in PyTorch</summary><div class="cx-body"><div class="snip"><p class="cap">Dataset and DataLoader</p><pre><code>from torch.utils.data import Dataset, DataLoader
+class ImageSet(Dataset):
+    def __init__(self, paths, labels, tf): self.p, self.y, self.tf = paths, labels, tf
+    def __len__(self): return len(self.p)
+    def __getitem__(self, i): return self.tf(read_image(self.p[i])), self.y[i]
+
+dl = DataLoader(ImageSet(paths, labels, tf), batch_size=32, shuffle=True,
+                num_workers=8, pin_memory=True, persistent_workers=True)</code></pre></div><div class="snip"><p class="cap">Transfer learning: freeze and replace the head</p><pre><code>import torchvision.models as M
+net = M.resnet50(weights=M.ResNet50_Weights.IMAGENET1K_V2)
+for p in net.parameters():
+    p.requires_grad = False
+net.fc = torch.nn.Linear(net.fc.in_features, num_classes)   # new head trains
+net = net.cuda()</code></pre></div><div class="snip"><p class="cap">Training loop with mixed precision</p><pre><code>opt    = torch.optim.AdamW([p for p in net.parameters() if p.requires_grad], lr=3e-4)
+scaler = torch.amp.GradScaler("cuda")
+sched  = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=epochs)
+
+for ep in range(epochs):
+    net.train()
+    for xb, yb in dl:
+        xb, yb = xb.cuda(non_blocking=True), yb.cuda(non_blocking=True)
+        opt.zero_grad(set_to_none=True)
+        with torch.autocast("cuda", dtype=torch.bfloat16):
+            loss = F.cross_entropy(net(xb), yb)
+        scaler.scale(loss).backward()
+        scaler.step(opt); scaler.update()
+    sched.step()</code></pre></div><div class="snip"><p class="cap">IoU from scratch</p><pre><code>def box_iou(a, b):                      # a:[N,4], b:[M,4] as x1,y1,x2,y2
+    area_a = (a[:, 2] - a[:, 0]) * (a[:, 3] - a[:, 1])
+    area_b = (b[:, 2] - b[:, 0]) * (b[:, 3] - b[:, 1])
+    lt = torch.max(a[:, None, :2], b[None, :, :2])
+    rb = torch.min(a[:, None, 2:], b[None, :, 2:])
+    inter = (rb - lt).clamp(min=0).prod(dim=2)
+    return inter / (area_a[:, None] + area_b[None, :] - inter)</code></pre></div><div class="snip"><p class="cap">NMS and detection post-processing</p><pre><code>from torchvision.ops import nms, batched_nms
+keep = nms(boxes, scores, iou_threshold=0.5)              # single class
+keep = batched_nms(boxes, scores, class_ids, 0.5)         # per class, no cross-suppression</code></pre></div><div class="snip"><p class="cap">Dice loss for segmentation</p><pre><code>def dice_loss(logits, target, eps=1.0):
+    prob = torch.sigmoid(logits)
+    num  = 2 * (prob * target).sum(dim=(2, 3)) + eps
+    den  = prob.sum(dim=(2, 3)) + target.sum(dim=(2, 3)) + eps
+    return 1 - (num / den).mean()
+
+loss = 0.5 * F.binary_cross_entropy_with_logits(logits, target) + 0.5 * dice_loss(logits, target)</code></pre></div><div class="snip"><p class="cap">ViT patch embedding</p><pre><code>class PatchEmbed(torch.nn.Module):
+    def __init__(self, dim=768, patch=16, in_ch=3):
+        super().__init__()
+        self.proj = torch.nn.Conv2d(in_ch, dim, kernel_size=patch, stride=patch)
+    def forward(self, x):                      # [B,3,224,224]
+        return self.proj(x).flatten(2).transpose(1, 2)   # [B,196,768] tokens
+# a strided convolution IS the patch split plus linear projection</code></pre></div><div class="snip"><p class="cap">Inference correctly</p><pre><code>net.eval()
+with torch.inference_mode():                   # no autograd, no graph
+    logits = net(batch.cuda())
+    probs  = logits.softmax(dim=1)
+# forgetting .eval() leaves BatchNorm/Dropout in training mode — a classic silent bug</code></pre></div></div></details>
+<details class="cx code" id="code-df"><summary>3 · Diffusion Models — in PyTorch</summary><div class="cx-body"><div class="snip"><p class="cap">The noise schedule</p><pre><code>T = 1000
+betas = torch.linspace(1e-4, 0.02, T)                 # linear schedule
+alphas = 1.0 - betas
+abar   = torch.cumprod(alphas, dim=0)                 # alpha-bar_t</code></pre></div><div class="snip"><p class="cap">Forward process in closed form</p><pre><code>def q_sample(x0, t, noise):
+    a = abar[t].view(-1, 1, 1, 1)
+    return a.sqrt() * x0 + (1 - a).sqrt() * noise
+# no loop over timesteps — jump straight to any t</code></pre></div><div class="snip"><p class="cap">The training step (this is the whole objective)</p><pre><code>t     = torch.randint(0, T, (x0.size(0),), device=x0.device)
+noise = torch.randn_like(x0)
+xt    = q_sample(x0, t, noise)
+pred  = unet(xt, t, cond)                 # predict the noise that was added
+loss  = F.mse_loss(pred, noise)
+loss.backward()</code></pre></div><div class="snip"><p class="cap">Sinusoidal timestep embedding</p><pre><code>def timestep_embedding(t, dim):
+    half = dim // 2
+    freqs = torch.exp(-torch.arange(half, device=t.device) * (torch.log(torch.tensor(10000.0)) / half))
+    args = t[:, None].float() * freqs[None]
+    return torch.cat([args.cos(), args.sin()], dim=-1)
+# one network serves every noise level because t is fed in as a conditioning vector</code></pre></div><div class="snip"><p class="cap">DDPM sampling loop</p><pre><code>@torch.no_grad()
+def ddpm_sample(shape):
+    x = torch.randn(shape, device=dev)
+    for i in reversed(range(T)):
+        t = torch.full((shape[0],), i, device=dev, dtype=torch.long)
+        eps = unet(x, t, cond)
+        a, ab = alphas[i], abar[i]
+        mean = (x - (1 - a) / (1 - ab).sqrt() * eps) / a.sqrt()
+        x = mean + (betas[i].sqrt() * torch.randn_like(x) if i &gt; 0 else 0)
+    return x</code></pre></div><div class="snip"><p class="cap">DDIM: deterministic, skippable steps</p><pre><code>@torch.no_grad()
+def ddim_sample(shape, steps=50):
+    ts = torch.linspace(T - 1, 0, steps).long()
+    x = torch.randn(shape, device=dev)
+    for i, j in zip(ts[:-1], ts[1:]):
+        eps = unet(x, i.repeat(shape[0]).to(dev), cond)
+        x0  = (x - (1 - abar[i]).sqrt() * eps) / abar[i].sqrt()
+        x   = abar[j].sqrt() * x0 + (1 - abar[j]).sqrt() * eps    # no noise added
+    return x</code></pre></div><div class="snip"><p class="cap">Classifier-free guidance</p><pre><code>eps_uncond = unet(x, t, null_cond)
+eps_cond   = unet(x, t, cond)
+eps = eps_uncond + guidance_scale * (eps_cond - eps_uncond)
+# guidance_scale = 1 is plain conditional; higher pushes harder toward the prompt</code></pre></div><div class="snip"><p class="cap">Training with CFG dropout</p><pre><code>mask = (torch.rand(cond.size(0), device=cond.device) &lt; 0.1)   # drop 10%
+cond = torch.where(mask[:, None], null_cond, cond)
+# the same network learns conditional and unconditional prediction</code></pre></div></div></details>
+<details class="cx code" id="code-vl"><summary>4 · Vision-Language Models — in PyTorch</summary><div class="cx-body"><div class="snip"><p class="cap">CLIP contrastive loss (symmetric InfoNCE)</p><pre><code>def clip_loss(img_emb, txt_emb, logit_scale):
+    img = F.normalize(img_emb, dim=-1)
+    txt = F.normalize(txt_emb, dim=-1)
+    logits = logit_scale.exp() * img @ txt.T          # [B,B]
+    labels = torch.arange(len(logits), device=logits.device)
+    return 0.5 * (F.cross_entropy(logits, labels) +   # image -&gt; text
+                  F.cross_entropy(logits.T, labels))  # text -&gt; image
+# every other item in the batch is a negative, so batch size is a real hyperparameter</code></pre></div><div class="snip"><p class="cap">Zero-shot classification</p><pre><code>with torch.inference_mode():
+    i = F.normalize(image_encoder(pixels), dim=-1)
+    t = F.normalize(text_encoder(tokenised_labels), dim=-1)
+    probs = (100.0 * i @ t.T).softmax(dim=-1)
+# classification reduced to nearest-neighbour retrieval in a shared space</code></pre></div><div class="snip"><p class="cap">The projector that gives an LLM eyes</p><pre><code>class Projector(torch.nn.Module):
+    def __init__(self, vision_dim=1024, llm_dim=4096):
+        super().__init__()
+        self.net = torch.nn.Sequential(
+            torch.nn.Linear(vision_dim, llm_dim),
+            torch.nn.GELU(),
+            torch.nn.Linear(llm_dim, llm_dim))
+    def forward(self, patches):            # [B, N_patches, vision_dim]
+        return self.net(patches)           # [B, N_patches, llm_dim] -&gt; used as tokens</code></pre></div><div class="snip"><p class="cap">Train only the connector</p><pre><code>for p in vision_encoder.parameters(): p.requires_grad = False
+for p in language_model.parameters():  p.requires_grad = False
+opt = torch.optim.AdamW(projector.parameters(), lr=1e-3)
+
+vis   = projector(vision_encoder(pixels))                     # visual tokens
+embeds = torch.cat([vis, language_model.get_input_embeddings()(text_ids)], dim=1)
+loss   = language_model(inputs_embeds=embeds, labels=labels).loss</code></pre></div><div class="snip"><p class="cap">Masking image tokens out of the loss</p><pre><code>labels = text_ids.clone()
+labels[:, :vis.size(1)] = -100      # ignore_index: never predict visual positions
+# forgetting this trains the model to 'generate' image tokens and quietly degrades it</code></pre></div></div></details>
+<details class="cx code" id="code-mm"><summary>5 · Multimodal Language Modelling — in PyTorch</summary><div class="cx-body"><div class="snip"><p class="cap">A cross-attention block</p><pre><code>class CrossAttn(torch.nn.Module):
+    def __init__(self, dim, heads=8):
+        super().__init__()
+        self.attn = torch.nn.MultiheadAttention(dim, heads, batch_first=True)
+        self.norm = torch.nn.LayerNorm(dim)
+        self.gate = torch.nn.Parameter(torch.zeros(1))     # start as identity
+    def forward(self, text, other):
+        out, _ = self.attn(self.norm(text), other, other)
+        return text + self.gate.tanh() * out               # gated residual</code></pre></div><div class="snip"><p class="cap">Early vs late fusion</p><pre><code># early: concatenate tokens, every layer sees both
+seq = torch.cat([img_tokens, txt_tokens], dim=1)
+out = transformer(seq)
+
+# late: encode separately, combine at the end
+out = head(torch.cat([img_encoder(img).mean(1), txt_encoder(txt).mean(1)], dim=-1))</code></pre></div><div class="snip"><p class="cap">Modality type embeddings</p><pre><code>mod_emb = torch.nn.Embedding(3, dim)          # 0=text 1=image 2=audio
+types = torch.cat([torch.zeros(Lt), torch.ones(Li), torch.full((La,), 2)]).long()
+seq = seq + mod_emb(types.to(seq.device))[None]
+# without this the model cannot tell which tokens came from which modality</code></pre></div><div class="snip"><p class="cap">Modality dropout during training</p><pre><code>if self.training and torch.rand(1).item() &lt; 0.15:
+    img_tokens = torch.zeros_like(img_tokens)   # force reliance on text sometimes
+# improves robustness and reduces collapse onto one modality</code></pre></div><div class="snip"><p class="cap">The collapse test</p><pre><code>@torch.inference_mode()
+def ablate(model, loader):
+    full  = evaluate(model, loader)
+    blind = evaluate(model, loader, zero_out="image")
+    return full, blind, full - blind
+# a small gap means the image was never really being used</code></pre></div><div class="snip"><p class="cap">Padding and attention masks across modalities</p><pre><code>attn_mask = torch.cat([
+    torch.ones(B, Li, dtype=torch.bool, device=dev),   # images: always present
+    text_attention_mask.bool(),                        # text: variable length
+], dim=1)
+out = model(inputs_embeds=seq, attention_mask=attn_mask)</code></pre></div></div></details>
 
 <p style="margin-top:2.5em">Related: the <a href="/stacks/">Stacks</a> section covers agentic, API, data science, ML, and AWS concepts in the same format.</p>
 
