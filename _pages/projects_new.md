@@ -1,5 +1,5 @@
 ---
-title: "Selected Technical Research Projects"
+title: "Projects"
 permalink: /projects/
 layout: single
 author_profile: true
@@ -31,6 +31,31 @@ author_profile: true
   background: #f0f7f9; color: #1f6f8b; text-decoration: none;
 }
 .pd-more:hover { background: #e2eff3; border-color: #1f6f8b; text-decoration: none; }
+
+.pj-h2 {
+  margin: 2.4em 0 .3em; padding-top: .45em; border-top: 2px solid #eee;
+  font-size: 1.32rem; color: #23303a;
+}
+.pj-h2:first-of-type { margin-top: .6em; border-top: 0; padding-top: 0; }
+.pj-sub { font-size: .93rem; color: #5b656e; margin: 0 0 1.4em; line-height: 1.6; }
+
+.ind-card {
+  border: 1px solid #e2e6ea; border-left: 4px solid #1f6f8b; border-radius: 5px;
+  background: #fcfcfc; padding: 1em 1.15em; margin-bottom: 1em;
+}
+.ind-card h3 { margin: 0 0 .25em; font-size: 1.03rem; color: #23303a; }
+.ind-when { font-size: .8rem; color: #7a8189; margin: 0 0 .55em; }
+.ind-card p.ind-deck { font-size: .9rem; color: #4a5158; margin: 0 0 .7em; line-height: 1.6; }
+.ind-tags { margin: 0 0 .8em; }
+.ind-tags span {
+  display: inline-block; font-size: .74rem; color: #41606e; background: #f2f7f9;
+  border: 1px solid #dde7eb; border-radius: 10px; padding: .15em .6em; margin: 0 .3em .3em 0;
+}
+.ind-q {
+  display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .06em;
+  font-weight: 700; color: #7a601b; background: #f8f3e6; border: 1px solid #e8dcc2;
+  border-radius: 11px; padding: .18em .65em; margin-left: .5em; vertical-align: middle;
+}
 </style>
 
 <script>
@@ -42,6 +67,36 @@ author_profile: true
     triangle.textContent = isVisible ? "▶" : "▼";
   }
 </script>
+
+<h2 class="pj-h2">Industry Projects</h2>
+
+<p class="pj-sub">Production systems built in industry roles. Each page carries the architecture, the technical specifications, a full interview question bank covering the analytical and “what if” angles, and a glossary defining every term used.</p>
+
+<div class="ind-card">
+  <h3>Document Intelligence &amp; Edge Inference<span class="ind-q">132 questions</span></h3>
+  <p class="ind-when">AI Engineer · Infiswift.ai, California · Nov 2025 – Present</p>
+  <p class="ind-deck">LLM applications for document data extraction, a self-learning regex framework that promotes stable LLM outputs into deterministic rules, and wake-word detection optimised for edge devices.</p>
+  <p class="ind-tags"><span>LangChain</span><span>LangGraph</span><span>AWS Lambda</span><span>Step Functions</span><span>Bedrock</span><span>ONNX</span><span>Quantisation</span><span>A/B testing</span></p>
+  <a class="pd-more" href="/projects/industry/infiswift/">Detailed summary &amp; question bank →</a>
+</div>
+
+<div class="ind-card">
+  <h3>Real-Time Fraud Detection &amp; GenAI Investigation<span class="ind-q">134 questions</span></h3>
+  <p class="ind-when">AI/ML Engineer · JPMorgan Chase &amp; Co., California · Sept 2023 – Oct 2025</p>
+  <p class="ind-deck">Real-time transaction fraud models with a streaming feature store, a RAG assistant for investigators, and the explainability and governance layer a regulated bank requires.</p>
+  <p class="ind-tags"><span>XGBoost</span><span>Feast</span><span>Kafka</span><span>RAG</span><span>Kubeflow</span><span>Terraform</span><span>EKS</span><span>SHAP</span></p>
+  <a class="pd-more" href="/projects/industry/jpmorgan/">Detailed summary &amp; question bank →</a>
+</div>
+
+<div class="ind-card">
+  <h3>Clinical Risk Prediction &amp; EHR NLP<span class="ind-q">136 questions</span></h3>
+  <p class="ind-when">Machine Learning Engineer · Cognizant, India · Jan 2019 – Oct 2020</p>
+  <p class="ind-deck">A patient readmission model over 2M+ EHR records at 0.87 AUC-ROC, a clinical NLP pipeline over physician notes, and the explainability work that drove clinician adoption — under HIPAA throughout.</p>
+  <p class="ind-tags"><span>XGBoost</span><span>PySpark</span><span>Databricks</span><span>BioBERT</span><span>spaCy</span><span>SageMaker</span><span>SHAP</span><span>HL7/FHIR</span></p>
+  <a class="pd-more" href="/projects/industry/cognizant/">Detailed summary &amp; question bank →</a>
+</div>
+
+<h2 class="pj-h2">Selected Technical Research Projects</h2>
 
 **Vision Language Models:**
 
