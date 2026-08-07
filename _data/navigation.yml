@@ -1,4 +1,19 @@
-# main links links
+# Site navigation.
+#
+# TO HIDE A SECTION: add "hidden: true" under it. The link disappears from the
+# nav bar for every visitor. Nothing is deleted — remove the line (or set it to
+# false) and the section comes straight back.
+#
+#   - title: "Trends"
+#     url: /trends/
+#     hidden: true
+#
+# The page itself stays reachable by typing its URL directly. To take the page
+# offline as well, also add "published: false" to the front matter of its file
+# in _pages/ — the page then 404s and drops out of search engine indexing.
+#
+# Either change needs a commit and push; GitHub Pages rebuilds in about a minute.
+
 main:
   - title: "News"
     url: /publications/
@@ -28,21 +43,24 @@ main:
     url: /tutorials/
   - title: "Collaborators"
     url: /collaborators/
+  - title: "HiddenFlagSelfTest"
+    url: /self-test/
+    hidden: true
 
   #- title: "Talks"
-  #  url: /talks/    
+  #  url: /talks/
 
   #- title: "Teaching"
-  #  url: /teaching/    
-    
+  #  url: /teaching/
+
   #- title: "Portfolio"
   #  url: /portfolio/
-        
+
   #- title: "Blog Posts"
   #  url: /year-archive/
-    
+
   #- title: "CV"
   #  url: /cv/
-    
+
   #- title: "Guide"
   #  url: /markdown/
