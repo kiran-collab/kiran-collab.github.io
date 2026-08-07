@@ -32,12 +32,20 @@ author_profile: true
 }
 .pd-more:hover { background: #e2eff3; border-color: #1f6f8b; text-decoration: none; }
 
-.pj-h2 {
-  margin: 2.4em 0 .3em; padding-top: .45em; border-top: 2px solid #eee;
-  font-size: 1.32rem; color: #23303a;
+details.pj-sec { margin: 1.6em 0 0; scroll-margin-top: 24px; }
+details.pj-sec > summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; gap: .5em;
+  margin: 0 0 .3em; padding-top: .45em; border-top: 2px solid #eee;
+  font-size: 1.32rem; font-weight: 600; color: #23303a;
 }
-.pj-h2:first-of-type { margin-top: .6em; border-top: 0; padding-top: 0; }
+details.pj-sec:first-of-type { margin-top: .4em; }
+details.pj-sec:first-of-type > summary { border-top: 0; padding-top: 0; }
+details.pj-sec > summary::-webkit-details-marker { display: none; }
+details.pj-sec > summary::before { content: "\25BE"; color: #9aa4ad; font-size: .7em; }
+details.pj-sec:not([open]) > summary::before { content: "\25B8"; }
+details.pj-sec > summary:hover { color: #1f6f8b; }
 .pj-sub { font-size: .93rem; color: #5b656e; margin: 0 0 1.4em; line-height: 1.6; }
+.pj-grp { font-weight: 700; margin: 0 0 .8em; }
 
 .ind-card {
   border: 1px solid #e2e6ea; border-left: 4px solid #1f6f8b; border-radius: 5px;
@@ -68,7 +76,8 @@ author_profile: true
   }
 </script>
 
-<h2 class="pj-h2">Industry Projects</h2>
+<details class="pj-sec" id="industry" open>
+<summary>Industry Projects</summary>
 
 <p class="pj-sub">Production systems built in industry roles. Each page carries the architecture, the technical specifications, a full interview question bank covering the analytical and “what if” angles, and a glossary defining every term used.</p>
 
@@ -96,9 +105,12 @@ author_profile: true
   <a class="pd-more" href="/projects/industry/cognizant/">Detailed summary &amp; question bank →</a>
 </div>
 
-<h2 class="pj-h2">Selected Technical Research Projects</h2>
+</details>
 
-**Vision Language Models:**
+<details class="pj-sec" id="research" open>
+<summary>Selected Technical Research Projects</summary>
+
+<p class="pj-grp">Vision Language Models:</p>
 
 <div style="display: flex; align-items: center;">
   <img src="/./assets/images/saind.png" style="width: 30%; height: auto; margin-right: 20px; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3)">
@@ -139,7 +151,7 @@ author_profile: true
 
 <br><br>
 
-**Distributed Computing and Middleware Systems for Future Mobility:**
+<p class="pj-grp">Distributed Computing and Middleware Systems for Future Mobility:</p>
 
 <div style="display: flex; align-items: center;">
   <img src="/./assets/images/griffin.png" style="width: 60%; height: auto; margin-right: 30px; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3)">
@@ -162,7 +174,7 @@ author_profile: true
 
 <br><br>
 
-**WiFi Sensing:**
+<p class="pj-grp">WiFi Sensing:</p>
 
 <div style="display: flex; align-items: center;">
   <img src="/./assets/images/bmeye.png" style="width: 30%; height: auto; margin-right: 20px; box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3)">
@@ -202,3 +214,5 @@ author_profile: true
     <a class="pd-more" href="/projects/swidir/">Detailed summary →</a>
   </div>
 </div>
+
+</details>

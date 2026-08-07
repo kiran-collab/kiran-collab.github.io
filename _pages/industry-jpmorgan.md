@@ -22,7 +22,9 @@ author_profile: true
 <a href="#glossary">Glossary</a>
 </p>
 
-<h2 id="work">What I built</h2>
+<details class="ip-sec" id="work" open>
+<summary>What I built</summary>
+<div class="ip-sec-body">
 
 <ul>
 <li><strong>Real-time fraud detection platform</strong> — processing 5M+ daily card transactions with LightGBM and Isolation Forest models, reducing confirmed fraud losses by 22% while improving transaction risk scoring.</li>
@@ -35,7 +37,12 @@ author_profile: true
 <li><strong>Responsible AI controls</strong> — with Risk, Compliance, and Data Science: bias monitoring, output validation, and prompt injection safeguards enabling secure GenAI deployment.</li>
 </ul>
 
-<h2 id="arch">Architecture</h2>
+</div>
+</details>
+
+<details class="ip-sec" id="arch" open>
+<summary>Architecture</summary>
+<div class="ip-sec-body">
 
 <figure class="fig">
 <svg class="dgm" viewBox="0 0 540 230" aria-label="Fraud detection scoring path and investigation assistant">
@@ -61,7 +68,12 @@ author_profile: true
 <figcaption>The scoring path is latency-bound; the investigation path is quality-bound. Explainability is what connects them — a flagged transaction arrives at the analyst with reasons attached.</figcaption>
 </figure>
 
-<h2 id="specs">Technical specifications</h2>
+</div>
+</details>
+
+<details class="ip-sec" id="specs" open>
+<summary>Technical specifications</summary>
+<div class="ip-sec-body">
 
 <table class="ip-spec">
 <tr><td>Volume</td><td>5M+ card transactions scored daily</td></tr>
@@ -75,7 +87,12 @@ author_profile: true
 <tr><td>Reported outcomes</td><td>22% reduction in confirmed fraud losses; 15% detection accuracy improvement at &lt; 2% false positives; 40% reduction in investigation time</td></tr>
 </table>
 
-<h2 id="questions">Interview questions <span class="qb-count">134 questions</span></h2>
+</div>
+</details>
+
+<details class="ip-sec" id="questions" open>
+<summary>Interview questions <span class="qb-count">134 questions</span></summary>
+<div class="ip-sec-body">
 
 <p class="qb-intro">Fraud detection interviews concentrate on class imbalance, the cost asymmetry between error types, and latency under regulation. The "what if" groups are where interviewers find out whether you understand the system or only remember it. Terms are defined in the <a href="#glossary">glossary</a>.</p>
 
@@ -249,9 +266,13 @@ author_profile: true
 <li>What if you had to hand this system to a team who had never seen it — what would you document first?</li>
 </ol></div></details>
 
-<h2 id="glossary">Glossary</h2>
+</div>
+</details>
 
-<details class="qb gl" open><summary>Every term used above, defined</summary><div class="qb-body">
+<details class="ip-sec" id="glossary" open>
+<summary>Glossary</summary>
+<div class="ip-sec-body">
+
 <table class="gloss">
 <thead><tr><th>Term</th><th>What it means</th></tr></thead>
 <tbody>
@@ -318,7 +339,9 @@ author_profile: true
 <tr><td>Red teaming</td><td>Deliberately attacking your own system to find failures before an adversary does.</td></tr>
 </tbody>
 </table>
-</div></details>
+
+</div>
+</details>
 
 <p class="ip-foot">Back to <a href="/projects/">all projects</a>.</p>
 
