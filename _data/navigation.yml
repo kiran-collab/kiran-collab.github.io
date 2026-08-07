@@ -43,9 +43,6 @@ main:
     url: /tutorials/
   - title: "Collaborators"
     url: /collaborators/
-  - title: "HiddenFlagSelfTest"
-    url: /self-test/
-    hidden: true
 
   #- title: "Talks"
   #  url: /talks/
