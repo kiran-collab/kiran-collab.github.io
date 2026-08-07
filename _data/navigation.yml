@@ -20,6 +20,8 @@ main:
     url: /stacks/
   - title: "Vision"
     url: /vision/
+  - title: "Frameworks"
+    url: /frameworks/
   - title: "Toolkit"
     url: /toolkit/
   - title: "Tutorials"
