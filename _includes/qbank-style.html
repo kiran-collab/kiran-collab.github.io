@@ -13,6 +13,24 @@
   font-size: 1.3rem; color: #23303a; scroll-margin-top: 24px;
 }
 .ip h3 { font-size: 1.03rem; margin: 1.5em 0 .4em; color: #35424c; }
+
+/* collapsible top-level sections */
+details.ip-sec { margin-top: 2.2em; scroll-margin-top: 24px; }
+details.ip-sec > summary {
+  list-style: none; cursor: pointer; display: flex; align-items: center; gap: .5em;
+  padding-top: .45em; border-top: 2px solid #eee;
+  font-size: 1.3rem; font-weight: 600; color: #23303a;
+}
+details.ip-sec > summary::-webkit-details-marker { display: none; }
+details.ip-sec > summary::before { content: "\25BE"; color: #9aa4ad; font-size: .68em; }
+details.ip-sec:not([open]) > summary::before { content: "\25B8"; }
+details.ip-sec > summary:hover { color: #1f6f8b; }
+.ip-sec-body { padding-top: .5em; }
+.ip-toggle-all {
+  float: right; font-size: .78rem; padding: .25em .8em; cursor: pointer;
+  border: 1px solid #dde3e7; border-radius: 13px; background: #f6f9fa; color: #41606e;
+}
+.ip-toggle-all:hover { background: #eaf1f4; border-color: #c3d2d9; }
 .ip p, .ip li { line-height: 1.65; }
 
 table.ip-spec { width: 100%; border-collapse: collapse; font-size: .89rem; margin: 1.2em 0; display: block; overflow-x: auto; }
@@ -75,6 +93,9 @@ table.gloss thead th { background: #f4f7f8; }
 figure.fig { margin: 1.5em auto; max-width: 560px; }
 figure.fig figcaption { font-size: .8rem; color: #7a8189; text-align: center; margin-top: .5em; line-height: 1.45; }
 </style>
+
+<script src="{{ base_path }}/assets/js/open-target-details.js"></script>
+<script src="{{ base_path }}/assets/js/toggle-sections.js"></script>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 <marker id="ipar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#6b7480"/></marker>

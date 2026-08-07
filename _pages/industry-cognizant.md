@@ -22,7 +22,9 @@ author_profile: true
 <a href="#glossary">Glossary</a>
 </p>
 
-<h2 id="work">What I built</h2>
+<details class="ip-sec" id="work" open>
+<summary>What I built</summary>
+<div class="ip-sec-body">
 
 <ul>
 <li><strong>Patient readmission prediction</strong> — an XGBoost model over structured EHR data from 2M+ patient records, achieving 0.87 AUC-ROC and letting care teams identify high-risk patients before discharge.</li>
@@ -35,7 +37,12 @@ author_profile: true
 <li><strong>Clinical A/B evaluation</strong> — partnered with clinical and analytics teams to evaluate model-guided interventions, contributing to an 18% reduction in 30-day readmissions during the pilot.</li>
 </ul>
 
-<h2 id="arch">Architecture</h2>
+</div>
+</details>
+
+<details class="ip-sec" id="arch" open>
+<summary>Architecture</summary>
+<div class="ip-sec-body">
 
 <figure class="fig">
 <svg class="dgm" viewBox="0 0 540 220" aria-label="EHR ingestion, feature generation, model scoring and clinician delivery">
@@ -61,7 +68,12 @@ author_profile: true
 <figcaption>Two ingestion paths — structured and unstructured — converge into one feature set. The explainability layer is what made the output usable by clinicians rather than merely accurate.</figcaption>
 </figure>
 
-<h2 id="specs">Technical specifications</h2>
+</div>
+</details>
+
+<details class="ip-sec" id="specs" open>
+<summary>Technical specifications</summary>
+<div class="ip-sec-body">
 
 <table class="ip-spec">
 <tr><td>Dataset</td><td>Structured EHR data from 2M+ patient records</td></tr>
@@ -76,7 +88,12 @@ author_profile: true
 <tr><td>Clinical outcome</td><td>18% reduction in 30-day readmissions during the pilot A/B evaluation</td></tr>
 </table>
 
-<h2 id="questions">Interview questions <span class="qb-count">136 questions</span></h2>
+</div>
+</details>
+
+<details class="ip-sec" id="questions" open>
+<summary>Interview questions <span class="qb-count">136 questions</span></summary>
+<div class="ip-sec-body">
 
 <p class="qb-intro">Healthcare ML interviews test three things beyond modelling: whether you understand that a prediction has to change a clinical decision to be worth anything, whether you respect the privacy constraints, and whether you know why clinicians reject accurate models. Terms are defined in the <a href="#glossary">glossary</a>.</p>
 
@@ -252,9 +269,13 @@ author_profile: true
 <li>What if you had unlimited data but no labels?</li>
 </ol></div></details>
 
-<h2 id="glossary">Glossary</h2>
+</div>
+</details>
 
-<details class="qb gl" open><summary>Every term used above, defined</summary><div class="qb-body">
+<details class="ip-sec" id="glossary" open>
+<summary>Glossary</summary>
+<div class="ip-sec-body">
+
 <table class="gloss">
 <thead><tr><th>Term</th><th>What it means</th></tr></thead>
 <tbody>
@@ -325,7 +346,9 @@ author_profile: true
 <tr><td>Historical bias</td><td>Past inequity encoded in the data — if a group historically received less follow-up, the labels reflect that, not their true risk.</td></tr>
 </tbody>
 </table>
-</div></details>
+
+</div>
+</details>
 
 <p class="ip-foot">Back to <a href="/projects/">all projects</a>.</p>
 

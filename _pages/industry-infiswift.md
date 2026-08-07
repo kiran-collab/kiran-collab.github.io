@@ -22,7 +22,9 @@ author_profile: true
 <a href="#glossary">Glossary</a>
 </p>
 
-<h2 id="work">What I built</h2>
+<details class="ip-sec" id="work" open>
+<summary>What I built</summary>
+<div class="ip-sec-body">
 
 <ul>
 <li><strong>Modular NLP extraction API</strong> — consolidated multiple machine learning repositories into a unified inference pipeline, eliminating duplicate LLM workflows and improving maintainability across engineering teams.</li>
@@ -35,7 +37,12 @@ author_profile: true
 <li><strong>LLM evaluation and A/B testing</strong> — iterative evaluation across production projects, analysing model agreement and reasoning quality to identify classification gaps and refine prompt strategies.</li>
 </ul>
 
-<h2 id="arch">Architecture</h2>
+</div>
+</details>
+
+<details class="ip-sec" id="arch" open>
+<summary>Architecture</summary>
+<div class="ip-sec-body">
 
 <figure class="fig">
 <svg class="dgm" viewBox="0 0 520 210" aria-label="Document validation and rule promotion pipeline">
@@ -60,7 +67,12 @@ author_profile: true
 <figcaption>Two paths run side by side: an LLM classifies what regex cannot, and confirmed patterns are promoted into deterministic rules so the expensive path is used less over time.</figcaption>
 </figure>
 
-<h2 id="specs">Technical specifications</h2>
+</div>
+</details>
+
+<details class="ip-sec" id="specs" open>
+<summary>Technical specifications</summary>
+<div class="ip-sec-body">
 
 <table class="ip-spec">
 <tr><td>LLM &amp; platform</td><td>Vertex AI Gemini on Google Cloud</td></tr>
@@ -75,7 +87,12 @@ author_profile: true
 <tr><td>Evaluation</td><td>LLM evaluation with A/B testing, model agreement and reasoning-quality analysis</td></tr>
 </table>
 
-<h2 id="questions">Interview questions <span class="qb-count">132 questions</span></h2>
+</div>
+</details>
+
+<details class="ip-sec" id="questions" open>
+<summary>Interview questions <span class="qb-count">132 questions</span></summary>
+<div class="ip-sec-body">
 
 <p class="qb-intro">Grouped by what an interviewer is probing. The "what if" sections are the ones that separate a rehearsed answer from real understanding — they change one variable and see whether your reasoning survives. Terms used here are defined in the <a href="#glossary">glossary</a>.</p>
 
@@ -247,9 +264,13 @@ author_profile: true
 <li>What if you had unlimited budget — what would you actually change?<span class="hint">A good answer names something other than "a bigger model", because the bottleneck usually is not model capability.</span></li>
 </ol></div></details>
 
-<h2 id="glossary">Glossary</h2>
+</div>
+</details>
 
-<details class="qb gl" open><summary>Every term used above, defined</summary><div class="qb-body">
+<details class="ip-sec" id="glossary" open>
+<summary>Glossary</summary>
+<div class="ip-sec-body">
+
 <table class="gloss">
 <thead><tr><th>Term</th><th>What it means</th></tr></thead>
 <tbody>
@@ -302,7 +323,9 @@ author_profile: true
 <tr><td>A/B test</td><td>Randomly assigning traffic between variants so the measured difference can be attributed to the change rather than to who received it.</td></tr>
 </tbody>
 </table>
-</div></details>
+
+</div>
+</details>
 
 <p class="ip-foot">Back to <a href="/projects/">all projects</a>.</p>
 
