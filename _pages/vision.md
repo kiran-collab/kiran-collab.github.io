@@ -23,7 +23,7 @@ author_profile: true
 .vs-tier.a { color: #a52c22; background: #fbeae7; border: 1px solid #f0d3ce; }
 </style>
 
-<p class="stack-lead">The vision space, laid out end to end across five subdomains — from pixel arithmetic through recognition, generation, and models that reason across modalities. Each subdomain runs from foundations to advanced, so you can enter wherever you already are.</p>
+<p class="stack-lead">The vision space, laid out end to end across seven subdomains — from pixel arithmetic through recognition, generation, models that reason across modalities, and output that has to drive something interactive at frame rate. Each subdomain runs from foundations to advanced, so you can enter wherever you already are.</p>
 
 <p class="stack-hint">Click a subdomain to open it, then any concept inside. PyTorch code for everything is collected at the end. Tiers are cumulative: advanced material generally assumes the foundations above it.</p>
 
@@ -33,6 +33,8 @@ author_profile: true
 <a class="stack-back" href="#diffusion">3 · Diffusion Models</a>
 <a class="stack-back" href="#vlm">4 · Vision-Language Models</a>
 <a class="stack-back" href="#multimodal">5 · Multimodal Language Modelling</a>
+<a class="stack-back" href="#generative-vision">6 · Generative Vision — Autoencoders &amp; GANs</a>
+<a class="stack-back" href="#animation-audio">7 · Animation, Audio &amp; Real-Time 3D</a>
 <a class="stack-back" href="#code-snippets">Code snippets</a>
 </p>
 
@@ -511,6 +513,189 @@ author_profile: true
 </div>
 </details>
 
+<details class="vs-dom" id="generative-vision">
+<summary>6 · Generative Vision — Autoencoders &amp; GANs</summary>
+<div class="vs-body">
+<p class="vs-libs"><span class="lbl">Libraries &amp; packages</span><code>torch.nn</code> <code>torch.distributions</code> <code>torchmetrics.image</code> <code>diffusers.AutoencoderKL</code> <code>kornia</code> <code>timm</code> <code>lpips</code></p>
+<p class="vs-lead">The generative half of vision that predates diffusion and still underpins it. Autoencoders give you a latent space; GANs give you a way to make samples from one look real. Latent diffusion is both of these stacked, so this subdomain is a prerequisite for § 3 rather than an alternative to it.</p>
+
+<p class="vs-tier f">Foundations</p>
+
+<details class="cx"><summary>The autoencoder bottleneck</summary><div class="cx-body">
+<p>An encoder compresses input to a low-dimensional code, a decoder reconstructs the input from it, and the loss is reconstruction error against the input itself. No labels are involved, which makes it the simplest form of representation learning.</p>
+<p>The bottleneck is the entire mechanism. Given enough latent capacity the network learns the identity function and generalises nothing — so the constraint, not the architecture, is what forces useful structure to be discovered.</p>
+<p class="uses">Uses: <code>torch.nn.Sequential</code> · <code>torch.nn.MSELoss</code></p></div></details>
+
+<details class="cx"><summary>Denoising, sparse and contractive variants</summary><div class="cx-body">
+<p><span class="k">Denoising</span> autoencoders corrupt the input and ask for the clean version, which prevents identity-copying and produces features robust to exactly the corruption used. <span class="k">Sparse</span> autoencoders penalise mean activation so only a few units fire per input, yielding parts-based features — and are now central to interpretability work on language models.</p>
+<p><span class="k">Contractive</span> autoencoders penalise the Jacobian of the encoding with respect to the input, so the code changes little under small input perturbations. All three are the same idea: the useful autoencoder is the constrained one.</p>
+<p class="uses">Uses: <code>torch.autograd.functional.jacobian</code> · <code>torch.nn.L1Loss</code></p></div></details>
+
+<details class="cx"><summary>Reconstruction losses</summary><div class="cx-body">
+<p>Pixel MSE is the default and the reason autoencoder outputs blur — under uncertainty the loss-minimising output is the average of plausible reconstructions. L1 blurs slightly less. Perceptual loss compares activations of a pretrained network rather than pixels, so outputs match in feature space and look sharper.</p>
+<p>LPIPS is the standard learned perceptual metric. Combining pixel loss with perceptual loss, and sometimes an adversarial term, is what production autoencoders actually use — including the VAE inside Stable Diffusion.</p>
+<p class="uses">Uses: <code>lpips</code> · <code>torchmetrics.image.LearnedPerceptualImagePatchSimilarity</code></p></div></details>
+
+<details class="cx"><summary>Anomaly detection by reconstruction</summary><div class="cx-body">
+<p>Train only on normal data; anything the autoencoder reconstructs badly is anomalous. Attractive because it needs no labelled defects, which is usually the situation in inspection and monitoring.</p>
+<p>Its weakness is that a sufficiently powerful autoencoder reconstructs anomalies too. Practical systems constrain capacity, use memory banks of normal features, or compare features from a pretrained network rather than pixels.</p>
+<p class="uses">Uses: <code>anomalib</code> · <code>torch</code></p></div></details>
+
+<p class="vs-tier c">Core</p>
+
+<details class="cx"><summary>Variational autoencoders and the ELBO</summary><div class="cx-body">
+<p>A VAE encodes to a <span class="k">distribution</span> rather than a point: the encoder outputs a mean and log-variance, a sample is drawn, and the decoder reconstructs from that sample. This is what makes the latent space continuous and sampleable — a plain autoencoder's latent space has holes, so decoding a random point produces nothing meaningful.</p>
+<p>Training maximises the evidence lower bound, which is reconstruction likelihood minus the KL divergence between the encoder's posterior and a standard normal prior. The KL term is the regulariser that pulls the latent space into a usable shape.</p>
+<p class="uses">Uses: <code>torch.distributions.Normal</code> · <code>torch.distributions.kl_divergence</code></p></div></details>
+
+<details class="cx"><summary>The reparameterisation trick</summary><div class="cx-body">
+<p>Sampling is not differentiable, so gradients cannot flow through a random draw. Writing the sample as <code>z = mu + sigma * eps</code> with <code>eps</code> drawn from a fixed standard normal moves the randomness outside the computation graph, leaving <code>mu</code> and <code>sigma</code> differentiable.</p>
+<p>It is a small algebraic move with an outsized consequence — it is what made variational inference trainable by backpropagation, and it is the single most commonly asked VAE question.</p>
+<p class="uses">Uses: <code>torch.randn_like</code></p></div></details>
+
+<details class="cx"><summary>Posterior collapse and beta-VAE</summary><div class="cx-body">
+<p>If the KL term dominates, the encoder outputs the prior regardless of input and the decoder learns to ignore the latent entirely, producing the same average image every time. This is posterior collapse, and it is the characteristic VAE failure.</p>
+<p>Mitigations: KL annealing that ramps the weight up during training, free bits that exempt a minimum KL per dimension from the penalty, and weakening the decoder so it cannot succeed alone. Beta-VAE turns the weight into a deliberate knob — higher beta trades reconstruction quality for more disentangled factors.</p>
+<p class="uses">Uses: <code>torch</code> · custom loss weighting schedules</p></div></details>
+
+<details class="cx"><summary>The GAN objective</summary><div class="cx-body">
+<p>A generator maps noise to images; a discriminator classifies real against generated. The discriminator's gradient tells the generator how to become more convincing. At the theoretical optimum the generator matches the data distribution and the discriminator is reduced to guessing.</p>
+<p>The original minimax loss saturates when the discriminator wins early, giving the generator no gradient — so in practice the non-saturating form is used, maximising <code>log D(G(z))</code> rather than minimising <code>log(1 - D(G(z)))</code>.</p>
+<p class="uses">Uses: <code>torch.nn.BCEWithLogitsLoss</code></p></div></details>
+
+<details class="cx"><summary>WGAN, gradient penalty and hinge loss</summary><div class="cx-body">
+<p>When real and generated distributions barely overlap, the Jensen-Shannon objective gives vanishing gradients. WGAN approximates Earth Mover's distance instead, which stays informative — but requires the critic to be Lipschitz-constrained.</p>
+<p>Weight clipping enforced that crudely and damaged capacity; WGAN-GP replaced it with a penalty on the gradient norm at interpolated points. Hinge loss is the common modern default, used in BigGAN and StyleGAN-adjacent work, and is simpler than either.</p>
+<p class="uses">Uses: <code>torch.autograd.grad</code> · <code>torch.nn.functional.relu</code></p></div></details>
+
+<details class="cx"><summary>DCGAN and architectural conventions</summary><div class="cx-body">
+<p>DCGAN established the recipe that made GAN training reproducible: strided convolutions instead of pooling, transposed convolutions for upsampling, batch normalisation in both networks, ReLU in the generator with tanh output, LeakyReLU in the discriminator, and no fully-connected layers.</p>
+<p>Much of it has since been revised — transposed convolution is now usually replaced by upsample-then-convolve to avoid checkerboard artefacts — but it remains the baseline any GAN discussion starts from.</p>
+<p class="uses">Uses: <code>torch.nn.ConvTranspose2d</code> · <code>torch.nn.BatchNorm2d</code> · <code>torch.nn.LeakyReLU</code></p></div></details>
+
+<details class="cx"><summary>Mode collapse and training instability</summary><div class="cx-body">
+<p>Mode collapse is the generator discovering a handful of outputs that reliably fool the discriminator and abandoning the rest of the distribution. It looks like impressive individual samples with almost no diversity across a batch — which is why you always inspect a grid, never a single image.</p>
+<p>Causes trace to the generator optimising against a discriminator that has not seen enough variety. Mitigations: minibatch discrimination so the discriminator sees batch statistics, WGAN-GP's better-behaved objective, two-timescale update rules with different learning rates, and spectral normalisation on the discriminator.</p>
+<p class="uses">Uses: <code>torch.nn.utils.spectral_norm</code></p></div></details>
+
+<details class="cx"><summary>Conditional generation — cGAN, pix2pix, CycleGAN</summary><div class="cx-body">
+<p>A conditional GAN feeds a label or embedding to both networks so generation can be steered. <span class="k">pix2pix</span> does paired image-to-image translation with a U-Net generator, an L1 term for structural fidelity, and a PatchGAN discriminator that judges overlapping local patches rather than the whole image — cheaper and sharper on texture.</p>
+<p><span class="k">CycleGAN</span> removes the need for paired data with a cycle-consistency loss: translating to the other domain and back should return the original. It is the standard answer for style transfer when no aligned dataset exists, and its known failure is hiding information imperceptibly in the output to satisfy the cycle.</p>
+<p class="uses">Uses: <code>torch</code> · <code>kornia</code> · pix2pix / CycleGAN reference implementations</p></div></details>
+
+<details class="cx"><summary>Evaluating generative models</summary><div class="cx-body">
+<p>There is no held-out likelihood to report, so evaluation is indirect. <span class="k">Inception Score</span> rewards confident and diverse classifier predictions but never looks at the real data, so it cannot detect a model that generates convincing images from the wrong distribution.</p>
+<p><span class="k">Fréchet Inception Distance</span> fits Gaussians to Inception features of real and generated sets and measures the distance between them — lower is better, and it is the standard. Its caveats matter: it is biased by sample count, depends on the feature extractor, and is blind to memorisation of training images. Precision and recall for generative models separate fidelity from coverage, which FID conflates into one number.</p>
+<p class="uses">Uses: <code>torchmetrics.image.fid.FrechetInceptionDistance</code> · <code>torchmetrics.image.inception</code> · <code>clean-fid</code></p></div></details>
+
+<p class="vs-tier a">Advanced</p>
+
+<details class="cx"><summary>StyleGAN and disentangled latent spaces</summary><div class="cx-body">
+<p>StyleGAN's key move is a mapping network from the sampled <code>z</code> to an intermediate <code>w</code> space, which need not be Gaussian and so can un-warp the entangled factors that <code>z</code> forces together. <code>w</code> then modulates each layer through AdaIN, giving scale-specific control — coarse layers govern pose and shape, fine layers govern colour and texture.</p>
+<p>StyleGAN2 traced the characteristic droplet artefacts to AdaIN's normalisation and replaced it with weight demodulation. The extended <code>W+</code> space, with a separate vector per layer, is what GAN inversion and editing methods actually operate in.</p>
+<p class="uses">Uses: <code>stylegan2-ada-pytorch</code> · <code>torch</code></p></div></details>
+
+<details class="cx"><summary>GAN inversion and latent editing</summary><div class="cx-body">
+<p>Editing a real photograph with a GAN requires first finding the latent code that reproduces it — inversion, done by optimisation, by a trained encoder, or by a hybrid of the two. There is a persistent tension between reconstruction accuracy and editability: codes that reconstruct perfectly often sit outside the well-behaved region of the latent space and edit badly.</p>
+<p>Once inverted, editing means moving along a direction in latent space. Those directions are found supervised with attribute classifiers, or unsupervised through PCA of sampled codes (GANSpace) and closed-form factorisation (SeFa).</p>
+<p class="uses">Uses: <code>stylegan2-ada-pytorch</code> · <code>lpips</code> · encoder4editing</p></div></details>
+
+<details class="cx"><summary>Training on limited data</summary><div class="cx-body">
+<p>With a few thousand images the discriminator memorises the training set, stops providing useful gradient, and the generator degenerates. Naive augmentation makes it worse — the generator learns to reproduce the augmentation artefacts.</p>
+<p>Adaptive discriminator augmentation applies augmentations to both real and fake inputs with a probability tuned automatically from the discriminator's overfitting signal, and the augmentations remain invisible in the generator's output. It made high-quality GAN training on small datasets practical.</p>
+<p class="uses">Uses: <code>stylegan2-ada-pytorch</code> · <code>kornia.augmentation</code></p></div></details>
+
+<details class="cx"><summary>VQ-VAE and discrete latents</summary><div class="cx-body">
+<p>Instead of a continuous code, the encoder output is snapped to the nearest entry in a learned codebook. The gradient is passed through the non-differentiable lookup with a straight-through estimator, and a commitment loss keeps encoder outputs near their chosen codes.</p>
+<p>Discretisation sidesteps posterior collapse and, more importantly, turns an image into a sequence of tokens — which is what lets an autoregressive transformer model images the way it models text. This is the mechanism behind DALL·E 1 and behind image tokenisation in multimodal LLMs.</p>
+<p class="uses">Uses: <code>vector-quantize-pytorch</code> · <code>torch</code></p></div></details>
+
+<details class="cx"><summary>Where GANs still win over diffusion</summary><div class="cx-body">
+<p>Diffusion surpassed GANs on sample quality, diversity, and controllability for text-to-image, and largely displaced them there. But a GAN generates in one forward pass while diffusion needs tens — so on latency-bound and on-device work the trade-off is not settled.</p>
+<p>Super-resolution, face restoration, real-time style transfer, and interactive editing still commonly use GANs or GAN-distilled diffusion models. The honest position is that diffusion is the default for quality and GANs for speed, with distillation steadily narrowing the gap.</p>
+<p class="uses">Uses: <code>diffusers</code> · <code>basicsr</code> · <code>gfpgan</code></p></div></details>
+</div>
+</details>
+
+<details class="vs-dom" id="animation-audio">
+<summary>7 · Animation, Audio &amp; Real-Time 3D</summary>
+<div class="vs-body">
+<p class="vs-libs"><span class="lbl">Libraries &amp; packages</span><code>torchaudio</code> <code>librosa</code> <code>mediapipe</code> <code>smplx</code> <code>open3d</code> <code>pytorch3d</code> <code>trimesh</code> <code>nerfstudio</code> <code>transformers</code></p>
+<p class="vs-lead">Vision output that has to drive something interactive — a character, a voice, a scene rendered at frame rate. The modelling here is mostly familiar; what is unfamiliar is that the deadline is 16 milliseconds and a human perceptual system is the judge.</p>
+
+<p class="vs-tier f">Foundations</p>
+
+<details class="cx"><summary>Rigs, skinning and blendshapes</summary><div class="cx-body">
+<p>A rig is a hierarchy of joints. Skinning binds each mesh vertex to one or more joints with weights, so moving a joint deforms the surface — linear blend skinning is the standard, with its familiar collapsing artefact at strongly bent joints.</p>
+<p>Facial animation normally uses <span class="k">blendshapes</span> instead: a set of sculpted target expressions that are linearly combined by coefficients. This is the interface most ML-driven animation targets, because predicting fifty-odd coefficients per frame is a tractable regression problem.</p>
+<p class="uses">Uses: <code>trimesh</code> · <code>smplx</code> · ARKit blendshape coefficients</p></div></details>
+
+<details class="cx"><summary>Audio as a spectrogram</summary><div class="cx-body">
+<p>The short-time Fourier transform slices a waveform into overlapping windows and takes the frequency content of each, producing a time-frequency image. Mapping frequency onto the mel scale — which is roughly logarithmic, matching human pitch perception — gives the mel spectrogram that nearly all audio models consume.</p>
+<p>The consequence worth internalising: <span class="k">once audio is a mel spectrogram it is a 2D array</span>, so convolutional and transformer architectures from vision apply unchanged. Window size sets the trade-off between time and frequency resolution, and that choice matters more than most architecture decisions.</p>
+<p class="uses">Uses: <code>torchaudio.transforms.MelSpectrogram</code> · <code>librosa.feature.melspectrogram</code></p></div></details>
+
+<details class="cx"><summary>2D pose estimation</summary><div class="cx-body">
+<p>Locating body or hand joints in the image plane. Top-down pipelines detect a person then find joints inside the crop, which is accurate but scales with the number of people; bottom-up pipelines find all joints then group them into individuals, which is constant-time but harder.</p>
+<p>Heatmap regression — predicting a spatial probability map per joint rather than coordinates directly — is the standard trick, because a spatial map is a far easier target to learn than raw numbers.</p>
+<p class="uses">Uses: <code>mediapipe</code> · <code>mmpose</code> · <code>ultralytics</code> (pose models)</p></div></details>
+
+<details class="cx"><summary>3D representations</summary><div class="cx-body">
+<p>Point clouds are unordered sets, so networks over them must be permutation-invariant — PointNet's shared MLP plus max-pooling was the founding solution. Voxels are regular and convolvable but cost memory cubically. Meshes render efficiently but are awkward to predict. Implicit representations — signed distance fields, occupancy networks — are continuous and resolution-free but need querying.</p>
+<p>The representation choice constrains everything downstream, and picking one for a stated use case is a standard interview question rather than a detail.</p>
+<p class="uses">Uses: <code>open3d</code> · <code>pytorch3d</code> · <code>trimesh</code></p></div></details>
+
+<p class="vs-tier c">Core</p>
+
+<details class="cx"><summary>Motion capture from video</summary><div class="cx-body">
+<p>Lifting 2D pose to 3D, or regressing the parameters of a body model such as SMPL directly. Parametric models help because they constrain output to anatomically plausible bodies rather than arbitrary joint positions.</p>
+<p>The persistent problems are temporal jitter, foot sliding, and depth ambiguity from a single view. Jitter is not fixed by a better per-frame model — it is fixed by predicting over a temporal window or filtering the sequence, because per-frame independence is the cause.</p>
+<p class="uses">Uses: <code>smplx</code> · <code>mmpose</code> · <code>pytorch3d</code></p></div></details>
+
+<details class="cx"><summary>Temporal smoothing and filtering</summary><div class="cx-body">
+<p>Any per-frame prediction driving animation needs smoothing or it reads as noise. A Kalman filter models position and velocity and is the classical answer. The One Euro filter is the practical favourite for interactive work because it adapts its cutoff to speed — heavy smoothing when still, light smoothing when moving fast.</p>
+<p>The trade-off is always smoothing against latency: every filter that removes jitter also delays response, and in an interactive system users feel the delay.</p>
+<p class="uses">Uses: <code>filterpy</code> · One Euro filter implementations</p></div></details>
+
+<details class="cx"><summary>Speech representation models</summary><div class="cx-body">
+<p>wav2vec 2.0 learns from raw audio by masking latent speech units and solving a contrastive task over quantised targets; HuBERT uses offline clustering to provide masked-prediction targets. Both give representations that fine-tune to strong recognition with a fraction of the labelled data.</p>
+<p>Whisper took the opposite route — large-scale weakly-supervised training on diverse audio — and is the practical default for transcription because it degrades gracefully on accents, noise, and code-switching.</p>
+<p class="uses">Uses: <code>transformers</code> (Wav2Vec2, HuBERT, Whisper) · <code>torchaudio.pipelines</code></p></div></details>
+
+<details class="cx"><summary>Audio-driven facial animation</summary><div class="cx-body">
+<p>Mapping speech to mouth motion, either through explicit phoneme-to-viseme rules or by regressing blendshape coefficients from learned audio features. Learned approaches capture coarticulation — the way a sound's mouth shape is influenced by its neighbours — which rule-based mappings miss.</p>
+<p>Wav2Lip and SadTalker are the reference points for video-space generation. The evaluation problem is that lip sync quality is perceptual: humans detect misalignment of a few tens of milliseconds, so any metric that ignores timing is measuring the wrong thing.</p>
+<p class="uses">Uses: <code>transformers</code> · <code>torchaudio</code> · Wav2Lip / SadTalker reference implementations</p></div></details>
+
+<details class="cx"><summary>Depth and scene reconstruction</summary><div class="cx-body">
+<p>Depth arrives from stereo matching on a calibrated pair, from structure-from-motion across many views, from monocular estimators such as MiDaS and Depth Anything, or from active sensors — LiDAR and time-of-flight cameras.</p>
+<p>The distinction that matters: monocular depth is <span class="k">relative</span> unless anchored by known scale or sensor data. Treating a monocular depth map as metric is a common and consequential mistake in AR work.</p>
+<p class="uses">Uses: <code>transformers</code> (Depth Anything) · <code>open3d</code> · <code>cv2.StereoSGBM</code></p></div></details>
+
+<p class="vs-tier a">Advanced</p>
+
+<details class="cx"><summary>NeRF and Gaussian splatting</summary><div class="cx-body">
+<p>NeRF represents a scene as a function from 3D position and viewing direction to colour and density, rendered by marching rays and integrating. It produces striking view synthesis but was originally slow to both train and render, and it bakes lighting into the representation.</p>
+<p>3D Gaussian Splatting instead represents the scene as millions of anisotropic Gaussians rasterised directly to the screen, reaching real-time frame rates at comparable quality. For interactive and AR applications it has largely displaced NeRF, which is a rendering-pipeline argument rather than a modelling one.</p>
+<p class="uses">Uses: <code>nerfstudio</code> · <code>gsplat</code> · <code>pytorch3d</code></p></div></details>
+
+<details class="cx"><summary>The AR pipeline end to end</summary><div class="cx-body">
+<p>Pose tracking through visual-inertial odometry, fusing camera features with IMU because each covers the other's weakness — the IMU drifts but is fast, vision is stable but slow and fails on blur. Then plane detection and scene meshing, anchoring virtual content into that reconstruction, occlusion so virtual objects can pass behind real ones, and lighting estimation so they are shaded consistently.</p>
+<p>Occlusion is the piece that most often looks wrong, and it needs either a depth sensor or a per-frame segmentation mask for people — which is a real-time vision model competing for the same compute as everything else.</p>
+<p class="uses">Uses: ARKit · RealityKit · <code>open3d</code></p></div></details>
+
+<details class="cx"><summary>The real-time budget</summary><div class="cx-body">
+<p>Sixty frames per second leaves sixteen milliseconds for capture, preprocessing, inference, postprocessing, and rendering combined — and the renderer wants the GPU too. On a handheld device this sits under a thermal ceiling, so sustained performance is lower than a benchmark run suggests.</p>
+<p>The practical consequences: measure p95 rather than mean, measure after thermal soak rather than cold, budget end to end rather than model-only, and treat model choice as subordinate to the budget. Most accuracy arguments in interactive vision are settled by latency before they are settled by metrics.</p>
+<p class="uses">Uses: <code>coremltools</code> · <code>onnxruntime</code> · Instruments / Metal System Trace</p></div></details>
+
+<details class="cx"><summary>Generative animation and video</summary><div class="cx-body">
+<p>Video diffusion extends image diffusion with temporal layers or full spatiotemporal attention, and the hard constraint is consistency — a model that generates each frame well but independently produces flicker that is immediately obvious.</p>
+<p>Approaches include conditioning on previous frames, latent interpolation along a trajectory, and explicit motion conditioning from pose or depth sequences. Evaluation remains unresolved: per-frame quality metrics reward exactly the models that flicker.</p>
+<p class="uses">Uses: <code>diffusers</code> (video pipelines) · <code>transformers</code></p></div></details>
+</div>
+</details>
+
 
 <h2 class="vs-sec" id="code-snippets">Code Snippets</h2>
 <p class="vs-lead">Working PyTorch for the concepts above, grouped by subdomain. Written in torch rather than library one-liners wherever the mechanics are the point — the closed-form forward diffusion, the contrastive loss, morphology as pooling — because those are the parts worth being able to write from memory.</p>
@@ -713,6 +898,227 @@ def ablate(model, loader):
     text_attention_mask.bool(),                        # text: variable length
 ], dim=1)
 out = model(inputs_embeds=seq, attention_mask=attn_mask)</code></pre></div></div></details>
+
+<details class="cx code" id="code-gv"><summary>6 · Generative Vision — in PyTorch</summary><div class="cx-body"><div class="snip"><p class="cap">A convolutional autoencoder with an explicit bottleneck</p><pre><code>import torch, torch.nn as nn
+
+class AutoEncoder(nn.Module):
+    def __init__(self, latent=128):
+        super().__init__()
+        self.enc = nn.Sequential(
+            nn.Conv2d(3, 32, 4, 2, 1), nn.ReLU(),    # 64 -&gt; 32
+            nn.Conv2d(32, 64, 4, 2, 1), nn.ReLU(),   # 32 -&gt; 16
+            nn.Conv2d(64, 128, 4, 2, 1), nn.ReLU(),  # 16 -&gt; 8
+            nn.Flatten(), nn.Linear(128 * 8 * 8, latent),
+        )
+        self.dec = nn.Sequential(
+            nn.Linear(latent, 128 * 8 * 8), nn.Unflatten(1, (128, 8, 8)),
+            nn.Upsample(scale_factor=2), nn.Conv2d(128, 64, 3, 1, 1), nn.ReLU(),
+            nn.Upsample(scale_factor=2), nn.Conv2d(64, 32, 3, 1, 1), nn.ReLU(),
+            nn.Upsample(scale_factor=2), nn.Conv2d(32, 3, 3, 1, 1), nn.Sigmoid(),
+        )
+
+    def forward(self, x):
+        return self.dec(self.enc(x))
+# upsample-then-convolve rather than ConvTranspose2d: no checkerboard artefacts</code></pre></div><div class="snip"><p class="cap">Denoising objective — corrupt the input, reconstruct the clean target</p><pre><code>clean = batch
+noisy = clean + 0.2 * torch.randn_like(clean)
+loss  = nn.functional.mse_loss(model(noisy.clamp(0, 1)), clean)</code></pre></div><div class="snip"><p class="cap">VAE: encode to a distribution, reparameterise, decode</p><pre><code>class VAE(nn.Module):
+    def __init__(self, latent=128):
+        super().__init__()
+        self.backbone = nn.Sequential(nn.Flatten(), nn.Linear(3 * 64 * 64, 512), nn.ReLU())
+        self.to_mu     = nn.Linear(512, latent)
+        self.to_logvar = nn.Linear(512, latent)
+        self.dec = nn.Sequential(
+            nn.Linear(latent, 512), nn.ReLU(),
+            nn.Linear(512, 3 * 64 * 64), nn.Sigmoid(), nn.Unflatten(1, (3, 64, 64)),
+        )
+
+    def encode(self, x):
+        h = self.backbone(x)
+        return self.to_mu(h), self.to_logvar(h)
+
+    def reparameterise(self, mu, logvar):
+        std = torch.exp(0.5 * logvar)
+        eps = torch.randn_like(std)          # randomness lives outside the graph
+        return mu + std * eps                # differentiable in mu and std
+
+    def forward(self, x):
+        mu, logvar = self.encode(x)
+        z = self.reparameterise(mu, logvar)
+        return self.dec(z), mu, logvar</code></pre></div><div class="snip"><p class="cap">The ELBO, with beta as an explicit knob</p><pre><code>def elbo_loss(recon, x, mu, logvar, beta=1.0):
+    rec = nn.functional.mse_loss(recon, x, reduction="sum") / x.size(0)
+    # closed form KL between N(mu, sigma^2) and N(0, 1)
+    kld = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp()) / x.size(0)
+    return rec + beta * kld, rec, kld
+# watch kld -&gt; 0 during training: that is posterior collapse, not convergence</code></pre></div><div class="snip"><p class="cap">KL annealing to avoid collapse</p><pre><code>def kl_weight(step, warmup=10_000, target=1.0):
+    return target * min(1.0, step / warmup)</code></pre></div><div class="snip"><p class="cap">One GAN training step, non-saturating loss</p><pre><code>bce = nn.BCEWithLogitsLoss()
+
+def gan_step(G, D, real, opt_g, opt_d, z_dim=128):
+    B, dev = real.size(0), real.device
+
+    # --- discriminator ---
+    z    = torch.randn(B, z_dim, device=dev)
+    fake = G(z)
+    d_real = D(real)
+    d_fake = D(fake.detach())                # detach: no generator gradients here
+    loss_d = bce(d_real, torch.ones_like(d_real)) + \
+             bce(d_fake, torch.zeros_like(d_fake))
+    opt_d.zero_grad(); loss_d.backward(); opt_d.step()
+
+    # --- generator: non-saturating form ---
+    d_fake = D(fake)
+    loss_g = bce(d_fake, torch.ones_like(d_fake))   # maximise log D(G(z))
+    opt_g.zero_grad(); loss_g.backward(); opt_g.step()
+    return loss_d.item(), loss_g.item()</code></pre></div><div class="snip"><p class="cap">WGAN-GP: the gradient penalty term</p><pre><code>def gradient_penalty(D, real, fake, lam=10.0):
+    B = real.size(0)
+    eps = torch.rand(B, 1, 1, 1, device=real.device)
+    mixed = (eps * real + (1 - eps) * fake).requires_grad_(True)
+    scores = D(mixed)
+    grads = torch.autograd.grad(
+        outputs=scores, inputs=mixed,
+        grad_outputs=torch.ones_like(scores),
+        create_graph=True, retain_graph=True,
+    )[0]
+    norm = grads.flatten(1).norm(2, dim=1)
+    return lam * ((norm - 1) ** 2).mean()      # push the critic towards 1-Lipschitz</code></pre></div><div class="snip"><p class="cap">Spectral normalisation on the discriminator</p><pre><code>from torch.nn.utils import spectral_norm
+
+D = nn.Sequential(
+    spectral_norm(nn.Conv2d(3, 64, 4, 2, 1)), nn.LeakyReLU(0.2),
+    spectral_norm(nn.Conv2d(64, 128, 4, 2, 1)), nn.LeakyReLU(0.2),
+    nn.Flatten(), spectral_norm(nn.Linear(128 * 16 * 16, 1)),
+)</code></pre></div><div class="snip"><p class="cap">Detecting mode collapse from a batch</p><pre><code>@torch.no_grad()
+def sample_diversity(G, n=256, z_dim=128, dev="cuda"):
+    imgs = G(torch.randn(n, z_dim, device=dev)).flatten(1)
+    imgs = nn.functional.normalize(imgs, dim=1)
+    sim  = imgs @ imgs.T                       # pairwise cosine similarity
+    off  = sim[~torch.eye(n, dtype=torch.bool, device=dev)]
+    return off.mean().item()                   # climbing towards 1.0 = collapsing</code></pre></div><div class="snip"><p class="cap">FID with torchmetrics</p><pre><code>from torchmetrics.image.fid import FrechetInceptionDistance
+
+fid = FrechetInceptionDistance(feature=2048).to(dev)
+for real in real_loader:
+    fid.update((real * 255).to(torch.uint8), real=True)
+for _ in range(n_batches):
+    fake = G(torch.randn(B, z_dim, device=dev))
+    fid.update((fake * 255).to(torch.uint8), real=False)
+print(fid.compute())    # sensitive to sample count - keep it fixed across runs</code></pre></div><div class="snip"><p class="cap">Vector quantisation with a straight-through estimator</p><pre><code>class VectorQuantiser(nn.Module):
+    def __init__(self, n_codes=512, dim=64, commit=0.25):
+        super().__init__()
+        self.codebook = nn.Embedding(n_codes, dim)
+        self.codebook.weight.data.uniform_(-1 / n_codes, 1 / n_codes)
+        self.commit = commit
+
+    def forward(self, z):                       # z: [B, dim, H, W]
+        z_ = z.permute(0, 2, 3, 1).reshape(-1, z.size(1))
+        d  = torch.cdist(z_, self.codebook.weight)
+        idx = d.argmin(dim=1)
+        q  = self.codebook(idx).view(z.size(0), z.size(2), z.size(3), -1)
+        q  = q.permute(0, 3, 1, 2)
+
+        loss = nn.functional.mse_loss(q, z.detach()) + \
+               self.commit * nn.functional.mse_loss(z, q.detach())
+        q = z + (q - z).detach()                # straight-through: copy the gradient
+        return q, loss, idx</code></pre></div></div></details>
+
+<details class="cx code" id="code-aa"><summary>7 · Animation, Audio &amp; Real-Time 3D — in PyTorch</summary><div class="cx-body"><div class="snip"><p class="cap">Waveform to mel spectrogram</p><pre><code>import torchaudio
+
+wav, sr = torchaudio.load("speech.wav")            # [C, T]
+wav = torchaudio.functional.resample(wav, sr, 16_000).mean(0, keepdim=True)
+
+mel = torchaudio.transforms.MelSpectrogram(
+    sample_rate=16_000,
+    n_fft=400,          # 25 ms window at 16 kHz
+    hop_length=160,     # 10 ms hop -&gt; 100 frames per second
+    n_mels=80,
+)(wav)
+mel_db = torchaudio.transforms.AmplitudeToDB()(mel)   # [1, 80, frames]
+# from here it is a 2D array: any vision backbone applies unchanged</code></pre></div><div class="snip"><p class="cap">A conv encoder over audio, reused straight from vision</p><pre><code>audio_encoder = nn.Sequential(
+    nn.Conv2d(1, 32, 3, padding=1), nn.BatchNorm2d(32), nn.ReLU(),
+    nn.MaxPool2d(2),
+    nn.Conv2d(32, 64, 3, padding=1), nn.BatchNorm2d(64), nn.ReLU(),
+    nn.AdaptiveAvgPool2d((1, None)),      # collapse mel bins, keep time
+    nn.Flatten(2),                        # [B, 64, frames]
+)</code></pre></div><div class="snip"><p class="cap">Regressing blendshape coefficients from audio</p><pre><code>class AudioToBlendshapes(nn.Module):
+    """Predicts 52 ARKit-style coefficients per frame from audio features."""
+    def __init__(self, feat_dim=64, n_shapes=52, ctx=8):
+        super().__init__()
+        self.temporal = nn.Conv1d(feat_dim, 128, kernel_size=2 * ctx + 1,
+                                  padding=ctx)      # sees neighbours: coarticulation
+        self.head = nn.Sequential(nn.ReLU(), nn.Conv1d(128, n_shapes, 1), nn.Sigmoid())
+
+    def forward(self, feats):                        # [B, feat_dim, frames]
+        return self.head(self.temporal(feats))       # [B, 52, frames] in [0, 1]</code></pre></div><div class="snip"><p class="cap">Penalising jitter explicitly in the loss</p><pre><code>def animation_loss(pred, target, w_vel=0.5):
+    pos = nn.functional.l1_loss(pred, target)
+    vel = nn.functional.l1_loss(pred.diff(dim=-1), target.diff(dim=-1))
+    return pos + w_vel * vel
+# the velocity term is what stops per-frame prediction reading as noise</code></pre></div><div class="snip"><p class="cap">One Euro filter — smoothing that adapts to speed</p><pre><code>class OneEuroFilter:
+    def __init__(self, freq=60.0, min_cutoff=1.0, beta=0.007):
+        self.freq, self.min_cutoff, self.beta = freq, min_cutoff, beta
+        self.x_prev = None
+        self.dx_prev = 0.0
+
+    def _alpha(self, cutoff):
+        tau = 1.0 / (2 * torch.pi * cutoff)
+        return 1.0 / (1.0 + tau * self.freq)
+
+    def __call__(self, x):
+        if self.x_prev is None:
+            self.x_prev = x
+            return x
+        dx = (x - self.x_prev) * self.freq
+        a_d = self._alpha(1.0)
+        self.dx_prev = a_d * dx + (1 - a_d) * self.dx_prev
+        cutoff = self.min_cutoff + self.beta * self.dx_prev.abs()
+        a = self._alpha(cutoff)                  # moving fast -&gt; less smoothing
+        self.x_prev = a * x + (1 - a) * self.x_prev
+        return self.x_prev</code></pre></div><div class="snip"><p class="cap">Speech features from a pretrained model</p><pre><code>from transformers import Wav2Vec2Model, Wav2Vec2FeatureExtractor
+
+fe    = Wav2Vec2FeatureExtractor.from_pretrained("facebook/wav2vec2-base-960h")
+model = Wav2Vec2Model.from_pretrained("facebook/wav2vec2-base-960h").eval()
+
+inputs = fe(wav.squeeze().numpy(), sampling_rate=16_000, return_tensors="pt")
+with torch.no_grad():
+    feats = model(**inputs).last_hidden_state      # [1, frames, 768] at ~50 Hz</code></pre></div><div class="snip"><p class="cap">Resampling two modalities onto a common timebase</p><pre><code>def align_to(x, n_frames):
+    """x: [B, C, T] at some rate -&gt; [B, C, n_frames] at the video rate."""
+    return nn.functional.interpolate(x, size=n_frames, mode="linear",
+                                     align_corners=False)
+
+audio_at_video_rate = align_to(feats.transpose(1, 2), n_frames=video.size(1))</code></pre></div><div class="snip"><p class="cap">Monocular depth, and why it is relative</p><pre><code>from transformers import pipeline
+
+depth = pipeline("depth-estimation", model="depth-anything/Depth-Anything-V2-Small-hf")
+rel = torch.tensor(depth(image)["predicted_depth"])       # relative, unitless
+
+def to_metric(rel, known_depth, mask):
+    """Anchor with any real measurement - LiDAR sample, known object size."""
+    scale = known_depth.mean() / rel[mask].mean()
+    return rel * scale</code></pre></div><div class="snip"><p class="cap">Timing a model honestly on device</p><pre><code>import time
+
+@torch.no_grad()
+def benchmark(model, x, warmup=20, runs=200):
+    for _ in range(warmup):                       # never time a cold model
+        model(x)
+    if x.is_cuda:
+        torch.cuda.synchronize()
+    times = []
+    for _ in range(runs):
+        t0 = time.perf_counter()
+        model(x)
+        if x.is_cuda:
+            torch.cuda.synchronize()
+        times.append(time.perf_counter() - t0)
+    times = torch.tensor(times)
+    return {"mean_ms": times.mean().item() * 1e3,
+            "p95_ms":  times.quantile(0.95).item() * 1e3}
+# report p95: users feel the tail, not the mean</code></pre></div><div class="snip"><p class="cap">Export for on-device inference</p><pre><code>import coremltools as ct
+
+model.eval()
+traced = torch.jit.trace(model, torch.randn(1, 3, 224, 224))
+mlmodel = ct.convert(
+    traced,
+    inputs=[ct.ImageType(name="image", shape=(1, 3, 224, 224), scale=1 / 255.0)],
+    compute_units=ct.ComputeUnit.ALL,      # CPU + GPU + Neural Engine
+    minimum_deployment_target=ct.target.iOS17,
+)
+mlmodel.save("Model.mlpackage")
+# check the conversion report: unsupported ops fall back to CPU silently</code></pre></div></div></details>
 
 <p style="margin-top:2.5em">Related: the <a href="/stacks/">Stacks</a> section covers agentic, API, data science, ML, and AWS concepts in the same format.</p>
 

@@ -25,6 +25,8 @@ main:
     url: /articles/
   - title: "Job Resources"
     url: /job-resources/
+  - title: "JDs"
+    url: /jds/
   - title: "Interviews"
     url: /interview-rounds/
   - title: "Trends"
