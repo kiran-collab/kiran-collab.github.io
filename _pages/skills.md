@@ -170,6 +170,21 @@ author_profile: true
 <a class="wc-sm wc-b" href="#mongodb-sk">MongoDB</a>
 <a class="wc-xs wc-d" href="#diffae">DiffAE</a>
 <a class="wc-sm wc-f" href="#ffmpeg">ffmpeg</a>
+<a class="wc-xl wc-a" href="#object-detection">Object Detection</a>
+<a class="wc-sm wc-c" href="#opencv">OpenCV</a>
+<a class="wc-md wc-b" href="#tensorflow">TensorFlow</a>
+<a class="wc-lg wc-d" href="#gans">GANs</a>
+<a class="wc-xs wc-e" href="#core-ml">Core ML</a>
+<a class="wc-md wc-a" href="#face-recognition">Face Recognition</a>
+<a class="wc-lg wc-c" href="#image-segmentation">Image Segmentation</a>
+<a class="wc-sm wc-d" href="#autoencoders">Autoencoders</a>
+<a class="wc-xl wc-e" href="#diffusion-models">Diffusion Models</a>
+<a class="wc-md wc-f" href="#vision-transformers">Vision Transformers</a>
+<a class="wc-lg wc-b" href="#clip">CLIP</a>
+<a class="wc-sm wc-a" href="#object-tracking">Object Tracking</a>
+<a class="wc-md wc-c" href="#3d-vision">3D Vision</a>
+<a class="wc-xs wc-b" href="#audio-processing">Audio Processing</a>
+<a class="wc-lg wc-e" href="#vlm">VLM</a>
 </div>
 
 <h2 class="tk-sec" id="sec-programming">Programming Languages</h2>
@@ -666,6 +681,221 @@ author_profile: true
 <rect class="b2" x="152" y="36" width="44" height="28" rx="3"/><text class="ts" x="174" y="54">output</text>
 </svg></div>
 <div class="tk-txt"><p><strong>Prompt Engineering.</strong> Prompt engineering structures the instruction — role, context, examples, constraints, and output format — so the model's behaviour is specific and repeatable. Treating prompts as versioned, evaluated artefacts rather than ad-hoc text is what makes the results hold up in production.</p></div>
+</div>
+
+<h2 class="tk-sec" id="sec-vision">Computer Vision and Generative Vision</h2>
+
+<div class="tk-item" id="opencv">
+<div class="tk-dgm"><svg class="dgm" viewBox="0 0 200 110" aria-hidden="true">
+<rect class="b3" x="4" y="42" width="40" height="26" rx="3"/><text class="ts" x="24" y="58">capture</text>
+<path class="a" d="M46 55 H60"/>
+<rect class="b" x="62" y="30" width="48" height="20" rx="3"/><text class="ts" x="86" y="43">colour · resize</text>
+<rect class="b" x="62" y="54" width="48" height="20" rx="3"/><text class="ts" x="86" y="67">warp · calibrate</text>
+<path class="a" d="M112 40 H128"/><path class="a" d="M112 64 H128"/>
+<rect class="b4" x="130" y="42" width="46" height="26" rx="3"/><text class="ts" x="153" y="58">model</text>
+<path class="dl" d="M24 40 V16 H153 V40"/><text class="ts" x="90" y="12">BGR in, RGB expected downstream</text>
+</svg></div>
+<div class="tk-txt"><p><strong>OpenCV.</strong> OpenCV is the workhorse around the model rather than the model itself — capture, colour conversion, geometric warping, calibration, and the classical algorithms that still beat a network when the problem is purely geometric. Its one persistent trap is that it reads images as BGR while every deep learning pipeline expects RGB.</p></div>
+</div>
+
+<div class="tk-item" id="tensorflow">
+<div class="tk-dgm"><svg class="dgm" viewBox="0 0 200 110" aria-hidden="true">
+<rect class="b" x="6" y="10" width="80" height="22" rx="3"/><text class="ts" x="46" y="24">eager execution</text>
+<path class="a" d="M46 34 V48"/>
+<rect class="b4" x="6" y="50" width="80" height="26" rx="3"/><text class="ts" x="46" y="64">tf.function</text><text class="ts" x="46" y="74">traced graph</text>
+<path class="a" d="M88 62 H108"/>
+<rect class="b3" x="110" y="34" width="84" height="18" rx="3"/><text class="ts" x="152" y="47">TF Serving</text>
+<rect class="b3" x="110" y="56" width="84" height="18" rx="3"/><text class="ts" x="152" y="69">TF Lite · edge</text>
+<text class="ts" x="100" y="96">NHWC layout — converts badly from NCHW</text>
+</svg></div>
+<div class="tk-txt"><p><strong>TensorFlow.</strong> TensorFlow 2 runs eagerly like PyTorch but traces to a static graph through <code>tf.function</code>, which is what its deployment path — TF Serving, TF Lite, TFX — is built on. Keras sits on top and is genuinely faster for standard architectures; the layout difference from PyTorch, NHWC against NCHW, is the usual source of conversion bugs.</p></div>
+</div>
+
+<div class="tk-item" id="object-detection">
+<div class="tk-dgm"><svg class="dgm" viewBox="0 0 200 110" aria-hidden="true">
+<rect class="bg" x="6" y="14" width="70" height="60" rx="3"/>
+<rect class="b2" x="14" y="24" width="30" height="24" rx="2"/><rect class="b2" x="20" y="30" width="30" height="24" rx="2"/>
+<rect class="b" x="42" y="44" width="26" height="22" rx="2"/>
+<text class="ts" x="41" y="86">candidates</text>
+<path class="a" d="M80 44 H98"/><text class="ts" x="89" y="38">NMS</text>
+<rect class="bg" x="102" y="14" width="70" height="60" rx="3"/>
+<rect class="b2" x="118" y="28" width="30" height="24" rx="2"/><text class="ts" x="133" y="43">0.94</text>
+<rect class="b" x="140" y="46" width="26" height="22" rx="2"/><text class="ts" x="153" y="60">0.81</text>
+<text class="ts" x="137" y="86">kept</text>
+<text class="ts" x="100" y="104">IoU threshold decides what survives</text>
+</svg></div>
+<div class="tk-txt"><p><strong>Object Detection.</strong> Detection predicts a variable-length set of boxes with classes and confidences, which is what makes it harder than classification — the model must decide how many objects exist. Two-stage detectors propose then classify for accuracy, one-stage detectors predict densely in a single pass for speed, and both depend on IoU-based suppression and mAP evaluation.</p></div>
+</div>
+
+<div class="tk-item" id="face-recognition">
+<div class="tk-dgm"><svg class="dgm" viewBox="0 0 200 110" aria-hidden="true">
+<rect class="b3" x="4" y="40" width="34" height="26" rx="3"/><text class="ts" x="21" y="56">detect</text>
+<path class="a" d="M40 53 H52"/>
+<rect class="b" x="54" y="40" width="34" height="26" rx="3"/><text class="ts" x="71" y="56">align</text>
+<path class="a" d="M90 53 H102"/>
+<rect class="b4" x="104" y="40" width="38" height="26" rx="3"/><text class="ts" x="123" y="53">embed</text><text class="ts" x="123" y="63">512-d</text>
+<path class="a" d="M144 53 H156"/>
+<rect class="b2" x="158" y="40" width="38" height="26" rx="3"/><text class="ts" x="177" y="56">compare</text>
+<text class="ts" x="100" y="88">cosine distance vs threshold</text>
+<text class="ts" x="100" y="100">specified as TAR at fixed FAR, not accuracy</text>
+</svg></div>
+<div class="tk-txt"><p><strong>Face Recognition.</strong> The pipeline is four separable stages — detect, align to a canonical pose using landmarks, embed into a normalised vector, then compare by distance — and most accuracy problems trace to alignment rather than the network. Systems are specified as true accept rate at a fixed false accept rate, and the demographic and biometric-privacy considerations are part of the engineering, not an afterthought.</p></div>
+</div>
+
+<div class="tk-item" id="image-segmentation">
+<div class="tk-dgm"><svg class="dgm" viewBox="0 0 200 110" aria-hidden="true">
+<rect class="b" x="6" y="16" width="30" height="24" rx="2"/><path class="a" d="M38 28 H50"/>
+<rect class="b" x="52" y="22" width="24" height="18" rx="2"/><path class="a" d="M78 31 H88"/>
+<rect class="b4" x="90" y="26" width="20" height="14" rx="2"/>
+<path class="a" d="M112 33 H122"/>
+<rect class="b3" x="124" y="22" width="24" height="18" rx="2"/><path class="a" d="M150 31 H160"/>
+<rect class="b3" x="162" y="16" width="30" height="24" rx="2"/>
+<path class="dl" d="M21 44 V62 H177 V44"/><text class="ts" x="100" y="58">skip connections restore lost detail</text>
+<text class="ts" x="100" y="80">semantic · instance · panoptic</text>
+<text class="ts" x="100" y="96">mIoU · mask AP · panoptic quality</text>
+</svg></div>
+<div class="tk-txt"><p><strong>Image Segmentation.</strong> Segmentation classifies at pixel resolution, split into semantic (class per pixel), instance (separate objects), and panoptic (both at once). The recurring architectural problem is that downsampling builds meaning while destroying position, which skip connections and dilated convolutions exist to repair.</p></div>
+</div>
+
+<div class="tk-item" id="autoencoders">
+<div class="tk-dgm"><svg class="dgm" viewBox="0 0 200 110" aria-hidden="true">
+<rect class="b" x="6" y="24" width="22" height="48" rx="2"/><text class="ts" x="17" y="84">x</text>
+<path class="a" d="M30 48 H42"/>
+<rect class="b" x="44" y="34" width="18" height="28" rx="2"/>
+<path class="a" d="M64 48 H74"/>
+<rect class="b4" x="76" y="40" width="18" height="16" rx="2"/><text class="ts" x="85" y="30">z</text>
+<path class="a" d="M96 48 H106"/>
+<rect class="b3" x="108" y="34" width="18" height="28" rx="2"/>
+<path class="a" d="M128 48 H140"/>
+<rect class="b3" x="142" y="24" width="22" height="48" rx="2"/><text class="ts" x="153" y="84">x̂</text>
+<path class="dl" d="M17 92 H153"/><text class="ts" x="85" y="104">reconstruction loss — the bottleneck is the mechanism</text>
+</svg></div>
+<div class="tk-txt"><p><strong>Autoencoders.</strong> An autoencoder compresses input through a bottleneck and reconstructs it with no labels beyond the input itself, so the constraint rather than the architecture is what forces useful structure. A variational autoencoder encodes to a distribution instead of a point, which is what makes the latent space continuous, sampleable, and usable as the compression stage under latent diffusion.</p></div>
+</div>
+
+<div class="tk-item" id="gans">
+<div class="tk-dgm"><svg class="dgm" viewBox="0 0 200 110" aria-hidden="true">
+<rect class="bg" x="4" y="40" width="26" height="22" rx="3"/><text class="ts" x="17" y="55">z</text>
+<path class="a" d="M32 51 H44"/>
+<rect class="b" x="46" y="36" width="42" height="30" rx="3"/><text class="ts" x="67" y="55">generator</text>
+<path class="a" d="M90 51 H104"/>
+<rect class="b2" x="106" y="36" width="48" height="30" rx="3"/><text class="ts" x="130" y="50">discrim-</text><text class="ts" x="130" y="61">inator</text>
+<rect class="b3" x="106" y="8" width="48" height="20" rx="3"/><text class="ts" x="130" y="21">real data</text>
+<path class="a" d="M130 30 V34"/>
+<path class="a" d="M156 51 H176"/><text class="ts" x="184" y="55">real?</text>
+<path class="dl" d="M130 68 V86 H67 V68"/><text class="ts" x="98" y="100">gradient tells G how to look real</text>
+</svg></div>
+<div class="tk-txt"><p><strong>GANs.</strong> A generator and a discriminator train adversarially, and the discriminator's gradient is what teaches the generator to become convincing — which also makes the training a balancing act between two networks that can destabilise each other. The vocabulary that matters in practice is mode collapse, the WGAN-GP and hinge objectives that stabilise training, StyleGAN's disentangled latent space, and FID as the evaluation standard.</p></div>
+</div>
+
+<div class="tk-item" id="diffusion-models">
+<div class="tk-dgm"><svg class="dgm" viewBox="0 0 200 110" aria-hidden="true">
+<rect class="b3" x="6" y="30" width="26" height="26" rx="2"/><text class="ts" x="19" y="68">x₀</text>
+<path class="a" d="M34 43 H48"/><text class="ts" x="41" y="24">+noise</text>
+<rect class="b" x="50" y="30" width="26" height="26" rx="2"/>
+<path class="a" d="M78 43 H92"/>
+<rect class="b2" x="94" y="30" width="26" height="26" rx="2"/>
+<path class="a" d="M122 43 H136"/>
+<rect class="bg" x="138" y="30" width="26" height="26" rx="2"/><text class="ts" x="151" y="68">x_T</text>
+<path class="dl" d="M151 74 H19"/><text class="ts" x="85" y="88">reverse: predict ε at each step</text>
+<text class="ts" x="85" y="102">CFG scale trades adherence against diversity</text>
+</svg></div>
+<div class="tk-txt"><p><strong>Diffusion Models.</strong> Noise is added to an image over many steps in a process with a closed form, and a network is trained to reverse one step at a time — usually by predicting the noise rather than the image. Latent diffusion runs the whole thing inside an autoencoder's latent space, which is what brought text-to-image generation onto consumer hardware.</p></div>
+</div>
+
+<div class="tk-item" id="vision-transformers">
+<div class="tk-dgm"><svg class="dgm" viewBox="0 0 200 110" aria-hidden="true">
+<rect class="bg" x="6" y="16" width="54" height="54" rx="2"/>
+<path class="l" d="M24 16 V70 M42 16 V70 M6 34 H60 M6 52 H60"/>
+<text class="ts" x="33" y="84">16×16 patches</text>
+<path class="a" d="M62 43 H78"/>
+<rect class="b" x="80" y="20" width="16" height="46" rx="2"/><text class="ts" x="88" y="80">+pos</text>
+<path class="a" d="M98 43 H112"/>
+<rect class="b4" x="114" y="24" width="54" height="38" rx="3"/><text class="ts" x="141" y="40">transformer</text><text class="ts" x="141" y="52">encoder</text>
+<text class="ts" x="100" y="102">no locality prior — needs data or distillation</text>
+</svg></div>
+<div class="tk-txt"><p><strong>Vision Transformers.</strong> A ViT splits an image into patches, embeds each as a token, and applies a standard transformer encoder, discarding the convolutional assumption that nearby pixels matter most. That missing prior is why ViTs need either large-scale pretraining or strong augmentation and distillation to match CNNs on modest datasets.</p></div>
+</div>
+
+<div class="tk-item" id="clip">
+<div class="tk-dgm"><svg class="dgm" viewBox="0 0 200 110" aria-hidden="true">
+<rect class="b" x="6" y="16" width="46" height="22" rx="3"/><text class="ts" x="29" y="30">image enc</text>
+<rect class="b3" x="6" y="66" width="46" height="22" rx="3"/><text class="ts" x="29" y="80">text enc</text>
+<path class="a" d="M54 27 L76 44"/><path class="a" d="M54 77 L76 60"/>
+<rect class="b4" x="78" y="38" width="52" height="28" rx="3"/><text class="ts" x="104" y="52">shared</text><text class="ts" x="104" y="62">embedding</text>
+<path class="a" d="M132 52 H150"/>
+<text class="ts" x="174" y="48">cosine</text><text class="ts" x="174" y="60">similarity</text>
+<text class="ts" x="100" y="102">contrastive over the batch — enables zero-shot</text>
+</svg></div>
+<div class="tk-txt"><p><strong>CLIP.</strong> Two encoders are trained with a symmetric contrastive loss so that matching image-text pairs score highest in both directions, producing one space where images and text are directly comparable. That single property is what enables zero-shot classification by embedding class names as text, and it breaks predictably on counting, spatial relations, and fine-grained distinctions.</p></div>
+</div>
+
+<div class="tk-item" id="vlm">
+<div class="tk-dgm"><svg class="dgm" viewBox="0 0 200 110" aria-hidden="true">
+<rect class="b" x="6" y="18" width="46" height="24" rx="3"/><text class="ts" x="29" y="33">vision enc</text>
+<path class="a" d="M54 30 H68"/>
+<rect class="b4" x="70" y="18" width="42" height="24" rx="3"/><text class="ts" x="91" y="28">projector</text><text class="ts" x="91" y="38">to tokens</text>
+<path class="a" d="M114 30 L134 44"/>
+<rect class="b3" x="6" y="60" width="46" height="24" rx="3"/><text class="ts" x="29" y="75">text tokens</text>
+<path class="a" d="M54 72 L134 56"/>
+<rect class="b2" x="136" y="34" width="58" height="32" rx="3"/><text class="ts" x="165" y="54">LLM</text>
+<text class="ts" x="100" y="102">frozen encoders, trained bridge, instruction tuning</text>
+</svg></div>
+<div class="tk-txt"><p><strong>Vision-Language Models.</strong> A VLM conditions a language model on visual features, most simply by projecting image patch embeddings into the token space and instruction-tuning on image-text pairs. The characteristic failure is object hallucination — describing things that are not in the image — and missed detail usually traces to token resolution rather than model capability.</p></div>
+</div>
+
+<div class="tk-item" id="object-tracking">
+<div class="tk-dgm"><svg class="dgm" viewBox="0 0 200 110" aria-hidden="true">
+<rect class="bg" x="6" y="18" width="52" height="44" rx="2"/><rect class="b" x="16" y="30" width="20" height="18" rx="2"/><text class="ts" x="32" y="74">frame t</text>
+<rect class="bg" x="74" y="18" width="52" height="44" rx="2"/><rect class="b" x="92" y="32" width="20" height="18" rx="2"/><text class="ts" x="100" y="74">frame t+1</text>
+<rect class="bg" x="142" y="18" width="52" height="44" rx="2"/><rect class="b" x="164" y="34" width="20" height="18" rx="2"/><text class="ts" x="168" y="74">frame t+2</text>
+<path class="dl" d="M36 39 H92"/><path class="dl" d="M112 41 H164"/>
+<text class="ts" x="100" y="94">association is the hard part, not detection</text>
+</svg></div>
+<div class="tk-txt"><p><strong>Object Tracking.</strong> Tracking maintains identity across frames, and the difficulty sits in association — deciding whether this frame's box is the same object as the last one's, through occlusion, crossing paths, and missed detections. SORT pairs a Kalman motion model with Hungarian matching on IoU, and DeepSORT adds an appearance embedding so identities survive being hidden.</p></div>
+</div>
+
+<div class="tk-item" id="3d-vision">
+<div class="tk-dgm"><svg class="dgm" viewBox="0 0 200 110" aria-hidden="true">
+<rect class="b3" x="4" y="16" width="46" height="18" rx="3"/><text class="ts" x="27" y="29">point cloud</text>
+<rect class="b3" x="4" y="38" width="46" height="18" rx="3"/><text class="ts" x="27" y="51">mesh · voxel</text>
+<rect class="b3" x="4" y="60" width="46" height="18" rx="3"/><text class="ts" x="27" y="73">implicit SDF</text>
+<path class="a" d="M52 27 H70"/><path class="a" d="M52 47 H70"/><path class="a" d="M52 69 H70"/>
+<rect class="b4" x="72" y="30" width="50" height="34" rx="3"/><text class="ts" x="97" y="44">radiance</text><text class="ts" x="97" y="56">field</text>
+<path class="a" d="M124 47 H140"/>
+<rect class="b" x="142" y="30" width="52" height="34" rx="3"/><text class="ts" x="168" y="44">splatting</text><text class="ts" x="168" y="56">real-time</text>
+<text class="ts" x="100" y="98">monocular depth is relative until anchored</text>
+</svg></div>
+<div class="tk-txt"><p><strong>3D Vision.</strong> The representation choice — point cloud, voxel, mesh, or implicit field — constrains every architecture decision that follows, which is why it is usually the first question asked. NeRF made photorealistic view synthesis possible and Gaussian splatting made it real-time, which is what moved neural rendering into interactive and AR use.</p></div>
+</div>
+
+<div class="tk-item" id="audio-processing">
+<div class="tk-dgm"><svg class="dgm" viewBox="0 0 200 110" aria-hidden="true">
+<path class="l" d="M6 40 q6 -18 12 0 t12 0 t12 0 t12 0 t12 0"/><text class="ts" x="40" y="58">waveform</text>
+<path class="a" d="M72 40 H88"/><text class="ts" x="80" y="30">STFT</text>
+<rect class="bg" x="90" y="18" width="50" height="44" rx="2"/>
+<path class="l" d="M90 30 H140 M90 40 H140 M90 50 H140"/><text class="ts" x="115" y="74">mel spectrogram</text>
+<path class="a" d="M142 40 H158"/>
+<rect class="b" x="160" y="26" width="36" height="28" rx="3"/><text class="ts" x="178" y="43">CNN /</text><text class="ts" x="178" y="53">ViT</text>
+<text class="ts" x="100" y="100">once it is a spectrogram, vision architectures apply</text>
+</svg></div>
+<div class="tk-txt"><p><strong>Audio Processing.</strong> A short-time Fourier transform turns a waveform into a time-frequency image, and warping frequency onto the mel scale matches it to human perception — at which point audio is a 2D array and vision architectures apply unchanged. Window size sets the trade-off between time and frequency resolution, and that choice usually matters more than the model.</p></div>
+</div>
+
+<div class="tk-item" id="core-ml">
+<div class="tk-dgm"><svg class="dgm" viewBox="0 0 200 110" aria-hidden="true">
+<rect class="b" x="6" y="14" width="52" height="20" rx="3"/><text class="ts" x="32" y="27">PyTorch / TF</text>
+<path class="a" d="M32 36 V50"/>
+<rect class="b4" x="6" y="52" width="52" height="22" rx="3"/><text class="ts" x="32" y="66">coremltools</text>
+<path class="a" d="M60 63 H78"/>
+<rect class="b3" x="80" y="50" width="48" height="24" rx="3"/><text class="ts" x="104" y="65">.mlpackage</text>
+<path class="a" d="M130 63 H146"/>
+<rect class="bg" x="148" y="40" width="46" height="16" rx="2"/><text class="ts" x="171" y="51">CPU</text>
+<rect class="bg" x="148" y="58" width="46" height="16" rx="2"/><text class="ts" x="171" y="69">GPU</text>
+<rect class="b2" x="148" y="76" width="46" height="16" rx="2"/><text class="ts" x="171" y="87">Neural Engine</text>
+<text class="ts" x="70" y="100">unsupported ops fall back silently</text>
+</svg></div>
+<div class="tk-txt"><p><strong>Core ML.</strong> Core ML is Apple's on-device inference format and runtime, dispatching a converted model across CPU, GPU, and the Neural Engine, with coremltools handling conversion, palettisation, and quantisation. The failure that costs the most latency is silent: an unsupported operation falls back to CPU rather than erroring, so the conversion report matters as much as the benchmark.</p></div>
 </div>
 
 <h2 class="tk-sec" id="sec-ml-nlp">Machine Learning and NLP</h2>
