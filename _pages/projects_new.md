@@ -59,6 +59,12 @@ details.pj-sec > summary:hover { color: #1f6f8b; }
   display: inline-block; font-size: .74rem; color: #41606e; background: #f2f7f9;
   border: 1px solid #dde7eb; border-radius: 10px; padding: .15em .6em; margin: 0 .3em .3em 0;
 }
+.ind-card.soon { border-left-color: #b0b6bd; background: #fbfbfb; }
+.ind-soon {
+  display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .06em;
+  font-weight: 700; color: #6b7480; background: #f2f3f4; border: 1px solid #dfe2e5;
+  border-radius: 11px; padding: .18em .65em; margin-left: .5em; vertical-align: middle;
+}
 .ind-q {
   display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .06em;
   font-weight: 700; color: #7a601b; background: #f8f3e6; border: 1px solid #e8dcc2;
@@ -213,6 +219,21 @@ details.pj-sec > summary:hover { color: #1f6f8b; }
     </div>
     <a class="pd-more" href="/projects/swidir/">Detailed summary →</a>
   </div>
+</div>
+
+</details>
+
+<details class="pj-sec" id="products" open>
+<summary>Products</summary>
+
+<p class="pj-sub">Things being built as products rather than as papers or client systems. Both are in progress — this section will carry the write-up and links once there is something to show.</p>
+
+<div class="ind-card soon">
+  <h3>Deepfake detection browser plug-in<span class="ind-soon">In progress</span></h3>
+</div>
+
+<div class="ind-card soon">
+  <h3>Business intelligence tool for marketing strategy<span class="ind-soon">In progress</span></h3>
 </div>
 
 </details>
