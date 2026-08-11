@@ -3,6 +3,7 @@ title: "Products"
 permalink: /products/
 layout: single
 author_profile: true
+published: false   # superseded by the Products section on /projects/
 ---
 
 
