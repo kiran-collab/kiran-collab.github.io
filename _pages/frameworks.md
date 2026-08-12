@@ -46,6 +46,27 @@ table.fw-vs td:first-child { font-weight: 600; white-space: nowrap; background: 
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 .cx-body .eg pre code { background: none; border: none; padding: 0; font-size: inherit; color: #2f3a42; }
+
+/* vocabulary */
+.gl { margin: 0 0 1.3em; padding-bottom: 1.1em; border-bottom: 1px dashed #e9edef; }
+.gl:last-child { border-bottom: 0; padding-bottom: 0; margin-bottom: 0; }
+.gl .gl-t {
+  display: block; font-weight: 700; color: #23303a; font-size: .97rem; margin-bottom: .25em;
+  scroll-margin-top: 24px;
+}
+.cx-body .gl p { font-size: .92rem; margin: 0 0 .45em; line-height: 1.6; }
+.cx-body .gl p.gl-m {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .85rem;
+  color: #5d3f7a; background: #f7f4fa; border-left: 3px solid #cbbcd9;
+  padding: .45em .75em; border-radius: 0 3px 3px 0; margin: 0 0 .45em;
+  overflow-x: auto; white-space: nowrap;
+}
+.gl pre {
+  margin: 0; background: #f6f8f9; border: 1px solid #e2e8eb; border-radius: 4px;
+  padding: .55em .75em; overflow-x: auto; font-size: .78rem; line-height: 1.55;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+.gl pre code { background: none; border: none; padding: 0; font-size: inherit; color: #2f3a42; }
 .cx-body .gotcha {
   margin-top: .6em; font-size: .89rem; color: #7a4a44; background: #fdf6f5;
   border-left: 3px solid #b83227; padding: .5em .75em; border-radius: 0 3px 3px 0;
@@ -79,6 +100,7 @@ table.fw-vs td:first-child { font-weight: 600; white-space: nowrap; background: 
 <a class="stack-back" href="#classical">Classical ML</a>
 <a class="stack-back" href="#tracking">Tracking &amp; tuning</a>
 <a class="stack-back" href="#code">Code snippets</a>
+<a class="stack-back" href="#vocab">Technical vocabulary</a>
 </p>
 
 <h2 class="fw-sec" id="core">Core frameworks</h2>
@@ -844,6 +866,517 @@ def objective(trial):
 
 study = optuna.create_study(direction="maximize", pruner=optuna.pruners.MedianPruner())
 study.optimize(objective, n_trials=50)</code></pre></div>
+</div></details>
+
+<h2 class="fw-sec" id="vocab">Technical vocabulary</h2>
+<p class="fw-lead">Every technical term used on this page, defined in one or two sentences, with the maths where it clarifies and a line of code where it makes it concrete. Grouped by where you meet them.</p>
+
+<details class="cx"><summary>1 · Training basics</summary><div class="cx-body">
+
+<div class="gl"><span class="gl-t" id="v-tensor">Tensor</span>
+<p>An array with any number of dimensions, held on CPU or GPU. A number is 0-D, a vector 1-D, an image 3-D, a batch of images 4-D.</p>
+<p class="gl-m">image batch: [N, C, H, W] = [32, 3, 224, 224]</p>
+<pre><code>x = torch.randn(32, 3, 224, 224, device="cuda")
+x.shape, x.dtype, x.device</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-params">Parameters and weights</span>
+<p>The numbers the model learns. "Weights" usually means the multiplicative ones, "parameters" means all of them including biases. Model size is quoted in parameter count — 8B means eight billion.</p>
+<p class="gl-m">y = Wx + b &nbsp;&nbsp;→&nbsp;&nbsp; W and b are the parameters</p>
+<pre><code>sum(p.numel() for p in model.parameters())</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-forward">Forward pass</span>
+<p>Running input through the model to get an output. Nothing is learned yet; this is just the prediction.</p>
+<pre><code>logits = model(x)</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-loss">Loss function</span>
+<p>A single number saying how wrong the prediction is. Training is the process of making it smaller.</p>
+<p class="gl-m">L = f(prediction, target) &nbsp;&nbsp;→&nbsp;&nbsp; lower is better</p>
+<pre><code>loss = F.cross_entropy(logits, y)</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-logits">Logits</span>
+<p>The model's raw output scores, before they are turned into probabilities. They can be any real number, positive or negative.</p>
+<p class="gl-m">logits ∈ ℝ &nbsp;&nbsp;vs&nbsp;&nbsp; probabilities ∈ [0, 1] summing to 1</p>
+<pre><code>logits = model(x)                 # e.g. [2.1, -0.4, 0.9]
+probs  = torch.softmax(logits, -1)  # e.g. [0.68, 0.06, 0.21]</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-softmax">Softmax</span>
+<p>Turns a vector of logits into probabilities that sum to 1. Exponentiating first means the largest logit dominates, which is why it is called <em>soft</em> max.</p>
+<p class="gl-m">softmax(z)ᵢ = e^(zᵢ) / Σⱼ e^(zⱼ)</p>
+<pre><code>probs = torch.softmax(logits, dim=-1)</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-sigmoid">Sigmoid</span>
+<p>Squashes one number into the range 0 to 1. Used for binary problems where each output is an independent yes/no rather than a choice between classes.</p>
+<p class="gl-m">σ(z) = 1 / (1 + e^(−z))</p>
+<pre><code>p = torch.sigmoid(logit)          # single probability</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-cross-entropy">Cross entropy</span>
+<p>The standard classification loss. It measures how far the predicted probability distribution is from the true one. Because the true distribution puts all its mass on the correct class, it reduces to the negative log of the probability the model gave that class.</p>
+<p class="gl-m">H(y, ŷ) = −Σᵢ yᵢ · log ŷᵢ &nbsp;&nbsp;→&nbsp;&nbsp; for true class c: −log ŷ_c</p>
+<p>Predict 0.9 for the right answer and the loss is 0.105. Predict 0.1 and it is 2.303. Predict near zero and it explodes — which is exactly the intent: confident and wrong should hurt.</p>
+<pre><code>loss = F.cross_entropy(logits, targets)   # takes LOGITS, applies softmax itself
+# equivalent, the long way:
+loss = F.nll_loss(torch.log_softmax(logits, -1), targets)</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-bce">Binary cross entropy</span>
+<p>The two-class version, applied independently to each output. Used for yes/no problems and multi-label problems where several labels can be true at once.</p>
+<p class="gl-m">L = −[ y·log ŷ + (1−y)·log(1−ŷ) ]</p>
+<pre><code>loss = F.binary_cross_entropy_with_logits(logit, target)  # fuses sigmoid, numerically safer</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-mse">Mean squared error</span>
+<p>The standard regression loss: average squared difference between prediction and target. Squaring punishes large errors far more than small ones, which also makes it sensitive to outliers.</p>
+<p class="gl-m">MSE = (1/n) Σ (yᵢ − ŷᵢ)²</p>
+<pre><code>loss = F.mse_loss(pred, target)
+loss = F.l1_loss(pred, target)     # mean absolute error - less outlier-sensitive</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-gradient">Gradient</span>
+<p>The derivative of the loss with respect to each parameter — how much the loss would change if that parameter moved slightly, and in which direction. Training moves every parameter a little way <em>against</em> its gradient.</p>
+<p class="gl-m">∇L = [ ∂L/∂w₁, ∂L/∂w₂, … ]</p>
+<pre><code>loss.backward()
+model.fc.weight.grad          # the gradient for that layer's weights</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-backward">Backward pass and backpropagation</span>
+<p>Computing those gradients by applying the chain rule backwards through the network, layer by layer, reusing each layer's result for the one before it.</p>
+<p class="gl-m">∂L/∂w = (∂L/∂out) · (∂out/∂w) &nbsp;— the chain rule</p>
+<pre><code>loss.backward()               # fills .grad on every parameter</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-autograd">Autograd / automatic differentiation</span>
+<p>The machinery that records every operation performed on a tensor and can therefore differentiate the whole chain automatically. You never write a derivative by hand.</p>
+<pre><code>x = torch.tensor(3.0, requires_grad=True)
+y = x ** 2
+y.backward()
+x.grad        # tensor(6.) - because dy/dx = 2x</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-graph">Computation graph</span>
+<p>The record of which operations produced which tensors. PyTorch builds it as the code runs and throws it away after each backward pass; graph-mode frameworks build it once and reuse it.</p>
+<pre><code>loss.grad_fn                  # the node that produced this tensor</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-optimiser">Optimiser</span>
+<p>The rule that turns gradients into parameter updates. Plain SGD steps directly against the gradient; Adam and AdamW keep running averages of the gradient and its square so each parameter gets its own effective step size.</p>
+<p class="gl-m">SGD: w ← w − α·∇L &nbsp;&nbsp;&nbsp; (α = learning rate)</p>
+<pre><code>opt = torch.optim.AdamW(model.parameters(), lr=3e-4, weight_decay=0.01)
+opt.step()          # apply the update
+opt.zero_grad()     # clear gradients, or they accumulate</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-lr">Learning rate</span>
+<p>How big a step to take against the gradient. Too high and training diverges; too low and it crawls or gets stuck. The single most important hyperparameter.</p>
+<p class="gl-m">typical: 3e-4 for Adam, 1e-5 to 5e-5 for fine-tuning a pretrained model</p>
+<pre><code>sched = torch.optim.lr_scheduler.CosineAnnealingLR(opt, T_max=epochs)</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-batch">Batch, mini-batch, epoch, step</span>
+<p>A <span class="k">batch</span> is the group of examples processed together before one update. An <span class="k">epoch</span> is one full pass over the training set. A <span class="k">step</span> is one parameter update.</p>
+<p class="gl-m">steps per epoch = dataset size ÷ batch size</p>
+<pre><code>for epoch in range(10):
+    for batch in dataloader:      # one step per batch
+        ...</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-grad-accum">Gradient accumulation</span>
+<p>Summing gradients over several small batches before stepping, to simulate a large batch that would not fit in memory.</p>
+<p class="gl-m">effective batch = micro-batch × accumulation steps × number of GPUs</p>
+<pre><code>(loss / accum).backward()
+if (i + 1) % accum == 0:
+    opt.step(); opt.zero_grad()</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-overfit">Overfitting and underfitting</span>
+<p>Overfitting is learning the training data itself rather than the pattern — training loss keeps falling while validation loss rises. Underfitting is the model being too weak to capture the pattern at all.</p>
+<p class="gl-m">overfit: train ↓ &nbsp; val ↑ &nbsp;&nbsp;|&nbsp;&nbsp; underfit: both high</p></div>
+
+<div class="gl"><span class="gl-t" id="v-regularisation">Regularisation</span>
+<p>Anything that constrains the model so it generalises instead of memorising: weight decay, dropout, data augmentation, early stopping.</p>
+<p class="gl-m">L_total = L + λ·‖w‖²  &nbsp;(L2 / weight decay)</p>
+<pre><code>opt = torch.optim.AdamW(model.parameters(), weight_decay=0.01)
+nn.Dropout(p=0.1)</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-early-stopping">Early stopping</span>
+<p>Stopping training when validation performance stops improving, and keeping the best checkpoint. Must use a validation set separate from the test set, or the reported score is optimistic.</p>
+<pre><code>clf.fit(X_tr, y_tr, eval_set=[(X_val, y_val)])   # xgboost: early_stopping_rounds=50</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-train-val-test">Train, validation, test</span>
+<p>Train fits the parameters. Validation tunes the choices you make by hand — learning rate, when to stop. Test is touched once, at the end. Reusing test for decisions turns it into a validation set and inflates the number you report.</p></div>
+
+</div></details>
+
+<details class="cx"><summary>2 · Numbers, memory and precision</summary><div class="cx-body">
+
+<div class="gl"><span class="gl-t" id="v-precision">Floating-point precision</span>
+<p>How many bits each number uses. Fewer bits means less memory and faster arithmetic, at the cost of range or accuracy. <span class="k">bf16</span> keeps fp32's exponent range with fewer mantissa bits, which is why it trains stably where fp16 overflows.</p>
+<p class="gl-m">fp32: 4 bytes · fp16: 2 · bf16: 2 · fp8: 1 · int8: 1 · int4: 0.5</p>
+<pre><code>model.to(torch.bfloat16)
+# an 8B model: 32 GB at fp32, 16 GB at bf16, 4 GB at int4</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-mixed-precision">Mixed precision</span>
+<p>Doing most arithmetic in 16-bit while keeping a 32-bit copy of the weights and the loss accumulation, so you get the speed without the numerical instability.</p>
+<pre><code>with torch.autocast("cuda", dtype=torch.bfloat16):
+    loss = loss_fn(model(x), y)
+loss.backward()</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-quantisation">Quantisation</span>
+<p>Storing weights and activations as low-precision integers, with a scale factor to map them back. Post-training quantisation converts an already-trained model; quantisation-aware training simulates the rounding during training so the model adapts to it.</p>
+<p class="gl-m">q = round(x / s) + z &nbsp;&nbsp;→&nbsp;&nbsp; x ≈ s · (q − z)</p>
+<pre><code>model = AutoModelForCausalLM.from_pretrained(mid, load_in_4bit=True)</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-activation-ckpt">Activation checkpointing</span>
+<p>Not storing every intermediate activation for the backward pass, and recomputing them instead. Trades roughly 30% more compute for a large memory saving — often the difference between a model fitting and not.</p>
+<pre><code>from torch.utils.checkpoint import checkpoint
+out = checkpoint(block, x)        # recompute this block's activations later</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-kv-cache">KV cache</span>
+<p>During generation, each new token attends to every previous one. Rather than recomputing their keys and values every step, they are cached. It makes generation fast and it is the main consumer of memory when serving.</p>
+<p class="gl-m">size ≈ 2 × layers × heads × head_dim × seq_len × batch × bytes</p>
+<pre><code>out = model.generate(ids, use_cache=True)   # on by default</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-oom">Out of memory (OOM)</span>
+<p>GPU memory holds four things: weights, gradients, optimiser state, and activations. Adam keeps two extra values per parameter, so optimiser state alone is typically twice the model size.</p>
+<p class="gl-m">fp32 training ≈ 16 bytes/param: 4 weights + 4 grads + 8 Adam state</p></div>
+
+</div></details>
+
+<details class="cx"><summary>3 · Execution and compilation</summary><div class="cx-body">
+
+<div class="gl"><span class="gl-t" id="v-eager">Eager execution</span>
+<p>Operations run the moment you write them, like normal Python. Easy to debug, slower than a compiled graph because each operation is dispatched separately.</p>
+<pre><code>y = x + 1      # runs right now, y is a real tensor you can print</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-graph-mode">Graph mode and tracing</span>
+<p>Running the function once to record the operations, then executing that recorded graph from then on. Faster, but any Python that depends on actual values is frozen at the value it had while tracing.</p>
+<pre><code>@tf.function              # TensorFlow
+traced = torch.jit.trace(model, example)   # PyTorch</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-jit">JIT compilation</span>
+<p>Just-in-time: compiling at runtime, once the shapes and types are actually known, rather than ahead of time. The first call is slow; every later call is fast.</p>
+<pre><code>model = torch.compile(model)     # first call compiles, then it pays off</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-kernel">Kernel</span>
+<p>A single function that runs on the GPU. One line of Python may launch several. Launching a kernel has fixed overhead, so many tiny kernels waste time.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-fusion">Kernel fusion</span>
+<p>Combining several operations into one kernel so intermediate results stay in fast registers instead of being written to GPU memory and read back. Memory traffic, not arithmetic, is usually the bottleneck.</p>
+<p class="gl-m">unfused: read → add → write → read → relu → write
+fused:   read → add → relu → write</p></div>
+
+<div class="gl"><span class="gl-t" id="v-xla">XLA</span>
+<p>A compiler that takes a whole graph of array operations and emits optimised machine code, fusing aggressively. It is what JAX and TensorFlow use, and how TPUs are targeted.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-graph-break">Graph break</span>
+<p>A point where the compiler cannot trace further — usually Python control flow that depends on a tensor's value — so it falls back to eager execution for that part. Correctness is preserved; speed is quietly lost.</p>
+<pre><code>print(torch._dynamo.explain(model)(x).break_reasons)</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-layout">Tensor layout — NCHW and NHWC</span>
+<p>The order dimensions are stored in. PyTorch defaults to channels-first, TensorFlow to channels-last. Same numbers, different memory order — which is why conversion between frameworks means transposing weights.</p>
+<p class="gl-m">NCHW: [batch, channels, height, width] &nbsp;·&nbsp; NHWC: [batch, height, width, channels]</p>
+<pre><code>x.permute(0, 2, 3, 1)                       # NCHW → NHWC
+x.to(memory_format=torch.channels_last)     # same shape, different layout</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-onnx">ONNX</span>
+<p>An open file format describing a model as a graph of standard operators, so a model trained in one framework can be run by another runtime.</p>
+<pre><code>torch.onnx.export(model, dummy, "model.onnx", opset_version=17)</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-checkpoint">Checkpoint and state_dict</span>
+<p>A saved snapshot of the parameters. PyTorch's <code>state_dict</code> is a plain dictionary of tensors and carries no code, which is why the model class must be defined to load it.</p>
+<pre><code>torch.save(model.state_dict(), "ckpt.pt")
+model.load_state_dict(torch.load("ckpt.pt"))</code></pre></div>
+
+</div></details>
+
+<details class="cx"><summary>4 · Distributed training</summary><div class="cx-body">
+
+<div class="gl"><span class="gl-t" id="v-data-parallel">Data parallelism (DDP)</span>
+<p>Every GPU holds a full copy of the model and processes a different slice of the batch. Gradients are averaged across GPUs after each backward pass so all copies stay identical.</p>
+<p class="gl-m">memory per GPU = full model &nbsp;→&nbsp; largest model is capped by one device</p>
+<pre><code>model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[rank])</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-all-reduce">All-reduce</span>
+<p>The collective operation that sums each GPU's gradients and gives every GPU the result. It is the communication cost that decides how well data parallelism scales.</p>
+<p class="gl-m">each rank ends with: g = (g₀ + g₁ + … + g_{n−1}) / n</p></div>
+
+<div class="gl"><span class="gl-t" id="v-sharding">Sharding</span>
+<p>Splitting something across devices so each holds only a slice, rather than replicating it. What lifts the single-GPU memory ceiling.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-fsdp-t">FSDP and ZeRO</span>
+<p>Sharding applied to parameters, gradients, and optimiser state. Each layer's parameters are gathered just before use and released straight after. ZeRO's three stages shard progressively more: optimiser state, then gradients, then parameters.</p>
+<p class="gl-m">stage 1: optimiser · stage 2: + gradients · stage 3: + parameters</p></div>
+
+<div class="gl"><span class="gl-t" id="v-tensor-parallel">Tensor parallelism</span>
+<p>Splitting a single matrix multiplication across GPUs — each computes part of the output, then the parts are combined. Needs fast interconnect, so it is normally kept within one node.</p>
+<p class="gl-m">Y = XW &nbsp;→&nbsp; W split by columns: Y = [XW₁ | XW₂]</p></div>
+
+<div class="gl"><span class="gl-t" id="v-pipeline-parallel">Pipeline parallelism</span>
+<p>Putting different layers on different GPUs and passing activations along. The problem is the "bubble" — GPUs idle while waiting — which is reduced by splitting the batch into micro-batches that flow through continuously.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-3d">3-D parallelism</span>
+<p>Using data, tensor, and pipeline parallelism together. Standard for frontier-scale pretraining.</p>
+<p class="gl-m">total GPUs = data × tensor × pipeline</p></div>
+
+<div class="gl"><span class="gl-t" id="v-offload">Offload</span>
+<p>Moving parameters or optimiser state to CPU RAM or NVMe when not in use, and fetching them back on demand. Makes otherwise impossible runs possible, at a real throughput cost.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-rank">Rank, world size, node</span>
+<p><span class="k">World size</span> is the total number of processes; <span class="k">rank</span> is one process's index; <span class="k">local rank</span> is its index on its own machine. A <span class="k">node</span> is one machine, usually with 8 GPUs.</p>
+<pre><code>$ torchrun --nproc_per_node 8 --nnodes 4 train.py</code></pre></div>
+
+</div></details>
+
+<details class="cx"><summary>5 · Models and layers</summary><div class="cx-body">
+
+<div class="gl"><span class="gl-t" id="v-linear">Linear layer</span>
+<p>A matrix multiply plus a bias. The basic building block; most of a transformer's parameters and compute live in these.</p>
+<p class="gl-m">y = xWᵀ + b</p>
+<pre><code>nn.Linear(in_features=768, out_features=3072)</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-activation">Activation function</span>
+<p>The non-linear step between layers. Without one, stacking linear layers collapses into a single linear layer and depth buys nothing.</p>
+<p class="gl-m">ReLU(x) = max(0, x) &nbsp;·&nbsp; GELU(x) ≈ x · Φ(x)</p>
+<pre><code>nn.ReLU(), nn.GELU(), nn.SiLU()</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-conv">Convolution</span>
+<p>Sliding a small learned filter across an image and taking a weighted sum at each position. The same filter everywhere means far fewer parameters than a linear layer, and a feature detected in one place is detected anywhere.</p>
+<p class="gl-m">out[i,j] = Σ_m Σ_n in[i+m, j+n] · k[m,n]</p>
+<pre><code>nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1)</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-norm">Normalisation</span>
+<p>Rescaling activations to a stable mean and variance so training does not destabilise. BatchNorm normalises across the batch; LayerNorm and RMSNorm normalise across features, which is what transformers use.</p>
+<p class="gl-m">LN(x) = γ · (x − μ) / √(σ² + ε) + β</p>
+<pre><code>nn.LayerNorm(768)</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-embedding">Embedding</span>
+<p>A lookup table mapping a discrete id — a token, a category — to a learned vector. Similar meanings end up as nearby vectors.</p>
+<p class="gl-m">vocab 32000 × dim 4096 → 131M parameters in that one table</p>
+<pre><code>emb = nn.Embedding(32000, 4096)
+emb(torch.tensor([15, 892]))      # [2, 4096]</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-token">Token and tokeniser</span>
+<p>Models read integers, not text. The tokeniser splits text into sub-word pieces and maps each to an id. Roughly 4 characters per token for English.</p>
+<pre><code>tok("Hello world")["input_ids"]    # [9906, 1917]
+tok.decode([9906, 1917])           # "Hello world"</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-attention">Attention</span>
+<p>Each position produces a query, a key, and a value. It compares its query against every key to get weights, then takes a weighted sum of the values. That is how a token pulls in context from the rest of the sequence.</p>
+<p class="gl-m">Attention(Q,K,V) = softmax(QKᵀ / √d_k) · V</p>
+<p>The √d_k divisor keeps the dot products from growing with dimension and pushing softmax into a region with vanishing gradients. Cost is quadratic in sequence length, which is why long context is expensive.</p>
+<pre><code>out = F.scaled_dot_product_attention(q, k, v, is_causal=True)</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-mha">Multi-head attention</span>
+<p>Running attention several times in parallel on different learned projections, then concatenating. Each head can specialise — one on syntax, another on long-range reference.</p>
+<p class="gl-m">head_dim = model_dim / n_heads &nbsp;(e.g. 4096 / 32 = 128)</p>
+<pre><code>nn.MultiheadAttention(embed_dim=4096, num_heads=32, batch_first=True)</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-transformer">Transformer block</span>
+<p>Attention followed by a small feed-forward network, each wrapped in a residual connection and a normalisation. Stack a few dozen of these and you have a modern model.</p>
+<p class="gl-m">x ← x + Attn(LN(x)); &nbsp; x ← x + FFN(LN(x))</p></div>
+
+<div class="gl"><span class="gl-t" id="v-residual">Residual connection</span>
+<p>Adding a layer's input to its output. It gives the gradient a direct path back through the network, which is what makes very deep models trainable.</p>
+<p class="gl-m">y = x + F(x)</p></div>
+
+<div class="gl"><span class="gl-t" id="v-encdec">Encoder and decoder</span>
+<p>An encoder reads the whole input at once and produces representations — good for classification and retrieval. A decoder generates one token at a time and may only look backwards — good for generation.</p>
+<p class="gl-m">encoder: bidirectional (BERT) · decoder: causal (GPT, Llama)</p></div>
+
+<div class="gl"><span class="gl-t" id="v-backbone">Backbone and head</span>
+<p>The backbone is the pretrained feature extractor; the head is the small task-specific layer bolted on top. Transfer learning is keeping the backbone and replacing the head.</p>
+<pre><code>model = timm.create_model("resnet50", pretrained=True, num_classes=10)  # new head</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-pooling">Pooling</span>
+<p>Reducing many vectors to one — by mean, by max, or by taking a designated token. How a sequence of token vectors becomes a single sentence embedding.</p>
+<pre><code>sentence = token_embeddings.mean(dim=1)     # mean pooling</code></pre></div>
+
+</div></details>
+
+<details class="cx"><summary>6 · Fine-tuning and alignment</summary><div class="cx-body">
+
+<div class="gl"><span class="gl-t" id="v-pretraining">Pretraining vs fine-tuning</span>
+<p>Pretraining learns general structure from a very large unlabelled corpus and costs millions. Fine-tuning adapts that model to your task with a small labelled set and costs hours.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-freezing">Freezing</span>
+<p>Marking parameters as not trainable so gradients are not computed or stored for them. The cheapest way to cut memory when only part of a model needs to change.</p>
+<pre><code>for p in model.parameters():
+    p.requires_grad = False</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-lora">LoRA</span>
+<p>Instead of updating a weight matrix, learn a low-rank correction to it. Two thin matrices multiply out to the same shape as the original, so the frozen weight stays untouched and the update is tiny.</p>
+<p class="gl-m">W' = W + BA &nbsp; where B: d×r, A: r×k, and r ≪ min(d,k)</p>
+<p>With d = k = 4096 and r = 16, that is 33.5M parameters replaced by 131K — about 0.4%.</p>
+<pre><code>LoraConfig(r=16, lora_alpha=32, target_modules=["q_proj", "v_proj"])</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-qlora">QLoRA</span>
+<p>LoRA on top of a base model quantised to 4-bit. The frozen base takes a quarter of the memory, the adapters train in 16-bit, and a 70B fine-tune fits on a single large GPU.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-adapter">Adapter</span>
+<p>Any small trainable module added to a frozen model. Adapters are megabytes, can be swapped at inference, and several can be composed over one base model.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-sft">Supervised fine-tuning (SFT)</span>
+<p>Training on example prompt-and-answer pairs so the model learns the format and behaviour you want. The first stage of post-training.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-rlhf">RLHF</span>
+<p>Reinforcement learning from human feedback. Humans rank model outputs, a reward model is trained to predict those rankings, and the model is then optimised against that reward — classically with PPO.</p>
+<p class="gl-m">SFT → reward model → PPO against the reward, with a KL penalty to the SFT model</p></div>
+
+<div class="gl"><span class="gl-t" id="v-dpo">DPO</span>
+<p>Direct preference optimisation. It shows that the RLHF objective can be rewritten as a simple classification loss over preferred and rejected pairs — no separate reward model, no RL loop.</p>
+<p class="gl-m">L = −log σ( β · [ log(π/π_ref)(chosen) − log(π/π_ref)(rejected) ] )</p></div>
+
+<div class="gl"><span class="gl-t" id="v-catastrophic">Catastrophic forgetting</span>
+<p>Fine-tuning hard on a narrow task degrades the general ability the model had. Lower learning rates, fewer epochs, and adapter methods that leave the base weights frozen all limit it.</p></div>
+
+</div></details>
+
+<details class="cx"><summary>7 · Inference and serving</summary><div class="cx-body">
+
+<div class="gl"><span class="gl-t" id="v-latency">Latency vs throughput</span>
+<p>Latency is how long one request takes. Throughput is how many complete per second. Batching improves throughput and worsens latency, so you cannot maximise both.</p>
+<p class="gl-m">for LLMs: TTFT (time to first token) and TPOT (time per output token)</p></div>
+
+<div class="gl"><span class="gl-t" id="v-percentile">p50, p95, p99</span>
+<p>Percentiles of the latency distribution. p95 = 200 ms means 95% of requests finished within 200 ms. Report percentiles, not the mean — the mean hides the tail that users actually feel.</p>
+<pre><code>torch.tensor(times).quantile(0.95)</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-batching">Static, dynamic and continuous batching</span>
+<p>Static batching fixes the group before it runs. Dynamic batching waits a few milliseconds to gather arriving requests. Continuous batching, used for LLMs, lets a finished sequence leave the batch and a new one join mid-flight rather than waiting for the slowest.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-paged">PagedAttention</span>
+<p>Storing the KV cache in fixed-size blocks like operating-system memory pages, instead of one contiguous allocation per sequence. It removes the wasted space from over-allocating for a maximum length, so far more requests fit at once.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-prefix-cache">Prefix caching</span>
+<p>Requests that begin with the same tokens — a shared system prompt, the same tool definitions — reuse the cached KV entries for that prefix instead of recomputing it every time.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-prefill">Prefill and decode</span>
+<p>Prefill processes the whole prompt in parallel and is compute-bound. Decode generates one token at a time and is memory-bandwidth-bound. They have opposite bottlenecks, which is why serving engines schedule them separately.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-warmup">Warm-up</span>
+<p>The first calls to a model are slow — memory allocation, compilation, caches filling. Always discard them before measuring, or the numbers are meaningless.</p>
+<pre><code>for _ in range(20): model(x)      # warm up
+torch.cuda.synchronize()          # GPU work is async - sync before timing</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-engine">Engine</span>
+<p>A model compiled for one specific GPU architecture, precision, and shape range, as TensorRT produces. Fastest available, and not portable — a new GPU generation means a new build.</p></div>
+
+</div></details>
+
+<details class="cx"><summary>8 · Retrieval and embeddings</summary><div class="cx-body">
+
+<div class="gl"><span class="gl-t" id="v-embedding-vec">Embedding vector</span>
+<p>A fixed-length list of numbers representing a piece of text, an image, or an item, positioned so that similar things are close together.</p>
+<pre><code>emb = model.encode(["a sentence"], normalize_embeddings=True)   # [1, 768]</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-cosine">Cosine similarity</span>
+<p>The angle between two vectors, ignoring their length. 1 means identical direction, 0 unrelated, −1 opposite. On normalised vectors it is just the dot product.</p>
+<p class="gl-m">cos(a,b) = (a · b) / (‖a‖ ‖b‖)</p>
+<pre><code>sim = F.cosine_similarity(a, b, dim=-1)
+sim = a_norm @ b_norm.T          # same thing if both are unit length</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-biencoder">Bi-encoder vs cross-encoder</span>
+<p>A bi-encoder embeds query and document separately, so documents can be indexed in advance and search is fast. A cross-encoder feeds the pair through together, which is far more accurate and far too slow to run over a whole corpus.</p>
+<p class="gl-m">bi-encoder: encode once, compare many · cross-encoder: one forward pass per pair</p></div>
+
+<div class="gl"><span class="gl-t" id="v-rerank">Reranking</span>
+<p>Retrieve a shortlist cheaply, then reorder it with the expensive accurate model. Most practical retrieval quality gains come from this two-stage pattern rather than a better first-stage model.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-ann">ANN search</span>
+<p>Approximate nearest neighbour. Exact search compares against every vector; approximate methods trade a little recall for orders-of-magnitude speed, which is what makes million-vector search practical.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-rag">RAG</span>
+<p>Retrieval-augmented generation: fetch relevant documents and put them in the prompt so the model answers from supplied evidence rather than memory.</p></div>
+
+</div></details>
+
+<details class="cx"><summary>9 · Vision and diffusion terms</summary><div class="cx-body">
+
+<div class="gl"><span class="gl-t" id="v-iou">IoU</span>
+<p>Intersection over union — the overlap between two boxes divided by their combined area. 0 means no overlap, 1 means identical.</p>
+<p class="gl-m">IoU = area(A ∩ B) / area(A ∪ B)</p>
+<pre><code>from torchvision.ops import box_iou
+box_iou(pred_boxes, gt_boxes)</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-nms">NMS</span>
+<p>Non-maximum suppression. A detector fires several times on the same object; NMS keeps the highest-confidence box and discards any box overlapping it beyond an IoU threshold.</p>
+<pre><code>keep = torchvision.ops.nms(boxes, scores, iou_threshold=0.5)</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-map">mAP</span>
+<p>Mean average precision — area under the precision-recall curve, averaged over classes. COCO's mAP@[.5:.95] averages over ten IoU thresholds, so it rewards tight boxes and not merely finding the object.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-unet">UNet</span>
+<p>An encoder-decoder with skip connections carrying high-resolution detail across from encoder to decoder. Standard for segmentation, and the standard denoiser inside diffusion models.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-vae">VAE</span>
+<p>An autoencoder that encodes to a distribution rather than a point, giving a continuous latent space you can sample from. In latent diffusion it is the compressor that lets generation run in a small space instead of on pixels.</p>
+<p class="gl-m">z = μ + σ · ε, &nbsp; ε ~ N(0, 1) &nbsp;— the reparameterisation trick</p></div>
+
+<div class="gl"><span class="gl-t" id="v-diffusion">Diffusion, scheduler, steps</span>
+<p>Noise is added to an image over many steps, and a network learns to remove it one step at a time. The <span class="k">scheduler</span> decides how much noise each step carries and how sampling walks back; fewer steps means faster and rougher.</p>
+<p class="gl-m">x_t = √(ᾱ_t)·x₀ + √(1−ᾱ_t)·ε &nbsp;— jump to any noise level directly</p></div>
+
+<div class="gl"><span class="gl-t" id="v-cfg">Guidance scale (CFG)</span>
+<p>Classifier-free guidance. The model predicts with and without the prompt, and sampling extrapolates away from the unconditional prediction. Higher values follow the prompt more literally and reduce variety.</p>
+<p class="gl-m">ε = ε_uncond + w · (ε_cond − ε_uncond) &nbsp;(w ≈ 6–8 typical)</p></div>
+
+</div></details>
+
+<details class="cx"><summary>10 · Classical ML</summary><div class="cx-body">
+
+<div class="gl"><span class="gl-t" id="v-tree">Decision tree</span>
+<p>A series of yes/no splits on feature values, ending in a prediction. Individually weak and prone to overfitting, which is why they are used in ensembles.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-boosting">Gradient boosting</span>
+<p>Building trees one after another, each fitted to the errors the ensemble has made so far. Each tree corrects its predecessors rather than voting independently.</p>
+<p class="gl-m">F_m(x) = F_{m−1}(x) + η · h_m(x) &nbsp; where h_m fits the residual</p></div>
+
+<div class="gl"><span class="gl-t" id="v-bagging">Bagging vs boosting</span>
+<p>Bagging trains many models independently on resamples and averages them, reducing variance — that is a random forest. Boosting trains them in sequence, reducing bias.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-leafwise">Leaf-wise vs level-wise growth</span>
+<p>Level-wise grows every node at a depth before going deeper; leaf-wise always splits whichever leaf reduces loss most. Leaf-wise is more accurate per tree and overfits more easily on small data.</p>
+<pre><code>{"num_leaves": 63, "min_data_in_leaf": 100}   # the two that control it</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-histogram">Histogram splitting</span>
+<p>Bucketing continuous feature values into a few hundred bins before searching for splits, so the search is over bins rather than every distinct value. The main reason LightGBM trains fast.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-cat-encoding">Categorical encoding</span>
+<p>Turning categories into numbers. One-hot creates a column per value and explodes on high-cardinality features; target encoding replaces a category with the mean outcome for it and leaks unless computed carefully within folds.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-imbalance">Class imbalance</span>
+<p>When one class is much rarer than the other, a model that never predicts it can still be 99% accurate. Fix by weighting the loss, not by trusting accuracy.</p>
+<p class="gl-m">scale_pos_weight = n_negative / n_positive</p></div>
+
+<div class="gl"><span class="gl-t" id="v-cv">Cross-validation</span>
+<p>Splitting the data into k folds, training on k−1 and validating on the held-out one, k times. Gives a more reliable estimate than a single split, and a spread that tells you how stable it is.</p>
+<pre><code>cross_val_score(pipe, X, y, cv=5, scoring="roc_auc")</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-leakage">Data leakage</span>
+<p>Information in the training features that would not be available at prediction time — including preprocessing fitted on the full dataset before splitting. It inflates offline scores and disappears in production.</p>
+<pre><code>Pipeline([("scale", StandardScaler()), ("clf", model)])   # scaler refits per fold</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-roc">ROC AUC and PR AUC</span>
+<p>ROC AUC is the probability the model ranks a random positive above a random negative — 0.5 is chance. PR AUC uses precision and recall instead, and is the more informative of the two when positives are rare.</p>
+<p class="gl-m">precision = TP/(TP+FP) &nbsp;·&nbsp; recall = TP/(TP+FN)</p></div>
+
+</div></details>
+
+<details class="cx"><summary>11 · Experiment workflow</summary><div class="cx-body">
+
+<div class="gl"><span class="gl-t" id="v-hyperparameter">Hyperparameter</span>
+<p>A setting you choose rather than one the model learns — learning rate, tree depth, LoRA rank, batch size.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-search">Grid, random and Bayesian search</span>
+<p>Grid tries every combination and wastes effort on parameters that do not matter. Random sampling beats it in practice. Bayesian search builds a model of which regions look promising and samples there.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-trial-pruning">Trial pruning</span>
+<p>Stopping a hyperparameter trial early once it is clearly behind, so the budget goes to candidates that might win.</p>
+<pre><code>trial.report(auc, step)
+if trial.should_prune(): raise optuna.TrialPruned()</code></pre></div>
+
+<div class="gl"><span class="gl-t" id="v-tracking">Experiment tracking</span>
+<p>Recording the config, code version, metrics, and outputs of every run, so a result months later can be traced back to exactly what produced it.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-artefact">Artefact</span>
+<p>Any file a run produces and you may need again — a checkpoint, a dataset snapshot, a plot — stored with the run rather than beside it on someone's laptop.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-registry">Model registry</span>
+<p>A versioned catalogue of trained models with stages such as Staging and Production, and a link back to the run that produced each. The audit trail a governed release process needs.</p></div>
+
+<div class="gl"><span class="gl-t" id="v-repro">Reproducibility</span>
+<p>Being able to rerun and get the same result. Needs the seed, the library versions, the data version, and the config — and on GPU, still not exactly bit-identical unless you force deterministic kernels.</p>
+<pre><code>torch.manual_seed(0)
+torch.use_deterministic_algorithms(True)   # slower, but repeatable</code></pre></div>
+
 </div></details>
 
 <p style="margin-top:2.5em">Related: <a href="/stacks/">Stacks</a> covers the concepts these frameworks implement, and <a href="/vision/">Vision &amp; Multimodal AI</a> goes deeper on the vision side.</p>
