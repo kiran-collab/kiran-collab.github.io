@@ -39,7 +39,7 @@ table.fw-vs td:first-child { font-weight: 600; white-space: nowrap; background: 
 }
 </style>
 
-<p class="stack-lead">The frameworks that actually get used, grouped by which layer of the stack they occupy. Most confusion in this space comes from comparing tools that solve different problems — a training abstraction against a serving engine, or a model library against the tensor framework underneath it.</p>
+<p class="stack-lead">The frameworks that actually get used, grouped by which layer of the stack they occupy. Most confusion here comes from comparing tools that do different jobs: a training helper against a serving engine, or a model library against the tensor framework underneath it.</p>
 
 <table class="fw-map">
 <thead><tr><th>Layer</th><th>What it handles</th><th>Reasonable default in 2026</th></tr></thead>
@@ -69,116 +69,116 @@ table.fw-vs td:first-child { font-weight: 600; white-space: nowrap; background: 
 </p>
 
 <h2 class="fw-sec" id="core">Core frameworks</h2>
-<p class="fw-lead">The tensor and autograd layer. Everything above is built on one of these, and the choice determines your ecosystem more than any other decision.</p>
+<p class="fw-lead">The tensor and autograd layer. Everything else is built on one of these, so this choice decides your ecosystem more than any other.</p>
 
 <details class="cx"><summary>PyTorch</summary><div class="cx-body">
-<p>Defines the computation graph as the code runs, so a model is ordinary Python you can step through with a debugger and inspect with <code>print</code>. Autograd records operations on tensors and differentiates them on the backward pass.</p>
-<p>It won research first and then production. <code>torch.compile</code> closed most of the historical performance gap by tracing and fusing graphs ahead of execution, which removed the main argument for static-graph frameworks.</p>
-<p class="when"><strong>Choose it when:</strong> almost always. It is the default for research, the majority of new production work, and nearly every model library assumes it.</p>
+<p>Builds the computation graph as the code runs, so a model is ordinary Python. You can step through it with a debugger and inspect it with <code>print</code>. Autograd records what you do to tensors and works out the gradients on the backward pass.</p>
+<p>It won research first, then production. <code>torch.compile</code> closed most of the old speed gap by tracing and fusing the graph before it runs, which took away the main argument for static-graph frameworks.</p>
+<p class="when"><strong>Choose it when:</strong> almost always. It is the default for research and for most new production work, and nearly every model library assumes it.</p>
 
 <p class="sub">PyTorch versus TensorFlow</p>
 
-<p>The framing that used to settle this — dynamic graph against static graph — no longer holds. TF2 is eager by default and PyTorch compiles ahead of execution, so both now do both. What is left is a set of concrete differences that still change day-to-day work.</p>
+<p>The old answer was dynamic graph against static graph. That no longer holds: TF2 runs eagerly by default, and PyTorch can compile ahead of time. Both now do both. What is left is a set of practical differences that still affect daily work.</p>
 
 <table class="fw-vs">
 <thead><tr><th>Dimension</th><th class="pt">PyTorch</th><th class="tf">TensorFlow</th></tr></thead>
 <tbody>
 <tr><td>Execution</td><td>Eager by default; <code>torch.compile</code> traces and fuses into a graph when you ask for it</td><td>Eager by default since TF2; <code>@tf.function</code> traces into a static graph for speed and export</td></tr>
-<tr><td>Debugging</td><td>Ordinary Python — breakpoints, <code>print</code>, and stack traces all work inside the model</td><td>Fine eagerly; inside a traced <code>tf.function</code> the Python only runs during tracing, which surprises people</td></tr>
+<tr><td>Debugging</td><td>Ordinary Python — breakpoints, <code>print</code>, and stack traces all work inside the model</td><td>Fine in eager mode. Inside a traced <code>tf.function</code> the Python runs only while tracing, which catches people out</td></tr>
 <tr><td>Tensor layout</td><td><code>NCHW</code> — channels before spatial dimensions</td><td><code>NHWC</code> — channels last</td></tr>
 <tr><td>Model definition</td><td>Subclass <code>nn.Module</code>, write <code>forward</code>; the training loop is yours to write</td><td>Keras <code>Sequential</code>/functional/subclassing, with <code>model.fit()</code> supplying the loop</td></tr>
-<tr><td>Shapes</td><td>Inferred at runtime from real tensors, so errors surface on the first forward pass</td><td>Can be known at build time, which catches some errors earlier and makes others more cryptic</td></tr>
+<tr><td>Shapes</td><td>Inferred at runtime from real tensors, so errors surface on the first forward pass</td><td>Often known before the model runs, so some errors show up earlier and others get harder to read</td></tr>
 <tr><td>Weight format</td><td><code>state_dict</code> — a plain dict of tensors, saved via <code>torch.save</code> or safetensors</td><td>SavedModel — graph plus weights plus signatures in one directory, self-describing</td></tr>
 <tr><td>Deployment</td><td>TorchServe, ONNX export, ExecuTorch, TorchScript, plus <code>torch.compile</code> backends</td><td>TF Serving, TFLite for mobile, TensorFlow.js for browsers, TFX for full pipelines</td></tr>
 <tr><td>Accelerators</td><td>CUDA and ROCm first class; Apple <code>mps</code>; TPU only through PyTorch/XLA</td><td>CUDA plus native, first-class TPU support</td></tr>
 <tr><td>Distributed</td><td>DDP, FSDP, and the DeepSpeed and Accelerate ecosystems</td><td><code>tf.distribute</code> strategies, tightly integrated with TPU pods</td></tr>
-<tr><td>Ecosystem gravity</td><td>Nearly all new research and model releases — Transformers, Diffusers, timm — land here first</td><td>Large installed base in existing production; fewer new releases target it</td></tr>
+<tr><td>Ecosystem gravity</td><td>Nearly all new research and model releases land here first: Transformers, Diffusers, timm</td><td>Large installed base in existing production; fewer new releases target it</td></tr>
 </tbody>
 </table>
 
 <p class="sub">What this means in practice</p>
 
-<p><span class="k">The layout difference is the one that bites.</span> A convolution weight is <code>[out, in, kH, kW]</code> in PyTorch and <code>[kH, kW, in, out]</code> in TensorFlow. Converting between them means transposing every conv and dense weight, and getting it subtly wrong produces a model that runs, produces plausible-looking output, and is simply incorrect. This is why conversion goes through ONNX or a purpose-built converter rather than by hand.</p>
+<p><span class="k">The layout difference is the one that bites.</span> A convolution weight is <code>[out, in, kH, kW]</code> in PyTorch and <code>[kH, kW, in, out]</code> in TensorFlow. Converting between them means transposing every convolution and dense weight. Get it slightly wrong and the model still runs and still produces plausible output — it is simply incorrect. That is why conversion goes through ONNX or a purpose-built converter rather than by hand.</p>
 
-<p><span class="k">Tracing is where TensorFlow's mental model diverges.</span> Inside a <code>tf.function</code>, Python control flow executes once, while tracing, and is then baked into the graph — so a <code>print</code> fires once rather than every call, and a Python <code>if</code> on a tensor value silently freezes one branch. <code>tf.cond</code> and <code>tf.while_loop</code> exist for exactly this. PyTorch's <code>torch.compile</code> handles the same situation differently: it falls back to eager execution on anything it cannot trace (a graph break), which costs performance rather than correctness.</p>
+<p><span class="k">Tracing is where TensorFlow works differently.</span> Inside a <code>tf.function</code>, Python control flow runs once, while tracing, and is then fixed into the graph. So a <code>print</code> fires once rather than on every call, and a Python <code>if</code> on a tensor value quietly locks in one branch. <code>tf.cond</code> and <code>tf.while_loop</code> exist for exactly this. PyTorch fails differently: <code>torch.compile</code> drops back to eager mode on anything it cannot trace, called a graph break, so you lose speed rather than correctness.</p>
 
-<p><span class="k">The deployment gap has narrowed but not closed.</span> TFLite and TensorFlow.js remain the more mature paths for mobile and browser, and TPUs are genuinely TensorFlow's home ground. Everywhere else PyTorch has caught up, and ONNX export means the training framework need not decide the serving one.</p>
+<p><span class="k">The deployment gap has narrowed but not closed.</span> TFLite and TensorFlow.js are still the more mature paths for mobile and browser, and TPUs are genuinely TensorFlow's home ground. Everywhere else PyTorch has caught up. And with ONNX export, the framework you train in does not have to be the one you serve in.</p>
 
-<p><span class="k">Keras is orthogonal, not a third option.</span> Keras 3 runs on TensorFlow, PyTorch, or JAX, so "Keras versus PyTorch" is a category error — you can write Keras and have PyTorch execute it.</p>
+<p><span class="k">Keras is not a third option.</span> Keras 3 runs on TensorFlow, PyTorch, or JAX, so "Keras versus PyTorch" is the wrong comparison — you can write Keras and have PyTorch run it.</p>
 
-<div class="gotcha"><strong>If you are asked to pick:</strong> new work starts in PyTorch unless something specific pulls the other way — an existing TensorFlow codebase, a TPU training budget, or a mobile/browser target where TFLite or TF.js is the shortest path. Being fluent in the differences matters more than having shipped both, since integrating into an existing platform means inheriting whichever is already there.</div>
+<div class="gotcha"><strong>If you are asked to pick:</strong> start new work in PyTorch unless something specific pulls the other way — an existing TensorFlow codebase, a TPU training budget, or a mobile or browser target where TFLite or TF.js is the shortest path. Knowing the differences matters more than having shipped both, because joining an existing platform means inheriting whichever one is already there.</div>
 </div></details>
 
 <details class="cx"><summary>TensorFlow</summary><div class="cx-body">
-<p>Graph-first from the start, which made deployment and cross-platform export strong early. TF2 adopted eager execution by default, narrowing the usability gap with PyTorch.</p>
-<p>Its remaining strength is the deployment surface — TFLite for mobile, TensorFlow.js for browsers, TFX for pipelines, and TPU support — and a large body of existing production code.</p>
+<p>Graph-first from the start, which made deployment and cross-platform export strong early on. TF2 made eager execution the default, closing much of the usability gap with PyTorch.</p>
+<p>Its remaining strength is where it can run: TFLite for mobile, TensorFlow.js for browsers, TFX for pipelines, and TPU support. It also has a large body of existing production code.</p>
 <p class="when"><strong>Choose it when:</strong> you are maintaining existing TensorFlow systems, targeting mobile or browser through TFLite/TF.js, or standardised on TFX. Rarely the choice for a greenfield research project.</p>
-<p style="font-size:.88rem;color:#6b7480;margin-top:.6em">The dimension-by-dimension comparison against PyTorch — execution, layout, weight formats, deployment, and the conversion traps — sits inside the <strong>PyTorch</strong> entry above.</p>
+<p style="font-size:.88rem;color:#6b7480;margin-top:.6em">The point-by-point comparison against PyTorch — execution, layout, weight formats, deployment, and the conversion traps — sits inside the <strong>PyTorch</strong> entry above.</p>
 </div></details>
 
 <details class="cx"><summary>JAX</summary><div class="cx-body">
-<p>NumPy-like functions plus composable transformations: <code>grad</code> for derivatives, <code>jit</code> for XLA compilation, <code>vmap</code> for automatic batching, <code>pmap</code> and <code>shard_map</code> for parallelism. Functions must be pure, and state is passed explicitly rather than held in objects.</p>
-<p>That purity constraint is the whole trade. It is unfamiliar and occasionally awkward, and it is what makes the transformations compose so cleanly and the compiler optimise so aggressively.</p>
-<p class="when"><strong>Choose it when:</strong> you are doing research where custom gradients or unusual parallelism matter, running on TPUs, or working in a lab already standardised on it. Flax and Optax supply the layers and optimisers.</p>
+<p>NumPy-style functions plus transformations you can stack: <code>grad</code> for derivatives, <code>jit</code> for XLA compilation, <code>vmap</code> for automatic batching, <code>pmap</code> and <code>shard_map</code> for parallelism. Functions must be pure, and state is passed in explicitly rather than held in objects.</p>
+<p>That purity rule is the whole trade-off. It is unfamiliar and sometimes awkward, and it is exactly what lets the transformations stack so cleanly and the compiler optimise so aggressively.</p>
+<p class="when"><strong>Choose it when:</strong> you are doing research where custom gradients or unusual parallelism matter, running on TPUs, or working in a lab that already uses it. Flax and Optax supply the layers and optimisers.</p>
 </div></details>
 
 <details class="cx"><summary>Keras</summary><div class="cx-body">
 <p>A high-level model-building API. Keras 3 is backend-agnostic and runs on TensorFlow, PyTorch, or JAX, so the same model code is portable across all three.</p>
-<p><code>model.fit()</code> hides the training loop entirely — excellent for standard supervised setups, limiting the moment you need a custom loop, unusual loss scheduling, or multiple optimisers.</p>
-<p class="when"><strong>Choose it when:</strong> the task is conventional, you value speed of authorship, or you are teaching. Reach past it when the training loop itself becomes the interesting part.</p>
+<p><code>model.fit()</code> hides the training loop completely. That is excellent for standard supervised setups, and limiting the moment you need a custom loop, unusual loss scheduling, or more than one optimiser.</p>
+<p class="when"><strong>Choose it when:</strong> the task is standard, you want to write it quickly, or you are teaching. Go past it when the training loop itself becomes the interesting part.</p>
 </div></details>
 
 <h2 class="fw-sec" id="scaling">Training and scaling</h2>
 <p class="fw-lead">Removing boilerplate and getting a model across more than one GPU. These sit on top of PyTorch rather than replacing it.</p>
 
 <details class="cx"><summary>PyTorch Lightning</summary><div class="cx-body">
-<p>Restructures training into a <code>LightningModule</code> — you write <code>training_step</code>, <code>validation_step</code>, and <code>configure_optimizers</code>, and the Trainer handles device placement, distributed setup, checkpointing, logging, and early stopping.</p>
-<p>The benefit is consistency across a team: every project looks the same, and the parts everyone gets subtly wrong are written once. The cost is a framework whose control flow you must learn before you can override it.</p>
-<p class="when"><strong>Choose it when:</strong> you run many experiments and want structure enforced. Skip it for a single bespoke training run where the loop is the research.</p>
+<p>Reorganises training into a <code>LightningModule</code>. You write <code>training_step</code>, <code>validation_step</code>, and <code>configure_optimizers</code>; the Trainer handles device placement, distributed setup, checkpointing, logging, and early stopping.</p>
+<p>The benefit is consistency across a team: every project looks the same, and the parts people usually get subtly wrong are written once. The cost is that you have to learn the framework's control flow before you can override it.</p>
+<p class="when"><strong>Choose it when:</strong> you run many experiments and want the structure enforced. Skip it for a one-off training run where the loop is the research.</p>
 </div></details>
 
 <details class="cx"><summary>Hugging Face Accelerate</summary><div class="cx-body">
 <p>A thin layer that makes one training script run unchanged on CPU, single GPU, multi-GPU, multi-node, or TPU. You keep your own loop; <code>accelerator.prepare()</code> wraps the model, optimiser, and dataloaders, and <code>accelerator.backward()</code> replaces <code>loss.backward()</code>.</p>
-<p>Its appeal is how little it takes over. The loop stays yours and stays readable, which is why it is often the better first step than a full framework.</p>
-<p class="when"><strong>Choose it when:</strong> you want distributed training without restructuring your code or adopting an abstraction.</p>
+<p>Its appeal is how little it takes over. The loop stays yours and stays readable, which usually makes it a better first step than a full framework.</p>
+<p class="when"><strong>Choose it when:</strong> you want distributed training without restructuring your code or adopting a new abstraction.</p>
 </div></details>
 
 <details class="cx"><summary>FSDP — Fully Sharded Data Parallel</summary><div class="cx-body">
 <p>Built into PyTorch. Shards parameters, gradients, and optimiser state across ranks, gathering each layer's parameters only while it is being used and releasing them afterwards.</p>
-<p>Plain DDP replicates the whole model on every GPU, so the largest trainable model is bounded by one device's memory. Sharding removes that ceiling — the reason FSDP is the default path to training models larger than a single accelerator.</p>
+<p>Plain DDP copies the whole model onto every GPU, so the biggest model you can train is limited by one device's memory. Sharding removes that ceiling, which is why FSDP is the standard way to train models larger than a single accelerator.</p>
 <p class="when"><strong>Choose it when:</strong> the model no longer fits comfortably on one GPU with its optimiser state, and you want the in-tree PyTorch option.</p>
 </div></details>
 
 <details class="cx"><summary>DeepSpeed</summary><div class="cx-body">
-<p>Microsoft's training library, best known for ZeRO — three progressive stages sharding optimiser state, then gradients, then parameters — plus CPU and NVMe offload, activation checkpointing, and a fast fused-kernel inference path.</p>
-<p>Offload is what distinguishes it: parameters can spill to CPU memory or disk, letting you train models that genuinely do not fit in aggregate GPU memory, at a real throughput cost.</p>
+<p>Microsoft's training library, best known for ZeRO: three stages that shard optimiser state, then gradients, then parameters. It also adds CPU and NVMe offload, activation checkpointing, and a fast fused-kernel inference path.</p>
+<p>Offload is what sets it apart: parameters can spill to CPU memory or disk, so you can train models that genuinely do not fit in all your GPU memory combined. It costs real throughput.</p>
 <p class="when"><strong>Choose it when:</strong> you are training at a scale where FSDP is not enough, or you need offload to make the run possible at all.</p>
 </div></details>
 
 <details class="cx"><summary>Megatron-LM</summary><div class="cx-body">
 <p>NVIDIA's library for very large language model training, providing tensor parallelism (splitting individual matrix multiplications across GPUs) alongside pipeline and data parallelism.</p>
-<p>Combining all three — often called 3-D parallelism — is how frontier-scale training is actually done. It is expert-facing and configuration-heavy by design.</p>
+<p>Combining all three, often called 3-D parallelism, is how frontier-scale training is actually done. It is built for experts and takes a lot of configuration by design.</p>
 <p class="when"><strong>Choose it when:</strong> you are pretraining at a scale where tensor parallelism is required. For fine-tuning, this is the wrong tool.</p>
 </div></details>
 
 <details class="cx"><summary>Ray &amp; Ray Train</summary><div class="cx-body">
 <p>A general distributed computing framework for Python, with libraries layered on it: Ray Train for distributed training, Ray Tune for hyperparameter search, Ray Serve for deployment, and Ray Data for distributed preprocessing.</p>
-<p>Its distinctive property is that it orchestrates the whole workload rather than only the training step — data loading, training, and tuning under one cluster abstraction.</p>
-<p class="when"><strong>Choose it when:</strong> you need cluster-wide orchestration or large-scale hyperparameter search, not merely multi-GPU training.</p>
+<p>What sets it apart is that it runs the whole workload, not just the training step: data loading, training, and tuning all under one cluster.</p>
+<p class="when"><strong>Choose it when:</strong> you need cluster-wide orchestration or large-scale hyperparameter search, not just multi-GPU training.</p>
 </div></details>
 
 <h2 class="fw-sec" id="models">Model libraries</h2>
 <p class="fw-lead">Pretrained weights and architectures. These are why almost nobody trains from scratch any more.</p>
 
 <details class="cx"><summary>Hugging Face Transformers</summary><div class="cx-body">
-<p>A uniform interface over thousands of pretrained models — text, vision, audio, multimodal — with <code>AutoModel</code>, <code>AutoTokenizer</code>, and <code>AutoProcessor</code> resolving the right classes from a model ID.</p>
-<p>Its real contribution is standardisation. Swapping architectures becomes a string change, and the ecosystem around it — PEFT, TRL, Accelerate, Datasets — assumes the same interfaces.</p>
-<p class="when"><strong>Choose it when:</strong> you are working with any pretrained model. This is effectively unavoidable and rightly so.</p>
+<p>One consistent interface over thousands of pretrained models across text, vision, audio, and multimodal. <code>AutoModel</code>, <code>AutoTokenizer</code>, and <code>AutoProcessor</code> pick the right classes from a model ID.</p>
+<p>Its real contribution is standardisation. Swapping architectures becomes a change of one string, and the tools around it — PEFT, TRL, Accelerate, Datasets — all assume the same interfaces.</p>
+<p class="when"><strong>Choose it when:</strong> you are working with any pretrained model. Effectively unavoidable, and rightly so.</p>
 </div></details>
 
 <details class="cx"><summary>Diffusers</summary><div class="cx-body">
-<p>The equivalent for diffusion models: pipelines, schedulers, UNet and DiT backbones, VAEs, and ControlNet, composable so you can swap a sampler or attach an adapter without rewriting the pipeline.</p>
-<p>The separation of scheduler from model is the good design decision — sampling strategy becomes a runtime choice rather than something baked into the weights.</p>
+<p>The same idea for diffusion models: pipelines, schedulers, UNet and DiT backbones, VAEs, and ControlNet. The pieces slot together, so you can swap a sampler or attach an adapter without rewriting the pipeline.</p>
+<p>Keeping the scheduler separate from the model is the good design decision: the sampling strategy becomes a runtime choice rather than something baked into the weights.</p>
 <p class="when"><strong>Choose it when:</strong> generating or fine-tuning images, video, or audio with diffusion.</p>
 </div></details>
 
@@ -189,14 +189,14 @@ table.fw-vs td:first-child { font-weight: 600; white-space: nowrap; background: 
 </div></details>
 
 <details class="cx"><summary>torchvision, torchaudio, torchtext</summary><div class="cx-body">
-<p>PyTorch's domain libraries: datasets, transforms, common architectures, and — importantly — operators like <code>nms</code>, <code>roi_align</code>, and <code>box_iou</code> implemented as fast, differentiable CUDA kernels.</p>
-<p>Even in projects that get models elsewhere, <code>torchvision.ops</code> and <code>transforms.v2</code> remain worth using directly rather than reimplementing.</p>
+<p>PyTorch's domain libraries: datasets, transforms, common architectures, and — importantly — operators such as <code>nms</code>, <code>roi_align</code>, and <code>box_iou</code> written as fast, differentiable CUDA kernels.</p>
+<p>Even when the models come from elsewhere, <code>torchvision.ops</code> and <code>transforms.v2</code> are worth using directly rather than rewriting.</p>
 <p class="when"><strong>Choose it when:</strong> you need standard vision or audio primitives that should be fast and correct.</p>
 </div></details>
 
 <details class="cx"><summary>sentence-transformers</summary><div class="cx-body">
 <p>Wraps transformer encoders for producing sentence and document embeddings, with pooling, normalisation, similarity search, and training objectives for retrieval built in.</p>
-<p>It also supplies cross-encoder rerankers — the two-stage retrieve-then-rerank pattern that most RAG quality improvements come from.</p>
+<p>It also supplies cross-encoder rerankers, which give you the two-stage retrieve-then-rerank pattern that most RAG quality improvements come from.</p>
 <p class="when"><strong>Choose it when:</strong> building semantic search, retrieval, deduplication, or clustering over text.</p>
 </div></details>
 
@@ -205,40 +205,40 @@ table.fw-vs td:first-child { font-weight: 600; white-space: nowrap; background: 
 
 <details class="cx"><summary>PEFT</summary><div class="cx-body">
 <p>Parameter-efficient fine-tuning: LoRA, QLoRA, prefix tuning, and adapters, integrated with Transformers so a base model becomes trainable with a few lines and a config.</p>
-<p>The operational win is deployment shape. Adapters are megabytes rather than gigabytes, compose with each other, and swap at inference — one base model can serve many specialisations.</p>
+<p>The practical win is size. Adapters are megabytes rather than gigabytes, they combine with each other, and they can be swapped at inference, so one base model can serve many specialisations.</p>
 <p class="when"><strong>Choose it when:</strong> fine-tuning anything large. Full fine-tuning is rarely worth its cost unless you are changing the model's behaviour fundamentally.</p>
 </div></details>
 
 <details class="cx"><summary>TRL</summary><div class="cx-body">
 <p>Hugging Face's library for the post-training stack: supervised fine-tuning, reward modelling, PPO, and the simpler preference methods such as DPO and its variants.</p>
-<p>DPO in particular removed the need for a separate reward model and an RL loop, which is why preference tuning became something a small team can actually run.</p>
+<p>DPO in particular removed the need for a separate reward model and an RL loop, which is why a small team can now run preference tuning at all.</p>
 <p class="when"><strong>Choose it when:</strong> aligning a model to preferences or instruction data rather than to labels.</p>
 </div></details>
 
 <details class="cx"><summary>Unsloth</summary><div class="cx-body">
-<p>Optimised fine-tuning kernels that cut memory use and increase throughput substantially versus a naive PEFT setup, while keeping a Transformers-compatible interface.</p>
-<p>Its practical effect is fitting a fine-tune onto hardware that otherwise could not run it — a single consumer GPU rather than a rented cluster.</p>
+<p>Optimised fine-tuning kernels that cut memory use and raise throughput well beyond a plain PEFT setup, while keeping a Transformers-compatible interface.</p>
+<p>The practical effect is fitting a fine-tune onto hardware that could not otherwise run it: a single consumer GPU rather than a rented cluster.</p>
 <p class="when"><strong>Choose it when:</strong> you are fine-tuning on constrained hardware and the speedup decides feasibility.</p>
 </div></details>
 
 <details class="cx"><summary>Axolotl</summary><div class="cx-body">
 <p>A configuration-driven fine-tuning tool: a YAML file specifies the model, dataset, method, and hyperparameters, and it orchestrates the run across the underlying libraries.</p>
-<p>The value is reproducibility. The config <em>is</em> the experiment, so runs can be diffed, reviewed, and repeated — which matters more than it sounds once you have done thirty of them.</p>
-<p class="when"><strong>Choose it when:</strong> running many fine-tuning variants and wanting each to be a reviewable artefact rather than an edited script.</p>
+<p>The value is reproducibility. The config <em>is</em> the experiment, so runs can be diffed, reviewed, and repeated. That matters more than it sounds once you have done thirty of them.</p>
+<p class="when"><strong>Choose it when:</strong> running many fine-tuning variants and want each one to be a reviewable file rather than an edited script.</p>
 </div></details>
 
 <h2 class="fw-sec" id="serving">Inference and serving</h2>
 <p class="fw-lead">Training frameworks make poor serving engines. This layer exists because throughput, latency, and memory behaviour at inference are a different problem.</p>
 
 <details class="cx"><summary>vLLM</summary><div class="cx-body">
-<p>An LLM serving engine built around PagedAttention, which manages the KV cache in fixed-size blocks like virtual memory pages rather than as one contiguous allocation per sequence.</p>
-<p>That removes the fragmentation and over-allocation that limited concurrency, and combined with continuous batching it delivers order-of-magnitude throughput gains over a naive <code>model.generate</code> loop. It also serves an OpenAI-compatible API.</p>
+<p>An LLM serving engine built around PagedAttention, which stores the KV cache in fixed-size blocks like virtual memory pages rather than one continuous block per sequence.</p>
+<p>That removes the fragmentation and over-allocation that used to limit concurrency. Together with continuous batching, it gives throughput gains of around ten times over a plain <code>model.generate</code> loop. It also serves an OpenAI-compatible API.</p>
 <p class="when"><strong>Choose it when:</strong> serving an open-weight LLM to more than one user. The default answer for self-hosted inference.</p>
 </div></details>
 
 <details class="cx"><summary>SGLang</summary><div class="cx-body">
 <p>A serving engine with a front-end language for structured LLM programs, notable for RadixAttention — automatic prefix-cache reuse across requests that share a prompt prefix.</p>
-<p>That property matters for agent and RAG workloads, where every request repeats a long system prompt and tool definitions. The shared prefix is computed once rather than per request.</p>
+<p>That matters for agent and RAG workloads, where every request repeats a long system prompt and the same tool definitions. The shared prefix is computed once rather than on every request.</p>
 <p class="when"><strong>Choose it when:</strong> your traffic has heavily shared prefixes, or you need structured generation and complex multi-call control flow.</p>
 </div></details>
 
@@ -250,7 +250,7 @@ table.fw-vs td:first-child { font-weight: 600; white-space: nowrap; background: 
 
 <details class="cx"><summary>ONNX Runtime</summary><div class="cx-body">
 <p>Executes models in the ONNX interchange format across CPUs, GPUs, mobile chips, and specialised accelerators, with graph optimisations and quantisation support.</p>
-<p>Its value is decoupling: train in PyTorch, export once, and run wherever — which matters most for edge and cross-platform deployment where the training stack cannot follow.</p>
+<p>Its value is separation: train in PyTorch, export once, and run anywhere. That matters most for edge and cross-platform deployment, where the training stack cannot follow.</p>
 <p class="when"><strong>Choose it when:</strong> deploying to CPU, mobile, or heterogeneous hardware, or when the serving environment cannot host PyTorch.</p>
 </div></details>
 
@@ -261,41 +261,41 @@ table.fw-vs td:first-child { font-weight: 600; white-space: nowrap; background: 
 </div></details>
 
 <details class="cx"><summary>torch.compile &amp; TorchScript</summary><div class="cx-body">
-<p><code>torch.compile</code> traces a model, fuses operations, and generates optimised kernels — often a substantial speedup from a single line, with no change to your code. TorchScript was the older export path and is largely superseded.</p>
-<p>Graph breaks are the thing to watch: data-dependent Python control flow forces the compiler to fall back, silently reducing the benefit. Compiling also costs time on the first call.</p>
+<p><code>torch.compile</code> traces a model, fuses operations, and generates optimised kernels. It is often a substantial speedup from a single line, with no other change to your code. TorchScript was the older export path and has largely been replaced.</p>
+<p>Graph breaks are the thing to watch. Python control flow that depends on data forces the compiler to fall back, quietly reducing the benefit. Compiling also costs time on the first call.</p>
 <p class="when"><strong>Choose it when:</strong> you want faster PyTorch without leaving PyTorch. Usually the first optimisation to try.</p>
 </div></details>
 
 <details class="cx"><summary>Triton Inference Server</summary><div class="cx-body">
-<p>NVIDIA's general-purpose serving system: hosts models from multiple frameworks behind one endpoint, with dynamic batching, concurrent model execution, versioning, and model ensembles.</p>
+<p>NVIDIA's general-purpose serving system. It hosts models from several frameworks behind one endpoint, with dynamic batching, concurrent model execution, versioning, and model ensembles.</p>
 <p>Not to be confused with OpenAI's Triton, which is a language for writing GPU kernels. The names collide constantly.</p>
-<p class="when"><strong>Choose it when:</strong> serving several models, possibly from different frameworks, behind consistent infrastructure. vLLM is the better pick for LLMs specifically.</p>
+<p class="when"><strong>Choose it when:</strong> serving several models, possibly from different frameworks, behind one piece of infrastructure. vLLM is the better pick for LLMs specifically.</p>
 </div></details>
 
 <h2 class="fw-sec" id="classical">Classical ML</h2>
 <p class="fw-lead">Still the right answer for most tabular problems, and still where a large share of production value sits.</p>
 
 <details class="cx"><summary>scikit-learn</summary><div class="cx-body">
-<p>Classical algorithms behind one consistent <code>fit</code>/<code>predict</code> interface, with pipelines that chain preprocessing and estimation into a single fitted object, plus cross-validation and model selection.</p>
-<p>Pipelines are the underrated part: they apply preprocessing inside each CV fold, which is what prevents the leakage that quietly inflates scores when you scale or impute before splitting.</p>
+<p>Classical algorithms behind one consistent <code>fit</code>/<code>predict</code> interface. Pipelines chain preprocessing and estimation into a single fitted object, and there is cross-validation and model selection alongside.</p>
+<p>Pipelines are the underrated part. They apply preprocessing inside each cross-validation fold, which prevents the leakage that quietly inflates scores when you scale or impute before splitting.</p>
 <p class="when"><strong>Choose it when:</strong> the data is tabular, or you need a baseline before anything deeper. Almost every project should start here.</p>
 </div></details>
 
 <details class="cx"><summary>XGBoost</summary><div class="cx-body">
 <p>Gradient-boosted trees with regularisation, sparsity handling, and efficient parallel training. The default strong model for structured data.</p>
-<p>On tabular problems it routinely beats neural networks with far less tuning and far less data, which remains true despite periodic claims otherwise.</p>
+<p>On tabular problems it routinely beats neural networks with far less tuning and far less data. That is still true, despite regular claims otherwise.</p>
 <p class="when"><strong>Choose it when:</strong> you have tabular data and want the strongest model quickly.</p>
 </div></details>
 
 <details class="cx"><summary>LightGBM</summary><div class="cx-body">
-<p>Microsoft's boosting implementation, using histogram-based splitting and leaf-wise growth to train considerably faster than XGBoost on large datasets, with native categorical handling.</p>
-<p>Leaf-wise growth is more accurate per tree and more prone to overfitting on small data, so <code>num_leaves</code> and <code>min_data_in_leaf</code> matter more than they do elsewhere.</p>
+<p>Microsoft's boosting implementation. Histogram-based splitting and leaf-wise growth make it train much faster than XGBoost on large datasets, and it handles categorical features natively.</p>
+<p>Leaf-wise growth is more accurate per tree and overfits more easily on small data, so <code>num_leaves</code> and <code>min_data_in_leaf</code> matter more here than elsewhere.</p>
 <p class="when"><strong>Choose it when:</strong> datasets are large enough that XGBoost training time is a bottleneck.</p>
 </div></details>
 
 <details class="cx"><summary>CatBoost</summary><div class="cx-body">
-<p>Yandex's boosting library, built around ordered target statistics for categorical features and ordered boosting to reduce the prediction shift that causes overfitting.</p>
-<p>It handles high-cardinality categorical columns natively and tends to perform well with default parameters, which makes it a strong first attempt on messy business data.</p>
+<p>Yandex's boosting library. It uses ordered target statistics for categorical features, and ordered boosting to reduce the prediction shift that causes overfitting.</p>
+<p>It handles categorical columns with many distinct values natively, and tends to do well on default settings, which makes it a strong first attempt on messy business data.</p>
 <p class="when"><strong>Choose it when:</strong> the data is heavily categorical and you would rather not hand-engineer encodings.</p>
 </div></details>
 
@@ -303,25 +303,25 @@ table.fw-vs td:first-child { font-weight: 600; white-space: nowrap; background: 
 <p class="fw-lead">The infrastructure that makes results reproducible and comparisons meaningful.</p>
 
 <details class="cx"><summary>Weights &amp; Biases</summary><div class="cx-body">
-<p>Experiment tracking with hosted dashboards — metrics, hyperparameters, system utilisation, artefacts, and sweeps for hyperparameter search, plus report pages for sharing findings.</p>
-<p>Its practical value is answering "what exactly produced this checkpoint" months later, and making runs comparable rather than remembered.</p>
+<p>Experiment tracking with hosted dashboards: metrics, hyperparameters, system usage, artefacts, and sweeps for hyperparameter search, plus report pages for sharing findings.</p>
+<p>Its practical value is being able to answer "what exactly produced this checkpoint" months later, and making runs comparable rather than remembered.</p>
 <p class="when"><strong>Choose it when:</strong> a team runs many experiments and needs shared visibility.</p>
 </div></details>
 
 <details class="cx"><summary>MLflow</summary><div class="cx-body">
 <p>Open-source tracking, project packaging, model registry, and deployment. Self-hostable, which is often the deciding factor.</p>
-<p>The registry is the piece that matters most in regulated or audited settings — versioned models with stage transitions and lineage back to the run that produced them.</p>
+<p>The registry matters most in regulated or audited settings: versioned models with stage transitions and a trail back to the run that produced them.</p>
 <p class="when"><strong>Choose it when:</strong> you need self-hosting, or a model registry as part of a governed release process.</p>
 </div></details>
 
 <details class="cx"><summary>Optuna</summary><div class="cx-body">
-<p>Hyperparameter optimisation with a define-by-run API — the search space is expressed in ordinary Python control flow — plus Bayesian sampling and pruning of unpromising trials.</p>
-<p>Pruning is where the saving comes from: trials that are clearly losing are stopped early, so the budget concentrates on candidates that might win.</p>
+<p>Hyperparameter optimisation with a define-by-run API, meaning the search space is written in ordinary Python control flow. It also does Bayesian sampling and prunes unpromising trials.</p>
+<p>Pruning is where the saving comes from. Trials that are clearly losing get stopped early, so the budget goes to candidates that might win.</p>
 <p class="when"><strong>Choose it when:</strong> tuning matters enough to automate and grid search would be wasteful.</p>
 </div></details>
 
 <h2 class="fw-sec" id="code">Code Snippets</h2>
-<p class="fw-lead">The characteristic idiom of each framework, side by side. Seeing the same job expressed four ways is usually more informative than any description of the differences.</p>
+<p class="fw-lead">The typical style of each framework, side by side. Seeing the same job written four ways usually tells you more than any description of the differences.</p>
 
 <details class="cx code" id="code-core"><summary>Core frameworks — the same model, four ways</summary><div class="cx-body">
 <div class="snip"><p class="cap">PyTorch — explicit loop, you own every step</p><pre><code>import torch, torch.nn as nn, torch.nn.functional as F
