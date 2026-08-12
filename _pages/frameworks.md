@@ -23,6 +23,20 @@ table.fw-map td:first-child { font-weight: 600; white-space: nowrap; background:
   margin-top: .6em; font-size: .89rem; color: #3f5a37; background: #f1f7ee;
   border-left: 3px solid #4a6741; padding: .5em .75em; border-radius: 0 3px 3px 0;
 }
+.cx-body .sub {
+  margin: 1.4em 0 .5em; font-size: .76rem; text-transform: uppercase; letter-spacing: .08em;
+  color: #7c848b; font-weight: 700;
+}
+table.fw-vs { width: 100%; border-collapse: collapse; font-size: .86rem; margin: .3em 0 1em; display: block; overflow-x: auto; }
+table.fw-vs th, table.fw-vs td { border: 1px solid #e3e7ea; padding: .45em .65em; text-align: left; vertical-align: top; }
+table.fw-vs thead th { background: #f4f7f8; font-size: .8rem; }
+table.fw-vs th.pt { background: #eef5f8; color: #1f6f8b; }
+table.fw-vs th.tf { background: #f8f3e6; color: #7a601b; }
+table.fw-vs td:first-child { font-weight: 600; white-space: nowrap; background: #fafbfb; width: 21%; }
+.cx-body .gotcha {
+  margin-top: .6em; font-size: .89rem; color: #7a4a44; background: #fdf6f5;
+  border-left: 3px solid #b83227; padding: .5em .75em; border-radius: 0 3px 3px 0;
+}
 </style>
 
 <p class="stack-lead">The frameworks that actually get used, grouped by which layer of the stack they occupy. Most confusion in this space comes from comparing tools that solve different problems — a training abstraction against a serving engine, or a model library against the tensor framework underneath it.</p>
@@ -61,12 +75,45 @@ table.fw-map td:first-child { font-weight: 600; white-space: nowrap; background:
 <p>Defines the computation graph as the code runs, so a model is ordinary Python you can step through with a debugger and inspect with <code>print</code>. Autograd records operations on tensors and differentiates them on the backward pass.</p>
 <p>It won research first and then production. <code>torch.compile</code> closed most of the historical performance gap by tracing and fusing graphs ahead of execution, which removed the main argument for static-graph frameworks.</p>
 <p class="when"><strong>Choose it when:</strong> almost always. It is the default for research, the majority of new production work, and nearly every model library assumes it.</p>
+
+<p class="sub">PyTorch versus TensorFlow</p>
+
+<p>The framing that used to settle this — dynamic graph against static graph — no longer holds. TF2 is eager by default and PyTorch compiles ahead of execution, so both now do both. What is left is a set of concrete differences that still change day-to-day work.</p>
+
+<table class="fw-vs">
+<thead><tr><th>Dimension</th><th class="pt">PyTorch</th><th class="tf">TensorFlow</th></tr></thead>
+<tbody>
+<tr><td>Execution</td><td>Eager by default; <code>torch.compile</code> traces and fuses into a graph when you ask for it</td><td>Eager by default since TF2; <code>@tf.function</code> traces into a static graph for speed and export</td></tr>
+<tr><td>Debugging</td><td>Ordinary Python — breakpoints, <code>print</code>, and stack traces all work inside the model</td><td>Fine eagerly; inside a traced <code>tf.function</code> the Python only runs during tracing, which surprises people</td></tr>
+<tr><td>Tensor layout</td><td><code>NCHW</code> — channels before spatial dimensions</td><td><code>NHWC</code> — channels last</td></tr>
+<tr><td>Model definition</td><td>Subclass <code>nn.Module</code>, write <code>forward</code>; the training loop is yours to write</td><td>Keras <code>Sequential</code>/functional/subclassing, with <code>model.fit()</code> supplying the loop</td></tr>
+<tr><td>Shapes</td><td>Inferred at runtime from real tensors, so errors surface on the first forward pass</td><td>Can be known at build time, which catches some errors earlier and makes others more cryptic</td></tr>
+<tr><td>Weight format</td><td><code>state_dict</code> — a plain dict of tensors, saved via <code>torch.save</code> or safetensors</td><td>SavedModel — graph plus weights plus signatures in one directory, self-describing</td></tr>
+<tr><td>Deployment</td><td>TorchServe, ONNX export, ExecuTorch, TorchScript, plus <code>torch.compile</code> backends</td><td>TF Serving, TFLite for mobile, TensorFlow.js for browsers, TFX for full pipelines</td></tr>
+<tr><td>Accelerators</td><td>CUDA and ROCm first class; Apple <code>mps</code>; TPU only through PyTorch/XLA</td><td>CUDA plus native, first-class TPU support</td></tr>
+<tr><td>Distributed</td><td>DDP, FSDP, and the DeepSpeed and Accelerate ecosystems</td><td><code>tf.distribute</code> strategies, tightly integrated with TPU pods</td></tr>
+<tr><td>Ecosystem gravity</td><td>Nearly all new research and model releases — Transformers, Diffusers, timm — land here first</td><td>Large installed base in existing production; fewer new releases target it</td></tr>
+</tbody>
+</table>
+
+<p class="sub">What this means in practice</p>
+
+<p><span class="k">The layout difference is the one that bites.</span> A convolution weight is <code>[out, in, kH, kW]</code> in PyTorch and <code>[kH, kW, in, out]</code> in TensorFlow. Converting between them means transposing every conv and dense weight, and getting it subtly wrong produces a model that runs, produces plausible-looking output, and is simply incorrect. This is why conversion goes through ONNX or a purpose-built converter rather than by hand.</p>
+
+<p><span class="k">Tracing is where TensorFlow's mental model diverges.</span> Inside a <code>tf.function</code>, Python control flow executes once, while tracing, and is then baked into the graph — so a <code>print</code> fires once rather than every call, and a Python <code>if</code> on a tensor value silently freezes one branch. <code>tf.cond</code> and <code>tf.while_loop</code> exist for exactly this. PyTorch's <code>torch.compile</code> handles the same situation differently: it falls back to eager execution on anything it cannot trace (a graph break), which costs performance rather than correctness.</p>
+
+<p><span class="k">The deployment gap has narrowed but not closed.</span> TFLite and TensorFlow.js remain the more mature paths for mobile and browser, and TPUs are genuinely TensorFlow's home ground. Everywhere else PyTorch has caught up, and ONNX export means the training framework need not decide the serving one.</p>
+
+<p><span class="k">Keras is orthogonal, not a third option.</span> Keras 3 runs on TensorFlow, PyTorch, or JAX, so "Keras versus PyTorch" is a category error — you can write Keras and have PyTorch execute it.</p>
+
+<div class="gotcha"><strong>If you are asked to pick:</strong> new work starts in PyTorch unless something specific pulls the other way — an existing TensorFlow codebase, a TPU training budget, or a mobile/browser target where TFLite or TF.js is the shortest path. Being fluent in the differences matters more than having shipped both, since integrating into an existing platform means inheriting whichever is already there.</div>
 </div></details>
 
 <details class="cx"><summary>TensorFlow</summary><div class="cx-body">
 <p>Graph-first from the start, which made deployment and cross-platform export strong early. TF2 adopted eager execution by default, narrowing the usability gap with PyTorch.</p>
 <p>Its remaining strength is the deployment surface — TFLite for mobile, TensorFlow.js for browsers, TFX for pipelines, and TPU support — and a large body of existing production code.</p>
 <p class="when"><strong>Choose it when:</strong> you are maintaining existing TensorFlow systems, targeting mobile or browser through TFLite/TF.js, or standardised on TFX. Rarely the choice for a greenfield research project.</p>
+<p style="font-size:.88rem;color:#6b7480;margin-top:.6em">The dimension-by-dimension comparison against PyTorch — execution, layout, weight formats, deployment, and the conversion traps — sits inside the <strong>PyTorch</strong> entry above.</p>
 </div></details>
 
 <details class="cx"><summary>JAX</summary><div class="cx-body">
