@@ -21,7 +21,7 @@ Currently at Infiswift, I am working with [Rahul Garg](https://www.linkedin.com/
 
 Web Links for work portfolio:
 
-[Resume](https://drive.google.com/file/d/1S4DCs-e5daRELRfqEjJPbFkjNlEhRwex/view?usp=share_link)
+[Resume](/files/Kiran-Davuluri-Resume.pdf) (PDF, hosted here)
 
 [CV](https://drive.google.com/file/d/1CfEzSRm9qq0q56GY-pWFhLHzBt1oCyKK/view?usp=share_link)
 
