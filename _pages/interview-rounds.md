@@ -37,6 +37,31 @@ author_profile: true
 .rnd ul.ask li::marker { color: #4a6741; }
 
 .ir-sec { margin-top: 2.6em; padding-top: .5em; border-top: 2px solid #eee; scroll-margin-top: 24px; }
+.rnd details.rq {
+  border: 1px solid #e2e6ea; border-left: 4px solid #6b4a8b; border-radius: 5px;
+  background: #fcfbfd; margin-bottom: .6em;
+}
+.rnd details.rq > summary {
+  list-style: none; cursor: pointer; padding: .6em .9em; font-weight: 600; font-size: .93rem;
+  color: #24313b; display: flex; align-items: center; gap: .5em; border-radius: 5px;
+}
+.rnd details.rq > summary::-webkit-details-marker { display: none; }
+.rnd details.rq > summary::before { content: "\25B8"; color: #9aa4ad; font-size: .82em; transition: transform .15s; }
+.rnd details.rq[open] > summary::before { transform: rotate(90deg); }
+.rnd details.rq > summary:hover { background: #f5f2f8; color: #5d3f7a; }
+.rnd details.rq[open] > summary { border-bottom: 1px solid #eef1f3; color: #5d3f7a; }
+.rnd details.rq .rq-body { padding: .7em .95em .9em; }
+.rnd details.rq .rq-src {
+  font-size: .82rem; color: #6b7480; margin: 0 0 .6em; padding-left: .6em;
+  border-left: 2px solid #ddd6e6;
+}
+.rnd details.rq ol { margin: 0 0 0 1.2em; padding: 0; }
+.rnd details.rq li { margin-bottom: .42em; font-size: .93rem; line-height: 1.58; }
+.rnd .rq-count {
+  display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .06em;
+  font-weight: 700; color: #7a601b; background: #f8f3e6; border: 1px solid #e8dcc2;
+  border-radius: 11px; padding: .16em .6em; margin-left: .4em;
+}
 .ir-note {
   border: 1px solid #e0e6ea; border-left: 3px solid #8a6d1f; background: #fbf9f2;
   padding: .85em 1.1em; border-radius: 0 4px 4px 0; margin: 1.6em 0; font-size: .93rem; color: #55504a;
@@ -257,6 +282,141 @@ figure.fig figcaption { font-size: .8rem; color: #7a8189; text-align: center; ma
 <li>Any story where every problem was caused by someone else.</li>
 <li>Delivery so rehearsed it stops sounding like something that happened.</li>
 </ul>
+
+<h4>Questions drawn from my résumé <span class="rq-count">76 questions</span></h4>
+
+<p>The advice above says prepare five or six stories rather than fifty answers. These are the questions my own <a href="/files/Kiran-Davuluri-Resume.pdf">résumé</a> invites, grouped by the story each one pulls. Every line on a CV is a question waiting to be asked — particularly every number.</p>
+
+<details class="rq"><summary>Story 1 · Ambiguity and scoping (8)</summary><div class="rq-body">
+<p class="rq-src">Pulls from: consolidating multiple ML repositories into one inference pipeline at Infiswift; the RFI document validation agent.</p>
+<ol>
+<li>Tell me about a time you were handed something poorly defined and had to decide what it actually was.</li>
+<li>You consolidated several ML repositories into one pipeline. Who decided that needed doing — you or someone else?</li>
+<li>How did you work out what the duplicate LLM workflows actually had in common?</li>
+<li>What did you have to leave alone, and how did you decide?</li>
+<li>Whose code were you replacing, and how did that conversation go?</li>
+<li>How did you know when the consolidation was finished rather than merely working?</li>
+<li>What would you do differently if you started that consolidation again tomorrow?</li>
+<li>Describe a time you pushed back on a request because the underlying problem was different from the one stated.</li>
+</ol>
+</div></details>
+
+<details class="rq"><summary>Story 2 · A hard technical decision (8)</summary><div class="rq-body">
+<p class="rq-src">Pulls from: the self-learning regex framework; choosing LightGBM and Isolation Forest for fraud; ONNX and TensorRT for edge.</p>
+<ol>
+<li>Walk me through a technical decision you made that you knew would be contested.</li>
+<li>You built a framework that generates regex rules from LLM output. Why not simply keep calling the model?</li>
+<li>How did you convince anyone that a generated rule was safe to promote to production?</li>
+<li>Fraud detection with LightGBM rather than a deep model — how did you argue that, and to whom?</li>
+<li>Who disagreed with you on a model choice, and what happened?</li>
+<li>Tell me about a decision you made under time pressure that you were not fully confident in.</li>
+<li>When did you choose the boring option over the interesting one, and was it right?</li>
+<li>What is a technical decision from your past that you now think was wrong?</li>
+</ol>
+</div></details>
+
+<details class="rq"><summary>Story 3 · Conflict and stakeholder pushback (8)</summary><div class="rq-body">
+<p class="rq-src">Pulls from: working with Risk and Compliance at JPMorgan; clinician adoption at Cognizant.</p>
+<ol>
+<li>Tell me about a time you disagreed with someone more senior than you.</li>
+<li>Compliance blocked or slowed something you had built — what happened next?</li>
+<li>How do you explain a model's limitation to someone whose job is to distrust it?</li>
+<li>Describe a time a stakeholder wanted something you thought was a bad idea.</li>
+<li>A clinician told you the model was wrong about a patient. What did you do?</li>
+<li>How do you handle it when a team refuses to adopt something you shipped?</li>
+<li>Tell me about a working relationship that started badly and improved.</li>
+<li>When have you had to say no to a request from a business partner?</li>
+</ol>
+</div></details>
+
+<details class="rq"><summary>Story 4 · Failure and what you changed (8)</summary><div class="rq-body">
+<p class="rq-src">Pulls from: false positives in fraud; misclassified documents; drift monitoring at Cognizant.</p>
+<ol>
+<li>Tell me about something you shipped that did not work.</li>
+<li>What is the worst production incident you have been responsible for?</li>
+<li>A misclassified document caused a downstream failure. Walk me through the day it happened.</li>
+<li>When did a model of yours degrade in production before anyone noticed?</li>
+<li>What did you change about how you work as a result of a specific failure?</li>
+<li>Tell me about a time you missed a deadline. What did you tell the people waiting?</li>
+<li>Describe an occasion where your testing did not catch something it should have.</li>
+<li>What is a mistake you have made more than once?</li>
+</ol>
+</div></details>
+
+<details class="rq"><summary>Story 5 · Influence without authority (8)</summary><div class="rq-body">
+<p class="rq-src">Pulls from: cross-team consolidation; SHAP dashboards raising physician adoption; responsible AI controls with three teams.</p>
+<ol>
+<li>Tell me about a time you got people to change how they worked without being their manager.</li>
+<li>Physician adoption increased after you built the explainability dashboards. What actually drove that — the dashboards, or something else?</li>
+<li>How did you get Risk, Compliance, and Data Science to agree on one set of controls?</li>
+<li>Describe a time you had to bring a sceptical team along with you.</li>
+<li>What did you do when a team ignored a standard you had introduced?</li>
+<li>Tell me about mentoring someone, and what you learned from it.</li>
+<li>When have you deliberately given away credit?</li>
+<li>How do you make a case for work that is invisible — testing, monitoring, refactoring?</li>
+</ol>
+</div></details>
+
+<details class="rq"><summary>Story 6 · Changing your mind (7)</summary><div class="rq-body">
+<p class="rq-src">Pulls from: LLM evaluation and A/B testing across production projects; the readmission A/B test.</p>
+<ol>
+<li>Tell me about a time an experiment told you that you were wrong.</li>
+<li>You ran A/B tests on LLM behaviour. What was the most surprising result?</li>
+<li>When did evaluation change your mind about an approach you had already built?</li>
+<li>Describe a strongly held technical opinion you have since abandoned.</li>
+<li>What is something you believed about ML two years ago that you no longer believe?</li>
+<li>Tell me about a time you were convinced by a junior colleague.</li>
+<li>How do you tell the difference between being persuaded and being worn down?</li>
+</ol>
+</div></details>
+
+<details class="rq"><summary>Story 7 · Working under hard constraints (7)</summary><div class="rq-body">
+<p class="rq-src">Pulls from: sub-50 ms feature serving; low-latency edge inference for robotic arm control; HIPAA-compliant retraining.</p>
+<ol>
+<li>Tell me about a project where the constraint, not the model, was the hard part.</li>
+<li>Sub-50 ms feature serving — what did you have to give up to hit that?</li>
+<li>How did the edge deployment change what you were willing to build?</li>
+<li>Describe working under a compliance constraint that shaped the design.</li>
+<li>When did you have to ship something you knew was not the best version?</li>
+<li>Tell me about a time you cut scope. Who did you tell, and how?</li>
+<li>What is the tightest deadline you have worked to, and what broke because of it?</li>
+</ol>
+</div></details>
+
+<details class="rq"><summary>Story 8 · Ownership and initiative (7)</summary><div class="rq-body">
+<p class="rq-src">Pulls from: building test frameworks with PyTest and Moto; the multi-agent side projects.</p>
+<ol>
+<li>Tell me about something you built that nobody asked you to build.</li>
+<li>You wrote testing frameworks for AI workflows — was that assigned, or did you decide it was needed?</li>
+<li>What did you fix that was not your responsibility?</li>
+<li>Describe a time you inherited something badly built and had to live with it.</li>
+<li>Your side projects use ADK and the Claude Agent SDK. What made you start them?</li>
+<li>What did the side projects teach you that your job did not?</li>
+<li>Tell me about a time you kept going on something after the interest had worn off.</li>
+</ol>
+</div></details>
+
+<details class="rq"><summary>The numbers you will be asked to defend (15)</summary><div class="rq-body">
+<p class="rq-src">Every quantified claim on a CV is an invitation. These are asked in a behavioural tone but are really testing whether you understand your own results — and honesty about attribution scores far better than a confident overclaim.</p>
+<ol>
+<li>Fraud losses fell 22%. How much of that was your model, and how much was everything else the bank changed that year?</li>
+<li>How was that 22% measured, and over what period?</li>
+<li>Investigation time dropped 40%. Who measured it, and against what baseline?</li>
+<li>Detection accuracy up 15% with false positives below 2% — what was the trade-off you had to argue for?</li>
+<li>What does "5M+ daily transactions" mean for how the system was actually built?</li>
+<li>Sub-50 ms — is that median or p99, and does the difference matter here?</li>
+<li>3× inference throughput after quantisation — what accuracy did that cost?</li>
+<li>0.87 AUC-ROC on readmission. Explain what that number means to a non-technical stakeholder.</li>
+<li>Feature generation time fell 60%. What was slow before, and what actually changed?</li>
+<li>Structured clinical coverage improved 35%. How did you verify that the extracted data was correct, not just present?</li>
+<li>Readmissions fell 18% in the pilot. How do you separate the model's effect from the care team's?</li>
+<li>Release cycles went from two weeks to three days. What was the real bottleneck?</li>
+<li>Which of your numbers are you least confident in, and why?</li>
+<li>Which of these results would you expect to hold up if the project were audited?</li>
+<li>Pick one number here and tell me what would have made it better.</li>
+</ol>
+</div></details>
+
 </div>
 
 <div class="rnd" id="founder">
