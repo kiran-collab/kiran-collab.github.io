@@ -41,6 +41,11 @@ main:
     url: /toolkit/
   - title: "Tutorials"
     url: /tutorials/
+  - title: "Open Source"
+    url: /open-source/
+  - title: "Hackathons"
+    url: /hackathons/
+    hidden: true   # revealed once the real event list is in — remove this line
   - title: "Collaborators"
     url: /collaborators/
 
