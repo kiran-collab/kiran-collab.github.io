@@ -57,6 +57,15 @@ author_profile: true
 }
 .rnd details.rq ol { margin: 0 0 0 1.2em; padding: 0; }
 .rnd details.rq li { margin-bottom: .42em; font-size: .93rem; line-height: 1.58; }
+.rnd details.rq li .ans {
+  display: block; font-size: .89rem; color: #4a5560; margin-top: .3em;
+  padding: .45em .7em; border-left: 2px solid #d9d2e4; background: #faf9fc;
+  border-radius: 0 3px 3px 0; line-height: 1.58;
+}
+.rnd details.rq li .ans .fill {
+  font-style: normal; font-weight: 600; color: #7a601b;
+  background: #f8f3e6; border: 1px solid #e8dcc2; border-radius: 3px; padding: 0 .28em;
+}
 .rnd .rq-count {
   display: inline-block; font-size: .72rem; text-transform: uppercase; letter-spacing: .06em;
   font-weight: 700; color: #7a601b; background: #f8f3e6; border: 1px solid #e8dcc2;
@@ -285,135 +294,137 @@ figure.fig figcaption { font-size: .8rem; color: #7a8189; text-align: center; ma
 
 <h4>Questions drawn from my résumé <span class="rq-count">76 questions</span></h4>
 
-<p>The advice above says prepare five or six stories rather than fifty answers. These are the questions my own <a href="/files/Kiran-Davuluri-Resume.pdf">résumé</a> invites, grouped by the story each one pulls. Every line on a CV is a question waiting to be asked — particularly every number.</p>
+<p>The advice above says prepare five or six stories rather than fifty answers. These are the questions my own <a href="/files/Kiran-Davuluri-Resume.pdf">résumé</a> invites, grouped by the story each one pulls, each with the answer underneath. Every line on a CV is a question waiting to be asked — particularly every number.</p>
+
+<p>The answers are built from what the résumé actually states, so they give the shape, the reasoning, and what the interviewer is listening for. Where only the person who was there knows the detail, there is an <em class="fill">amber placeholder</em> instead of an invented specific — those are the parts to fill in from memory before saying any of this out loud, because the follow-up question always goes straight at them.</p>
 
 <details class="rq"><summary>Story 1 · Ambiguity and scoping (8)</summary><div class="rq-body">
 <p class="rq-src">Pulls from: consolidating multiple ML repositories into one inference pipeline at Infiswift; the RFI document validation agent.</p>
 <ol>
-<li>Tell me about a time you were handed something poorly defined and had to decide what it actually was.</li>
-<li>You consolidated several ML repositories into one pipeline. Who decided that needed doing — you or someone else?</li>
-<li>How did you work out what the duplicate LLM workflows actually had in common?</li>
-<li>What did you have to leave alone, and how did you decide?</li>
-<li>Whose code were you replacing, and how did that conversation go?</li>
-<li>How did you know when the consolidation was finished rather than merely working?</li>
-<li>What would you do differently if you started that consolidation again tomorrow?</li>
-<li>Describe a time you pushed back on a request because the underlying problem was different from the one stated.</li>
+<li>Tell me about a time you were handed something poorly defined and had to decide what it actually was.<span class="ans">Use the repository consolidation. The brief was &quot;reduce duplication&quot;; what I found was that several repositories had each grown their own LLM extraction path, so no single team owned the interface. Lead with what you found rather than what you were told — the shift from the stated problem to the real one is the whole point of the question.</span></li>
+<li>You consolidated several ML repositories into one pipeline. Who decided that needed doing — you or someone else?<span class="ans">Answer directly, then evidence it. If you spotted it, say what you saw that others had not: <em class="fill">[the specific duplication you noticed and how]</em>. If it was assigned, say so plainly and describe what you added to the scope. Claiming initiative you did not have collapses under one follow-up question.</span></li>
+<li>How did you work out what the duplicate LLM workflows actually had in common?<span class="ans">By comparing inputs and outputs rather than reading code. The prompts and post-processing differed, but the contract was the same — document in, structured fields out. That is the level at which consolidation is possible; at the code level it looks like four unrelated systems.</span></li>
+<li>What did you have to leave alone, and how did you decide?<span class="ans">Name a real exclusion and the rule behind it: <em class="fill">[what you deliberately left out]</em>. A good rule is blast radius, not elegance — anything with a different output contract or a consumer you could not migrate stayed where it was.</span></li>
+<li>Whose code were you replacing, and how did that conversation go?<span class="ans"><em class="fill">[the teams involved]</em>. The approach that works is bringing the migration rather than the criticism: provide the compatibility layer, keep their tests green, and let them cut over on their own schedule. Say what you did to make it easy, not how you persuaded them.</span></li>
+<li>How did you know when the consolidation was finished rather than merely working?<span class="ans">Finished means the old paths are deleted and no callers remain — not that the new path exists. A consolidation that leaves both running has added a system rather than removed one. Deleting is the milestone worth naming.</span></li>
+<li>What would you do differently if you started that consolidation again tomorrow?<span class="ans">Migrate one consumer end to end before generalising. Designing the shared interface by reading all the existing code produces something that fits none of them; designing it against one real caller and then widening produces something that fits.</span></li>
+<li>Describe a time you pushed back on a request because the underlying problem was different from the one stated.<span class="ans">The document validation work is the cleanest example. The ask was better classification; the actual failure was files arriving mis-categorised in the first place, so validating content at upload removed failures that no amount of model tuning would have.</span></li>
 </ol>
 </div></details>
 
 <details class="rq"><summary>Story 2 · A hard technical decision (8)</summary><div class="rq-body">
 <p class="rq-src">Pulls from: the self-learning regex framework; choosing LightGBM and Isolation Forest for fraud; ONNX and TensorRT for edge.</p>
 <ol>
-<li>Walk me through a technical decision you made that you knew would be contested.</li>
-<li>You built a framework that generates regex rules from LLM output. Why not simply keep calling the model?</li>
-<li>How did you convince anyone that a generated rule was safe to promote to production?</li>
-<li>Fraud detection with LightGBM rather than a deep model — how did you argue that, and to whom?</li>
-<li>Who disagreed with you on a model choice, and what happened?</li>
-<li>Tell me about a decision you made under time pressure that you were not fully confident in.</li>
-<li>When did you choose the boring option over the interesting one, and was it right?</li>
-<li>What is a technical decision from your past that you now think was wrong?</li>
+<li>Walk me through a technical decision you made that you knew would be contested.<span class="ans">Promoting stable LLM outputs into deterministic regex rules. It looks like a step backwards — replacing a capable model with pattern matching — so the case has to be made on cost, latency, and reproducibility rather than on capability.</span></li>
+<li>You built a framework that generates regex rules from LLM output. Why not simply keep calling the model?<span class="ans">Three reasons, in order: a rule is free and instant where a model call costs money and hundreds of milliseconds; a rule gives the same answer every time, which matters for a classification that downstream systems depend on; and a rule can be reviewed and version-controlled. The model stays in the loop for anything the rules do not cover.</span></li>
+<li>How did you convince anyone that a generated rule was safe to promote to production?<span class="ans">By making promotion a gated pipeline rather than a decision — the rule had to be generated, validated, deduplicated, and versioned before it moved through Development, Preview, and Production. <em class="fill">[the validation threshold you actually used]</em>. Safety came from the process, not from trusting the generator.</span></li>
+<li>Fraud detection with LightGBM rather than a deep model — how did you argue that, and to whom?<span class="ans">Tabular transaction data with strong categorical features is where gradient boosting wins, and it wins with less tuning and less data. Add that it trains in minutes, which matters when the fraud pattern shifts and you need to retrain. Isolation Forest covered the unsupervised side for patterns with no labels yet.</span></li>
+<li>Who disagreed with you on a model choice, and what happened?<span class="ans"><em class="fill">[the actual disagreement and how it resolved]</em>. The structure that lands: what they argued, what you agreed with in their argument, what evidence settled it, and — if they were right — say so.</span></li>
+<li>Tell me about a decision you made under time pressure that you were not fully confident in.<span class="ans"><em class="fill">[the decision]</em>. Say what you did to limit the downside rather than claiming you were secretly confident: the smaller reversible version, the flag you could turn off, the thing you agreed to revisit.</span></li>
+<li>When did you choose the boring option over the interesting one, and was it right?<span class="ans">The regex promotion is exactly this, and so is LightGBM over a transformer for tabular fraud. Both were the duller choice and both were right. The honest framing is that the interesting option is usually the one that costs someone else maintenance later.</span></li>
+<li>What is a technical decision from your past that you now think was wrong?<span class="ans"><em class="fill">[a real one]</em>. Pick something with a consequence you can describe, explain what you were optimising for at the time, and say what you would need to have known. Avoid decisions that turned out fine anyway.</span></li>
 </ol>
 </div></details>
 
 <details class="rq"><summary>Story 3 · Conflict and stakeholder pushback (8)</summary><div class="rq-body">
 <p class="rq-src">Pulls from: working with Risk and Compliance at JPMorgan; clinician adoption at Cognizant.</p>
 <ol>
-<li>Tell me about a time you disagreed with someone more senior than you.</li>
-<li>Compliance blocked or slowed something you had built — what happened next?</li>
-<li>How do you explain a model's limitation to someone whose job is to distrust it?</li>
-<li>Describe a time a stakeholder wanted something you thought was a bad idea.</li>
-<li>A clinician told you the model was wrong about a patient. What did you do?</li>
-<li>How do you handle it when a team refuses to adopt something you shipped?</li>
-<li>Tell me about a working relationship that started badly and improved.</li>
-<li>When have you had to say no to a request from a business partner?</li>
+<li>Tell me about a time you disagreed with someone more senior than you.<span class="ans"><em class="fill">[the disagreement]</em>. Show that you separated the disagreement from the person, made the case once with evidence, and then either changed their mind or committed to their decision properly. Interviewers are listening for whether you can lose gracefully.</span></li>
+<li>Compliance blocked or slowed something you had built — what happened next?<span class="ans">Frame compliance as a requirement you had not gathered yet rather than an obstacle. On the GenAI work that meant bias monitoring, output validation, and prompt injection safeguards became part of the design — which is what made deployment possible at all.</span></li>
+<li>How do you explain a model's limitation to someone whose job is to distrust it?<span class="ans">In their terms and with numbers. For a risk function that means false positive rate at the operating threshold, what the model cannot see, and what happens when it is wrong. Volunteering the limitation before being asked buys more credibility than defending the model does.</span></li>
+<li>Describe a time a stakeholder wanted something you thought was a bad idea.<span class="ans"><em class="fill">[the request]</em>. The strong version: you built the smallest thing that tested their assumption, and let the result settle it rather than the argument.</span></li>
+<li>A clinician told you the model was wrong about a patient. What did you do?<span class="ans">Treat it as signal, not user error — the clinician usually has context the model does not. Go and look at that specific case, and often it reveals a data problem rather than a model problem. <em class="fill">[what you found when this happened]</em>.</span></li>
+<li>How do you handle it when a team refuses to adopt something you shipped?<span class="ans">Find out why before pushing. Non-adoption is usually cost of switching, a missing feature in their workflow, or lack of trust in the output. Each has a different fix, and only the third is about the model.</span></li>
+<li>Tell me about a working relationship that started badly and improved.<span class="ans"><em class="fill">[the relationship and the turning point]</em>. What lands is a specific change you made in how you worked with them, not a change in how you felt about them.</span></li>
+<li>When have you had to say no to a request from a business partner?<span class="ans"><em class="fill">[the request]</em>. Say no with an alternative and a reason they care about — timeline, risk, or something else it would displace. A no with no alternative reads as unwillingness rather than judgement.</span></li>
 </ol>
 </div></details>
 
 <details class="rq"><summary>Story 4 · Failure and what you changed (8)</summary><div class="rq-body">
 <p class="rq-src">Pulls from: false positives in fraud; misclassified documents; drift monitoring at Cognizant.</p>
 <ol>
-<li>Tell me about something you shipped that did not work.</li>
-<li>What is the worst production incident you have been responsible for?</li>
-<li>A misclassified document caused a downstream failure. Walk me through the day it happened.</li>
-<li>When did a model of yours degrade in production before anyone noticed?</li>
-<li>What did you change about how you work as a result of a specific failure?</li>
-<li>Tell me about a time you missed a deadline. What did you tell the people waiting?</li>
-<li>Describe an occasion where your testing did not catch something it should have.</li>
-<li>What is a mistake you have made more than once?</li>
+<li>Tell me about something you shipped that did not work.<span class="ans"><em class="fill">[the failure]</em>. Structure: what you expected, what happened, how you found out, what you did in the hour after, and the process change that came from it. The last part is what is actually being assessed.</span></li>
+<li>What is the worst production incident you have been responsible for?<span class="ans"><em class="fill">[the incident]</em>. Own your part explicitly and early in the answer. Describing the detection and recovery in detail is more impressive than the incident being small.</span></li>
+<li>A misclassified document caused a downstream failure. Walk me through the day it happened.<span class="ans">Tell it chronologically and concretely — how it surfaced, what you checked first, what the actual cause turned out to be, what you shipped that day versus that week. <em class="fill">[the specifics]</em>. Chronology is what makes it sound real rather than rehearsed.</span></li>
+<li>When did a model of yours degrade in production before anyone noticed?<span class="ans">This is why the drift and data quality monitoring at Cognizant existed. The honest version names how long it went unnoticed and what monitoring you added afterwards — undetected degradation is normal, having no way to detect it is the failure.</span></li>
+<li>What did you change about how you work as a result of a specific failure?<span class="ans"><em class="fill">[the change]</em>. The test frameworks built with PyTest and Moto are a good anchor if the answer is about validating cloud integrations before they reach production rather than after.</span></li>
+<li>Tell me about a time you missed a deadline. What did you tell the people waiting?<span class="ans"><em class="fill">[the occasion]</em>. The question is really about when and how you communicated it. Raising it early with a revised estimate is the good answer; discovering it on the day is the bad one.</span></li>
+<li>Describe an occasion where your testing did not catch something it should have.<span class="ans">Usually the gap is between unit tests and reality — mocked cloud services that behave unlike the real ones, or a case absent from the fixtures. <em class="fill">[what slipped through]</em>. Then say what class of test you added, not just the one case.</span></li>
+<li>What is a mistake you have made more than once?<span class="ans">Answer it honestly; the question exists to see whether you will. A common and credible one is under-scoping migration work because the new system was finished and the old one was still running. Say what you now do to catch yourself.</span></li>
 </ol>
 </div></details>
 
 <details class="rq"><summary>Story 5 · Influence without authority (8)</summary><div class="rq-body">
 <p class="rq-src">Pulls from: cross-team consolidation; SHAP dashboards raising physician adoption; responsible AI controls with three teams.</p>
 <ol>
-<li>Tell me about a time you got people to change how they worked without being their manager.</li>
-<li>Physician adoption increased after you built the explainability dashboards. What actually drove that — the dashboards, or something else?</li>
-<li>How did you get Risk, Compliance, and Data Science to agree on one set of controls?</li>
-<li>Describe a time you had to bring a sceptical team along with you.</li>
-<li>What did you do when a team ignored a standard you had introduced?</li>
-<li>Tell me about mentoring someone, and what you learned from it.</li>
-<li>When have you deliberately given away credit?</li>
-<li>How do you make a case for work that is invisible — testing, monitoring, refactoring?</li>
+<li>Tell me about a time you got people to change how they worked without being their manager.<span class="ans">The consolidation again, from the other side. Adoption came from making the new path cheaper to use than the old one, not from a mandate. <em class="fill">[what you did to lower the switching cost]</em>.</span></li>
+<li>Physician adoption increased after you built the explainability dashboards. What actually drove that — the dashboards, or something else?<span class="ans">Be careful here — the dashboards helped, but adoption usually turns on the risk factors being clinically plausible, on the score arriving inside an existing workflow, and on a respected clinician using it first. Naming the parts you did not control reads as more credible, not less.</span></li>
+<li>How did you get Risk, Compliance, and Data Science to agree on one set of controls?<span class="ans">By writing down what each team actually needed and finding the controls that satisfied more than one — bias monitoring and output validation served both governance and quality. <em class="fill">[how the agreement was reached]</em>. Agreement usually comes from a document, not a meeting.</span></li>
+<li>Describe a time you had to bring a sceptical team along with you.<span class="ans"><em class="fill">[the team and the concern]</em>. Scepticism is usually specific; find the specific objection and address that rather than making a general case.</span></li>
+<li>What did you do when a team ignored a standard you had introduced?<span class="ans">Check first whether the standard was worth following. If it was, make it the default — in a template, in CI, in the scaffold — rather than in a document. Standards that require remembering do not hold.</span></li>
+<li>Tell me about mentoring someone, and what you learned from it.<span class="ans"><em class="fill">[who and what]</em>. The detail that makes this answer good is what you learned about your own explanations from watching where they got stuck.</span></li>
+<li>When have you deliberately given away credit?<span class="ans"><em class="fill">[the occasion]</em>. Keep it brief and specific. This question is answered as much by how you talk about colleagues throughout the whole interview as by the story.</span></li>
+<li>How do you make a case for work that is invisible — testing, monitoring, refactoring?<span class="ans">Attach it to a cost that has already been paid. Testing frameworks are easy to justify after a regression; monitoring is easy after an incident. Where there is no incident yet, quantify the risk in time rather than in principle.</span></li>
 </ol>
 </div></details>
 
 <details class="rq"><summary>Story 6 · Changing your mind (7)</summary><div class="rq-body">
 <p class="rq-src">Pulls from: LLM evaluation and A/B testing across production projects; the readmission A/B test.</p>
 <ol>
-<li>Tell me about a time an experiment told you that you were wrong.</li>
-<li>You ran A/B tests on LLM behaviour. What was the most surprising result?</li>
-<li>When did evaluation change your mind about an approach you had already built?</li>
-<li>Describe a strongly held technical opinion you have since abandoned.</li>
-<li>What is something you believed about ML two years ago that you no longer believe?</li>
-<li>Tell me about a time you were convinced by a junior colleague.</li>
-<li>How do you tell the difference between being persuaded and being worn down?</li>
+<li>Tell me about a time an experiment told you that you were wrong.<span class="ans"><em class="fill">[the experiment]</em>. The LLM evaluation and A/B testing work is the natural source. What makes the answer strong is that you had committed to a view publicly beforehand.</span></li>
+<li>You ran A/B tests on LLM behaviour. What was the most surprising result?<span class="ans"><em class="fill">[the actual result]</em>. A genuinely common finding worth checking against your own: prompt changes that improved average quality also increased variance, and the variance mattered more downstream than the average did.</span></li>
+<li>When did evaluation change your mind about an approach you had already built?<span class="ans">Say what the evaluation measured and why the result was not what you expected. Analysing model agreement and reasoning quality — rather than only final accuracy — is what tends to reveal that a model was right for the wrong reason.</span></li>
+<li>Describe a strongly held technical opinion you have since abandoned.<span class="ans"><em class="fill">[the opinion]</em>. Give the evidence that moved you, not just the fact that you moved. Opinions abandoned without a reason read as having had no basis.</span></li>
+<li>What is something you believed about ML two years ago that you no longer believe?<span class="ans">Something defensible and specific — for instance, that a capable enough model removes the need for deterministic rules. The regex promotion framework exists because that turned out to be false on cost, latency, and reproducibility grounds.</span></li>
+<li>Tell me about a time you were convinced by a junior colleague.<span class="ans"><em class="fill">[the occasion]</em>. Say what they saw that you had stopped seeing. This question quietly tests whether you listen downwards.</span></li>
+<li>How do you tell the difference between being persuaded and being worn down?<span class="ans">Persuasion changes what you would predict; attrition only changes what you will argue about. A useful test is whether you can now make their case better than they did — if you cannot, you have conceded rather than been convinced.</span></li>
 </ol>
 </div></details>
 
 <details class="rq"><summary>Story 7 · Working under hard constraints (7)</summary><div class="rq-body">
 <p class="rq-src">Pulls from: sub-50 ms feature serving; low-latency edge inference for robotic arm control; HIPAA-compliant retraining.</p>
 <ol>
-<li>Tell me about a project where the constraint, not the model, was the hard part.</li>
-<li>Sub-50 ms feature serving — what did you have to give up to hit that?</li>
-<li>How did the edge deployment change what you were willing to build?</li>
-<li>Describe working under a compliance constraint that shaped the design.</li>
-<li>When did you have to ship something you knew was not the best version?</li>
-<li>Tell me about a time you cut scope. Who did you tell, and how?</li>
-<li>What is the tightest deadline you have worked to, and what broke because of it?</li>
+<li>Tell me about a project where the constraint, not the model, was the hard part.<span class="ans">The wake-word detection work. An MLP on Mel-spectrogram features is not the interesting part; making it run at low latency on edge hardware for robotic arm control, via ONNX and TensorRT, is where the difficulty sat.</span></li>
+<li>Sub-50 ms feature serving — what did you have to give up to hit that?<span class="ans">Freshness and flexibility. Anything requiring a large aggregation window has to be precomputed and served from the online store, so the feature set is constrained to what can be maintained in advance. <em class="fill">[the specific trade-off you made]</em>.</span></li>
+<li>How did the edge deployment change what you were willing to build?<span class="ans">It moved the decision from accuracy to what survives quantisation and export. An architecture that gains a point of accuracy but has an operation the runtime does not support is worse than a simpler one, because unsupported operations fall back and destroy the latency budget.</span></li>
+<li>Describe working under a compliance constraint that shaped the design.<span class="ans">HIPAA on the clinical work shaped where data could live, what could be logged, and how retraining had to be automated so patient data never moved through a manual step. The constraint changed the architecture, not just the paperwork.</span></li>
+<li>When did you have to ship something you knew was not the best version?<span class="ans"><em class="fill">[the occasion]</em>. Say what you protected — the interface, the ability to swap the model later, the monitoring — so the shortcut was contained rather than structural.</span></li>
+<li>Tell me about a time you cut scope. Who did you tell, and how?<span class="ans"><em class="fill">[what was cut]</em>. Name who you told and when. Cutting scope silently is the failure mode this question is looking for.</span></li>
+<li>What is the tightest deadline you have worked to, and what broke because of it?<span class="ans">Answer the second half honestly — something always breaks, usually tests, documentation, or a migration left half-done. <em class="fill">[what it was in your case]</em> and whether you went back for it.</span></li>
 </ol>
 </div></details>
 
 <details class="rq"><summary>Story 8 · Ownership and initiative (7)</summary><div class="rq-body">
 <p class="rq-src">Pulls from: building test frameworks with PyTest and Moto; the multi-agent side projects.</p>
 <ol>
-<li>Tell me about something you built that nobody asked you to build.</li>
-<li>You wrote testing frameworks for AI workflows — was that assigned, or did you decide it was needed?</li>
-<li>What did you fix that was not your responsibility?</li>
-<li>Describe a time you inherited something badly built and had to live with it.</li>
-<li>Your side projects use ADK and the Claude Agent SDK. What made you start them?</li>
-<li>What did the side projects teach you that your job did not?</li>
-<li>Tell me about a time you kept going on something after the interest had worn off.</li>
+<li>Tell me about something you built that nobody asked you to build.<span class="ans">The testing and evaluation frameworks are the strongest example, and the multi-agent side projects the second. Say what problem you kept hitting that made you build it — unrequested work is only impressive if it was solving something real.</span></li>
+<li>You wrote testing frameworks for AI workflows — was that assigned, or did you decide it was needed?<span class="ans"><em class="fill">[assigned or not]</em>. If it grew out of a regression you had already been bitten by, say that; it explains the motivation better than any claim about quality culture.</span></li>
+<li>What did you fix that was not your responsibility?<span class="ans"><em class="fill">[the fix]</em>. Keep it proportionate — the good version is a small fix with an outsized effect, not a rewrite of someone else's system.</span></li>
+<li>Describe a time you inherited something badly built and had to live with it.<span class="ans">Say what you stabilised first and what you left alone. Anyone can list the problems; the signal is in choosing which one actually mattered and resisting the rewrite.</span></li>
+<li>Your side projects use ADK and the Claude Agent SDK. What made you start them?<span class="ans"><em class="fill">[the actual motivation]</em>. The credible answer is usually wanting to understand a failure mode properly — evaluation, hallucination rates, and workflow reliability are the parts you cannot learn from a demo.</span></li>
+<li>What did the side projects teach you that your job did not?<span class="ans">Owning every layer, including the parts a team would normally hide from you — the evaluation harness, the CI, the security scanning. Building the trace-driven evaluation yourself teaches you what the numbers actually mean.</span></li>
+<li>Tell me about a time you kept going on something after the interest had worn off.<span class="ans"><em class="fill">[the project]</em>. The finishing is the point. Say what the last 10% consisted of, since that is the part people abandon.</span></li>
 </ol>
 </div></details>
 
 <details class="rq"><summary>The numbers you will be asked to defend (15)</summary><div class="rq-body">
 <p class="rq-src">Every quantified claim on a CV is an invitation. These are asked in a behavioural tone but are really testing whether you understand your own results — and honesty about attribution scores far better than a confident overclaim.</p>
 <ol>
-<li>Fraud losses fell 22%. How much of that was your model, and how much was everything else the bank changed that year?</li>
-<li>How was that 22% measured, and over what period?</li>
-<li>Investigation time dropped 40%. Who measured it, and against what baseline?</li>
-<li>Detection accuracy up 15% with false positives below 2% — what was the trade-off you had to argue for?</li>
-<li>What does "5M+ daily transactions" mean for how the system was actually built?</li>
-<li>Sub-50 ms — is that median or p99, and does the difference matter here?</li>
-<li>3× inference throughput after quantisation — what accuracy did that cost?</li>
-<li>0.87 AUC-ROC on readmission. Explain what that number means to a non-technical stakeholder.</li>
-<li>Feature generation time fell 60%. What was slow before, and what actually changed?</li>
-<li>Structured clinical coverage improved 35%. How did you verify that the extracted data was correct, not just present?</li>
-<li>Readmissions fell 18% in the pilot. How do you separate the model's effect from the care team's?</li>
-<li>Release cycles went from two weeks to three days. What was the real bottleneck?</li>
-<li>Which of your numbers are you least confident in, and why?</li>
-<li>Which of these results would you expect to hold up if the project were audited?</li>
-<li>Pick one number here and tell me what would have made it better.</li>
+<li>Fraud losses fell 22%. How much of that was your model, and how much was everything else the bank changed that year?<span class="ans">The honest answer is that you measured the system, not the model in isolation — the model changed, and so did rules, thresholds, and analyst capacity. Say what you would need to isolate it properly: a holdout population scored by the old system over the same period. Interviewers rate this answer highly precisely because most candidates claim the whole 22%.</span></li>
+<li>How was that 22% measured, and over what period?<span class="ans"><em class="fill">[the measurement window and comparison basis]</em>. Be ready to say whether it was year on year, before-and-after deployment, or against a control — and to name the confound that comparison does not remove.</span></li>
+<li>Investigation time dropped 40%. Who measured it, and against what baseline?<span class="ans"><em class="fill">[who measured it and the baseline]</em>. If it came from case handling times before and after the assistant launched, say so, and note that analysts also got faster with practice over the same period.</span></li>
+<li>Detection accuracy up 15% with false positives below 2% — what was the trade-off you had to argue for?<span class="ans">That pair is the trade-off. Every point of recall costs precision, and in fraud a false positive is a declined transaction for a real customer. The 2% was a business constraint that fixed the operating threshold; accuracy improvements had to be found inside it.</span></li>
+<li>What does "5M+ daily transactions" mean for how the system was actually built?<span class="ans">Roughly 60 per second average with peaks well above it, so scoring has to be streaming rather than batch, features must be precomputed and served from an online store, and every component needs to degrade rather than queue. The volume dictates the architecture more than the model does.</span></li>
+<li>Sub-50 ms — is that median or p99, and does the difference matter here?<span class="ans">Say which, and say why it matters: a median under 50 ms with a long tail still fails the transactions that matter most, because slow requests correlate with unusual ones. <em class="fill">[which you measured]</em>. If it was median, say so — being caught rounding a percentile is worse than the weaker number.</span></li>
+<li>3× inference throughput after quantisation — what accuracy did that cost?<span class="ans">Post-training quantisation to int8 typically costs a small amount of accuracy, and the number only means something measured on your own held-out set rather than a published benchmark. <em class="fill">[the accuracy delta you measured]</em>. If you did not measure it, say that too.</span></li>
+<li>0.87 AUC-ROC on readmission. Explain what that number means to a non-technical stakeholder.<span class="ans">Take one patient who was readmitted and one who was not, at random: the model gives the readmitted one a higher risk score 87 times out of 100. It is a ranking quality, not an accuracy — the model is not right 87% of the time, and saying it that way is the most common mistake.</span></li>
+<li>Feature generation time fell 60%. What was slow before, and what actually changed?<span class="ans"><em class="fill">[the actual bottleneck]</em>. Typical causes are wide shuffles on skewed keys, recomputing history every run instead of incrementally, and row-by-row work that could be vectorised. Naming which one it was is what separates a real answer from a rehearsed one.</span></li>
+<li>Structured clinical coverage improved 35%. How did you verify that the extracted data was correct, not just present?<span class="ans">Coverage measures presence, not correctness, so the two have to be checked separately — a sample manually reviewed against the notes, and negation and family-history handling tested explicitly, since those produce confidently wrong extractions rather than missing ones.</span></li>
+<li>Readmissions fell 18% in the pilot. How do you separate the model's effect from the care team's?<span class="ans">You cannot, fully. The model flags and the care team acts, so what was measured was the combined intervention. Say that plainly, then say what would isolate it: randomising at patient level with the same intervention available to both arms, which raises its own ethical question worth acknowledging.</span></li>
+<li>Release cycles went from two weeks to three days. What was the real bottleneck?<span class="ans"><em class="fill">[the actual bottleneck]</em>. It is rarely the training run — usually manual approval steps, environment drift between staging and production, or the absence of automated validation that made every release a judgement call.</span></li>
+<li>Which of your numbers are you least confident in, and why?<span class="ans">Answer it. Picking one and explaining the weakness in its measurement is a strong signal, and refusing to pick reads as either not having examined them or not being willing to say so.</span></li>
+<li>Which of these results would you expect to hold up if the project were audited?<span class="ans">Split them: the ones with a clean measurement — AUC on a held-out set, latency percentiles, throughput — hold up. The ones combining a model with a human process — the 22%, the 40%, the 18% — are directional and depend on how attribution was defined.</span></li>
+<li>Pick one number here and tell me what would have made it better.<span class="ans"><em class="fill">[your choice]</em>. A good instinct is to pick a measurement rather than a result: the number that would have been most improved by a cleaner baseline or a proper control group.</span></li>
 </ol>
 </div></details>
 
