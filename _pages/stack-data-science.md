@@ -7,6 +7,28 @@ author_profile: true
 
 {% include stack-style.html %}
 
+<style>
+table.cmp {
+  width: 100%; border-collapse: collapse; font-size: .85rem; margin: .4em 0 1em;
+  display: block; overflow-x: auto;
+}
+table.cmp th, table.cmp td { border: 1px solid #e3e7ea; padding: .45em .65em; text-align: left; vertical-align: top; }
+table.cmp thead th { background: #f4f7f8; font-size: .79rem; }
+table.cmp th.pg { background: #eef5f8; color: #1f6f8b; }
+table.cmp th.my { background: #f8f3e6; color: #7a601b; }
+table.cmp td:first-child { font-weight: 600; white-space: nowrap; background: #fafbfb; width: 20%; }
+table.cmp td .yes { color: #3f5a37; font-weight: 600; }
+table.cmp td .no  { color: #a4534a; font-weight: 600; }
+.cx-body .verdict {
+  margin-top: .8em; font-size: .9rem; color: #3f5a37; background: #f1f7ee;
+  border-left: 3px solid #4a6741; padding: .55em .8em; border-radius: 0 3px 3px 0;
+}
+.cx-body .subh {
+  margin: 1.3em 0 .4em; font-size: .76rem; text-transform: uppercase; letter-spacing: .08em;
+  color: #7c848b; font-weight: 700;
+}
+</style>
+
 <p><a class="stack-back" href="/stacks/">← All stacks</a></p>
 
 <p class="stack-lead">The tools you compute with, the statistics that keep the answer honest, and the design decisions that determine whether a result means anything at all.</p>
@@ -20,6 +42,53 @@ author_profile: true
 <div class="cx-body">
 <p>SQL declares <em>what</em> data you want and leaves the engine to work out how to fetch it. Joins combine tables, <code>GROUP BY</code> aggregates, window functions compute across rows without collapsing them, and CTEs keep complex logic readable.</p>
 <p>It is the highest-leverage skill on this page. Nearly every data role uses it daily, it is the interface to every warehouse, and being genuinely good at it — window functions, query plans, why something is slow — pays back faster than almost anything else you could study.</p>
+</div>
+</details>
+
+<details class="cx" id="postgres-vs-mysql">
+<summary>PostgreSQL vs MySQL</summary>
+<div class="cx-body">
+<p>The two databases you are most likely to be querying, and the comparison that comes up in nearly every data interview. Both are mature, free, and will handle far more than most projects need — so the honest answer is rarely "one is better", it is "they were built around different priorities". MySQL optimised early for fast, simple reads at web scale; PostgreSQL optimised for correctness, extensibility, and complex queries.</p>
+
+<p class="subh">Feature by feature</p>
+
+<table class="cmp">
+<thead><tr><th>Dimension</th><th class="pg">PostgreSQL</th><th class="my">MySQL</th></tr></thead>
+<tbody>
+<tr><td>Built around</td><td>Standards compliance, correctness, extensibility</td><td>Speed and simplicity for read-heavy web workloads</td></tr>
+<tr><td>Licence</td><td>PostgreSQL licence — permissive, no single owner</td><td>GPL, owned by Oracle; MariaDB is the community fork</td></tr>
+<tr><td>Storage engine</td><td>One engine, tuned for everything</td><td>Pluggable — InnoDB is the default and the one you want</td></tr>
+<tr><td>Complex queries</td><td>Stronger planner: better with many joins, subqueries, and aggregation</td><td>Planner has improved a lot in 8.x, still weaker on deep join trees</td></tr>
+<tr><td>Window functions &amp; CTEs</td><td>Long-standing, complete</td><td><span class="yes">Yes</span> since 8.0 — older versions have neither</td></tr>
+<tr><td><code>FULL OUTER JOIN</code></td><td><span class="yes">Supported</span></td><td><span class="no">Not supported</span> — emulate with two joins and a <code>UNION</code></td></tr>
+<tr><td>Materialised views</td><td><span class="yes">Native</span>, with <code>REFRESH MATERIALIZED VIEW</code></td><td><span class="no">None</span> — build a summary table and refresh it yourself</td></tr>
+<tr><td>Data types</td><td>Arrays, ranges, <code>JSONB</code>, <code>UUID</code>, <code>hstore</code>, custom and composite types</td><td>The standard set, plus <code>JSON</code>; no arrays or user-defined types</td></tr>
+<tr><td>JSON</td><td><code>JSONB</code> is binary, indexable with GIN, and genuinely queryable</td><td><code>JSON</code> is validated and functional, but indexing needs generated columns</td></tr>
+<tr><td>Indexes</td><td>B-tree, GIN, GiST, BRIN, hash; partial and expression indexes</td><td>B-tree, plus full-text and spatial on InnoDB</td></tr>
+<tr><td>Extensions</td><td>PostGIS, pgvector, TimescaleDB, foreign data wrappers</td><td>Plugin system exists but the ecosystem is far smaller</td></tr>
+<tr><td>Vector search</td><td><span class="yes">pgvector</span> — embeddings and ANN search in the same database</td><td>Vector type added in 9.x; ecosystem still thin</td></tr>
+<tr><td>Transactional DDL</td><td><span class="yes">Yes</span> — wrap a migration in a transaction and roll it back</td><td><span class="no">No</span> — DDL commits implicitly; a failed migration leaves you halfway</td></tr>
+<tr><td>Concurrency</td><td>MVCC with dead tuples reclaimed by <code>VACUUM</code></td><td>MVCC in InnoDB via undo logs; no vacuum to tune</td></tr>
+<tr><td>Known operational cost</td><td>Autovacuum and transaction ID wraparound need attention at scale</td><td>Replication lag and, historically, silent type coercion</td></tr>
+<tr><td>Replication</td><td>Streaming and logical replication built in</td><td>Binlog replication — long-established, very widely operated</td></tr>
+<tr><td>Strict mode</td><td>Strict by default — bad data is rejected</td><td>Strict by default since 5.7; older configs silently truncated values</td></tr>
+<tr><td>Identifier case</td><td>Folds unquoted names to lower case</td><td>Table-name case sensitivity depends on the host filesystem</td></tr>
+<tr><td>Managed hosting</td><td>RDS, Aurora, Cloud SQL, Azure, Supabase, Neon</td><td>RDS, Aurora, Cloud SQL, PlanetScale (Vitess)</td></tr>
+<tr><td>Horizontal scale</td><td>Citus for sharding; historically the weaker story</td><td>Vitess is battle-tested for very large sharded fleets</td></tr>
+</tbody>
+</table>
+
+<p class="subh">What actually matters for data work</p>
+
+<p>Most of the table is irrelevant if you are querying rather than operating the database. Four rows are not: <span class="k">window functions and CTEs</span>, because analytical SQL is unwritable without them and a MySQL below 8.0 has neither; <span class="k">FULL OUTER JOIN</span>, because reconciling two sources is a daily task and MySQL makes you write a UNION for it; <span class="k">materialised views</span>, because that is how a slow aggregate becomes a fast one without building a pipeline; and the <span class="k">planner</span>, because a seven-way join with subqueries is where the difference shows up.</p>
+
+<p>Add <code>JSONB</code> and <code>pgvector</code> and the gap widens for anything modern — semi-structured event data stays queryable, and embeddings can live beside the rows they describe instead of in a separate vector store. That last point removes an entire moving part from a RAG system.</p>
+
+<p class="subh">Where MySQL wins</p>
+
+<p>Simple high-volume reads on well-indexed tables, where its lighter footprint and simpler operational model tell. It is also easier to run: no vacuum to tune, replication that a very large number of engineers have operated before, and Vitess as a genuinely proven sharding path. And it is often simply what is already there — which is the most common reason anyone uses either.</p>
+
+<div class="verdict"><strong>If you are choosing:</strong> pick PostgreSQL for a new analytical or general-purpose system — richer types, a stronger planner, extensions, and safer migrations. Pick MySQL when you are joining an existing MySQL estate, when the workload is simple reads at very high volume, or when Vitess-style sharding is the plan. Note that MySQL 8.0 closed most of the classic gaps, so any comparison written before 2018 is out of date.</div>
 </div>
 </details>
 
