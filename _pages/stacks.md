@@ -11,6 +11,12 @@ author_profile: true
 
 <div class="stack-grid">
 
+<a class="stack-card k-math" href="/stacks/maths/">
+<span class="sc-name">Maths for AI Stack →</span>
+<span class="sc-desc">Linear algebra, calculus, probability and statistics — every concept paired with where it actually shows up in AI, what is safe to skip, and the eight derivations worth being able to do on a whiteboard.</span>
+<span class="sc-count">52 concepts</span>
+</a>
+
 <a class="stack-card" href="/stacks/agentic/">
 <span class="sc-name">Agentic Stack →</span>
 <span class="sc-desc">What an agent is made of — harness, tools, memory, skills — and the runtime, isolation, and evaluation machinery needed to run one in production.</span>
