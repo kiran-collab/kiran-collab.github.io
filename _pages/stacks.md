@@ -26,7 +26,7 @@ author_profile: true
 <a class="stack-card k-ds" href="/stacks/data-science/">
 <span class="sc-name">Data Science Stack →</span>
 <span class="sc-desc">The tools you compute with and the statistics that keep the answer honest — from SQL and pandas through hypothesis testing, experiment design, and causal inference.</span>
-<span class="sc-count">18 concepts</span>
+<span class="sc-count">19 concepts</span>
 </a>
 
 <a class="stack-card k-ml" href="/stacks/ml/">
@@ -39,6 +39,12 @@ author_profile: true
 <span class="sc-name">AWS Stack →</span>
 <span class="sc-desc">The twenty-odd services you actually reach for out of hundreds — containers and compute, storage, data and analytics, messaging, and the identity and operations layer underneath all of it.</span>
 <span class="sc-count">28 concepts</span>
+</a>
+
+<a class="stack-card k-do" href="/stacks/devops/">
+<span class="sc-name">DevOps Stack →</span>
+<span class="sc-desc">Everything between code that works and a service running reliably for other people: pipelines, containers and orchestration, infrastructure as code, release strategies, observability, and the security checks along the way.</span>
+<span class="sc-count">31 concepts</span>
 </a>
 
 </div>
