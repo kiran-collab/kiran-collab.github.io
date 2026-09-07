@@ -89,6 +89,7 @@ table.tri td:first-child, table.tri tbody th { background: #fafbfb; font-weight:
 <a href="#data-scientist">Data Scientist</a>
 <a href="#data-analyst">Data Analyst</a>
 <a href="#data-engineer">Data Engineer</a>
+<a href="#sysde">System Development Engineer</a>
 <a href="#fde">Forward Deployed Engineer</a>
 <a href="#tpm">Technical Program Manager</a>
 <a href="#grp-research">Research</a>
@@ -110,6 +111,7 @@ table.tri td:first-child, table.tri tbody th { background: #fafbfb; font-weight:
 <tr><td>Data Scientist</td><td>What is true here, and what should we do?</td><td>A decision, with quantified uncertainty</td><td>Stats, SQL, product case</td><td>Data Analyst / ML Engineer</td></tr>
 <tr><td>Data Analyst</td><td>What happened, and what should people see?</td><td>Trusted metrics and dashboards</td><td>SQL (heaviest), business case</td><td>Data Scientist</td></tr>
 <tr><td>Data Engineer</td><td>Is the data correct, fresh, and available?</td><td>Reliable pipelines and models of the data</td><td>SQL, modelling, pipeline design</td><td>Backend / Analytics Engineer</td></tr>
+<tr><td>System Development Eng.</td><td>Can this run reliably at scale without a human holding it up?</td><td>Automated, observable infrastructure and a shorter on-call</td><td>Linux/networking troubleshooting, coding, ops scenarios</td><td>DevOps Engineer / SRE / SDE</td></tr>
 <tr><td>Forward Deployed Eng.</td><td>What does <em>this</em> customer need, working, this week?</td><td>A working deployment in someone else's environment</td><td>Practical coding, customer scenarios</td><td>Solutions Architect / SWE</td></tr>
 <tr><td>Technical PM</td><td>What's blocking the ship, and who needs to know?</td><td>Shipped programs across teams</td><td>Execution cases, technical depth screen</td><td>Product Manager</td></tr>
 <tr><th colspan="5" style="background:#f0edf5;color:#4b3a63;font-weight:700;font-size:.8rem;letter-spacing:.05em;text-transform:uppercase">Research roles</th></tr>
@@ -441,6 +443,67 @@ table.tri td:first-child, table.tri tbody th { background: #fafbfb; font-weight:
 <p><strong>A pipeline that survives bad input.</strong> Ingest a messy public feed on a schedule into a modelled warehouse table. <span class="edge">The differentiator is everything after the happy path:</span> data-quality tests that quarantine bad rows instead of failing the run, an alert that says which check failed and why, backfills that are safe to re-run twice, and a documented schema contract. Then deliberately feed it a malformed batch and show what happened.</p>
 </div>
 
+</div>
+
+<div class="role" id="sysde">
+
+<svg class="pl" viewBox="0 0 300 64" aria-label="Infrastructure band under the whole pipeline, with serve owned">
+<rect class="band eng" x="3" y="4" width="292" height="16" rx="3"/><text class="bandt eng" x="149" y="15">build · deploy · observe · on-call · capacity · cost</text>
+<rect class="off" x="3" y="26" width="40" height="20" rx="3"/><text class="lf" x="23" y="39">source</text>
+<rect class="touch" x="45" y="26" width="40" height="20" rx="3"/><text class="lt" x="65" y="39">ingest</text>
+<rect class="touch" x="87" y="26" width="40" height="20" rx="3"/><text class="lt" x="107" y="39">store</text>
+<rect class="off" x="129" y="26" width="40" height="20" rx="3"/><text class="lf" x="149" y="39">explore</text>
+<rect class="off" x="171" y="26" width="40" height="20" rx="3"/><text class="lf" x="191" y="39">train</text>
+<rect class="own" x="213" y="26" width="40" height="20" rx="3"/><text class="lo" x="233" y="39">serve</text>
+<rect class="off" x="255" y="26" width="40" height="20" rx="3"/><text class="lf" x="275" y="39">product</text>
+<text class="cap" x="149" y="58">owns how it runs, not what it computes</text>
+</svg>
+
+<h3>System Development Engineer</h3>
+<p class="qn">"Can this run reliably at scale without a human holding it up — and if it breaks at 3am, how fast do we know and recover?"</p>
+
+<p>Primarily an Amazon and AWS title, and the source of most of the confusion around it. A <strong>Software Development Engineer (SDE)</strong> builds the product; a <strong>System Development Engineer (SysDE)</strong> builds and automates the systems the product runs on. It is a genuine engineering role with a real coding bar — not an operations role with a coding screen bolted on — but the code you write is automation, tooling, and infrastructure rather than product features. Elsewhere the same job is usually advertised as Infrastructure Engineer, Platform Engineer, or SRE.</p>
+
+<h4>What you own</h4>
+<ul>
+<li>The path from a merged commit to running software: build, deployment pipelines, rollout strategy, and rollback.</li>
+<li>Fleet and infrastructure lifecycle — provisioning, patching, scaling, and retiring hosts or containers without downtime.</li>
+<li>Observability as a product: the metrics, alarms, dashboards, and logs that other engineers depend on during an incident.</li>
+<li>Operational load itself. Reducing pages, automating the manual runbook step, and eliminating the class of failure rather than the instance.</li>
+<li>Capacity and cost, which in this role are engineering constraints you are measured on rather than someone else's spreadsheet.</li>
+<li>On-call for the systems you own, and the follow-up that stops the same incident happening twice.</li>
+</ul>
+
+<h4>Technical skills</h4>
+<ul>
+<li><strong>Linux, genuinely.</strong> Processes, file descriptors, memory and the OOM killer, systemd, and the ability to work out why a box is unhealthy from the shell rather than from a dashboard.</li>
+<li><strong>Networking.</strong> DNS, TCP handshakes and timeouts, TLS, load balancers, VPCs, routing, and NAT — most cross-service mysteries turn out to live here.</li>
+<li><strong>Coding at production quality</strong>, usually Python or Go, occasionally Java. The bar is real: expect data structures and algorithms, but weighted toward parsing, automating, and systems glue rather than competitive puzzles.</li>
+<li><strong>Infrastructure as code</strong> — Terraform or CDK/CloudFormation — plus configuration management, and the discipline that nothing is changed by hand.</li>
+<li><strong>Containers and orchestration</strong>: images, registries, and Kubernetes or ECS, including what to do when a pod is stuck rather than only how to deploy one.</li>
+<li><strong>CI/CD</strong> pipelines end to end, with the deployment safety mechanisms — canaries, staged rollouts, automatic rollback on alarm.</li>
+<li><strong>Cloud depth over cloud breadth.</strong> IAM, VPC, EC2, S3, and the operational behaviour of a handful of services beats a passing familiarity with fifty.</li>
+<li><strong>Observability and troubleshooting method:</strong> reading a distributed trace, bisecting to isolate a fault, and distinguishing saturation from a hard limit.</li>
+</ul>
+
+<h4>Soft skills that actually get screened</h4>
+<ul>
+<li><strong>Composure and structure under an active incident.</strong> The person who mitigates first and diagnoses second, and who says what they are doing while doing it, is the one this interview is trying to find.</li>
+<li><strong>Blameless analysis.</strong> Being able to describe an outage you caused, what the system allowed, and what you changed afterwards — without either defensiveness or performative self-blame.</li>
+<li><strong>Refusing to normalise toil.</strong> Treating a recurring manual step as a defect to be engineered away is the attitude that separates this role from ticket-driven operations.</li>
+<li><strong>Working with teams whose deadline your safeguards inconvenience,</strong> and making the case for the guardrail in their terms rather than yours.</li>
+</ul>
+
+<h4>Tools</h4>
+<p class="chips"><span>Linux</span><span>Python / Go</span><span>Bash</span><span>Terraform</span><span>Docker</span><span>Kubernetes / ECS</span><span>AWS</span><span>CI/CD</span><span>Prometheus / Grafana</span><span>CloudWatch</span><span>Ansible</span><span>Git</span></p>
+
+<h4>How the interview differs</h4>
+<p>Expect a <strong>Linux and networking troubleshooting round</strong> — a described broken system, and you ask questions to narrow it down. Bisecting to eliminate the most possibilities beats guessing the most likely cause, and saying so explicitly is part of the score. Expect a <strong>systems design round</strong> weighted toward deployment, failure modes, and blast radius rather than product features. Expect coding, at a real but not algorithm-tournament level. At Amazon specifically, expect Leadership Principles behavioural questions in every round, with <em>Ownership</em>, <em>Dive Deep</em>, and <em>Bias for Action</em> the ones this role leans on, answered in STAR form with your own metrics.</p>
+
+<h4>Small project worth building</h4>
+<div class="proj">
+<p><strong>A service that deploys and heals itself.</strong> Take any small application, then build everything around it: infrastructure defined in Terraform, a CI/CD pipeline that builds an image and deploys on merge, a health check, and autoscaling. <span class="edge">The differentiator is what happens when it breaks:</span> an alarm that fires on a symptom users would feel, an automatic rollback triggered by that alarm, and a short written runbook. Then kill an instance on purpose, let it recover, and write up what the graphs showed — that write-up is the artefact worth talking about.</p>
+</div>
 </div>
 
 <div class="role" id="fde">
@@ -806,11 +869,11 @@ table.tri td:first-child, table.tri tbody th { background: #fafbfb; font-weight:
 <li>Wanting research depth but needing to see it used → Applied Scientist.</li>
 </ul>
 
-<h4>Things that hold across all eleven</h4>
+<h4>Things that hold across all twelve</h4>
 <ul>
 <li><strong>Ship something end to end and write about it.</strong> One finished, documented, honestly-evaluated project beats five tutorial repositories — in every one of these roles.</li>
 <li><strong>Numbers on your resume, not adjectives.</strong> "Cut p99 latency from 2.4s to 700ms" carries; "optimised system performance" does not.</li>
 <li><strong>Have the failure story ready.</strong> Every interview loop asks. The strong answer names your own mistake, the diagnosis, and what you changed afterwards.</li>
-<li><strong>SQL is the common denominator.</strong> Six of the eleven use it regularly (the research roles least of all); being genuinely good at it is unusually high leverage per hour invested.</li>
+<li><strong>SQL is the common denominator.</strong> Six of the twelve use it regularly (the research roles least of all); being genuinely good at it is unusually high leverage per hour invested.</li>
 <li><strong>Read the responsibilities, then ask what the last person did all week.</strong> It is the single most informative question available to you in an interview, and few candidates ask it.</li>
 </ul>
